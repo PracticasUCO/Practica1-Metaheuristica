@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby
 
 =begin rdoc
-La clase MMDP define una interfaz para el problema MMDP
+La clase MMDP define una interfaz para el problema Max Min Diversity Problem
 propuesto en clase.
 =end
 class MMDP
