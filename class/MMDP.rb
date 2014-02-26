@@ -17,7 +17,7 @@ class MMDP
 	def leerInstancia(path_db)
 		@nodes = Hash.new
 		File.open(path_db, "r") do |file|
-			m, n = file.gets.chomp
+			m, n = file.gets.chomp.split(/ +/)
 			@total_nodes = m.to_i
 			@max_nodes = n.to_i
 
