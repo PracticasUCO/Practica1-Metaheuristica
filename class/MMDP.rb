@@ -4,7 +4,8 @@
 La clase MMDP define una interfaz para el problema MMDP
 propuesto en clase.
 =end
-class MMDP
+class 
+	attr_reader :total_nodes, :max_nodes
 	# Constructor de MMDP. Recibe como parametro un string
 	# con la direccion de la base de datos que se deseea leer
 	def initialize(path_db)
@@ -16,8 +17,8 @@ class MMDP
 		@nodes = Hash.new
 		File.open(path_db, "r") do |file|
 			m, n = file.gets.chomp
-			@m = m.to_i
-			@n = n.to_i
+			self.total_nodes = m.to_i
+			self.max_nodes = n.to_i
 
 			file.each do |linea|
 				origen, destino, coste = linea.split(/ +/)
