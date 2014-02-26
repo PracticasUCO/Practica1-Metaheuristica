@@ -8,9 +8,11 @@ class MMDP
 	# El atributo total_nodes indica el numero total de nodos que
 	# hay en la base de datos
 	attr_reader :total_nodes 
+
 	# El atributo max_nodes indica el numero maximo de nodos
 	# que debe aparecer en la solucion
 	attr_reader :max_nodes
+	
 	# Constructor de MMDP. Recibe como parametro un string
 	# con la direccion de la base de datos que se deseea leer
 	def initialize(path_db)
@@ -24,12 +26,18 @@ class MMDP
 			m, n = file.gets.chomp.split(/ +/)
 
 			if n.to_i > m.to_i
-				puts "Error de la base de datos"
-				puts "Numero total de nodos: #{m}"
-				puts "Numero maximo de nodos en la solucion: #{n}"
-				puts ""
-				puts "El numero maximo de nodos no puede ser mayor que el numero total de nodos"
-				return
+				error_string = <<-END_ERROR
+				Error en la base de datos
+				Numero total de nodos: #{m}
+				Numero maximo de nodos: #{n}
+
+				El numero maximo de nodos no puede ser mayour que
+				el numero total de nodos.
+
+				No se puede continuar
+				END_ERROR
+				error_string.gsub!(/\t/, "")
+				raise error_string
 			end
 
 			@total_nodes = m.to_i
@@ -41,10 +49,10 @@ class MMDP
 				signature << origen << destino
 				signature.sort!
 
-				if not @nodes.has_key? signature
-					@nodes[signature] = coste.to_f
-				end
+				@nodes[signature] = coste.to_f if not @nodes.has_key? signature
 			end
 		end
 	end
 end
+
+m = MMDP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/MMDP/GKD-Ia_1_n10_m2.txt")
