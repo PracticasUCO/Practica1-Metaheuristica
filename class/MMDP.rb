@@ -4,8 +4,9 @@
 La clase MMDP define una interfaz para el problema MMDP
 propuesto en clase.
 =end
-class 
-	attr_reader :total_nodes, :max_nodes
+class MMDP
+	attr_reader :total_nodes 
+	attr_reader :max_nodes
 	# Constructor de MMDP. Recibe como parametro un string
 	# con la direccion de la base de datos que se deseea leer
 	def initialize(path_db)
