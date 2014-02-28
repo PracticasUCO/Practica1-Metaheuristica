@@ -76,7 +76,7 @@ class MMDP
 	# vector con la maxima distancia entre nodos posible
 	def busqueda_global()
 		solucion = Array.new
-		elementosRestringidos = Array.new(self.total_nodes) {|index| index}
+		elementosRestringidos = lista_nodos()
 		coste_actual = 0.0
 
 		while solucion.size < self.solution_nodes
