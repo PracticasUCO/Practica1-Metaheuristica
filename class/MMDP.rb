@@ -149,15 +149,7 @@ class MMDP
 	# 
 	# Devuelve un vector con los nodos
 	# seleccionados y un valor flotante con la suma de costes
-	def generar_solucion_aleatoria(seed = 0)
-		raise TypeError, "El tipo del parametro seed es incorrecto" unless seed.is_a? Fixnum or seed.is_a? Bignum
-
-		if seed == 0
-			srand
-		else
-			srand seed
-		end
-
+	def generar_solucion_aleatoria()
 		solucion, coste_actual = busqueda_global
 		solucion, coste_actual = busqueda_local(solucion)
 
