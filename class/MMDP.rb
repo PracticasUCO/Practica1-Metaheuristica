@@ -71,15 +71,6 @@ class MMDP
 	# Devuelve un vector solucion optimizado
 	def busqueda_local(solucion)
 		raise TypeError, "El parametro solucion debe se ser un Array" unless solucion.class.name == "Array"
-
-		solucion_optimizada = solucion
-		nodos_destino = lista_nodos()
-		coste_actual = 
-
-		solucion.each do |nodo|
-			nodos_destino.each do |posible_candidato|
-				next if posible_candidato == nodo
-
 	end
 
 	# Realiza una busqueda global para tratar de obtener un
@@ -120,6 +111,10 @@ class MMDP
 		end
 
 		solucion, coste_actual = busqueda_global
+		coste = 0#obtener_suma_costes(solucion)
+		puts "s: #{solucion}"
+
+		puts "coste_actual: #{coste_actual} y coste: #{coste}"
 
 		return solucion, coste_actual	
 	end
@@ -142,7 +137,7 @@ class MMDP
 	# nuevo nodo deben de ser nodos leidos anteriormente de
 	# la base de datos, de lo contrario el comportamiento
 	# no esta definido.
-	def obtener_suma_costes(solucion, nuevo_nodo)
+	def obtener_suma_costes(solucion, *nuevo_nodo)
 		raise TypeError, "El parametro solucion debe de ser un array" unless solucion.class.name == "Array"
 
 		if solucion.empty?
@@ -151,31 +146,24 @@ class MMDP
 
 		coste = 0.0
 
-		for nodo in solucion
-			coste += obtener_coste_entre(nodo, nuevo_nodo)
-		end
+		if nuevo_nodo.empty?
+			solucion.each do |origen|
+				solucion.each do |destino|
+					next if origen == destino
+					coste += obtener_coste_entre(origen, destino)
+				end
+			end
 
-		return coste
-	end
-
-	# Devuelve la suma de costes de un vector solucion
-	def obtener_suma_costes(solucion)
-		raise TypeError, "El parametro solucion debe de ser un array" unless solucion.class.name == "Array"
-
-		if solucion.empty?
-			return 0.0
-		end
-
-		coste = 0.0
-
-		solucion.each do |origen|
-			solucion.each do |destino|
-				next if origen == destino
-				coste += obtener_coste_entre(origen, destino)
+		else
+			solucion.each do |nodo|
+				nuevo_nodo.each do |nuevo|
+					coste += obtener_coste_entre(nodo, nuevo) unless solucion.include? nuevo
+				end
 			end
 		end
 
 		return coste
+	end
 
 	# Definicion de los metodos privados de la clase
 	private :obtener_coste_entre, :obtener_suma_costes, :busqueda_global, :busqueda_local
