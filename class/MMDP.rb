@@ -83,6 +83,8 @@ class MMDP
 		while solucion.size < self.solution_nodes
 			posicion_elegida = rand elementosRestringidos.size
 			solucion << elementosRestringidos[posicion_elegida]
+			elementosRestringidos.delete_at(posicion_elegida)
+
 		end
 	end
 
@@ -93,6 +95,27 @@ class MMDP
 		signature.sort!
 
 		return @nodes[signature] if @nodes.has_key? signature
+	end
+
+	# Devuelve la suma de costes de añadir un nuevo nodo a la solucion
+	# El parametro solucion representa un array con la lista de
+	# de nodos ya escogidos y el parametro nuevo_nodo representa
+	# un nodo que se desea introduccir en la solucion.
+	#
+	# Tanto los nodos escogidos del array solucion, como el 
+	# nuevo nodo deben de ser nodos leidos anteriormente de
+	# la base de datos, de lo contrario el comportamiento
+	# no esta definido.
+	def obtener_suma_costes(solucion, nuevo_nodo)
+		raise TypeError, "El parametro soluccion debe de ser un array" unless solucion.to_a? Array
+
+		coste = 0.0
+
+		for nodo in solucion
+			coste += obtener_coste_entre(nodo, nuevo_nodo)
+		end
+
+		return coste
 	end
 end
 
