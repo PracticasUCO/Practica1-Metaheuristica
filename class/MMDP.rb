@@ -77,23 +77,26 @@ class MMDP
 		coste_actual = obtener_suma_costes(solucion)
 
 		solucion.each do |origen|
-			nodos_lista do |destino|
+			solucion.each do |destino|
 				next if origen == destino
 
-				if alternativa.include? destino
-					copia_alternativa = alternativa.dup.delete(destino)
+				nueva_alternativa = alternativa.dup
+				nueva_alternativa.delete(destino)
+				
+				nodos_lista.each do |nodo_alternativo|
+					next if nodo_alternativo == origen
+					next if nodo_alternativo == destino
 
-					nodos_lista.each do |nodo_alternativo|
-						next if nodo_alternativo == origen
-						next if nodo_alternativo == destino
-						copia_alternativa << nodo_alternativo
-						coste_alternativo = obtener_suma_costes(copia_alternativa)
+					nueva_alternativa << nodo_alternativo
 
-						if coste_alternativo > coste_actual
-							coste_actual = coste_alternativo
-							alternativa = copia_alternativa.dup
-						end
+					coste_alternativa = obtener_suma_costes(nueva_alternativa)
+
+					if coste_alternativa > coste_actual
+						coste_actual = coste_alternativa
+						alternativa = nueva_alternativa.dup
 					end
+
+					nueva_alternativa.delete(nodo_alternativo)
 				end
 			end
 		end
@@ -156,6 +159,7 @@ class MMDP
 		end
 
 		solucion, coste_actual = busqueda_global
+		solucion, coste_actual = busqueda_local(solucion)
 
 		return solucion, coste_actual	
 	end
@@ -213,8 +217,3 @@ class MMDP
 	# Definicion de los metodos privados de la clase
 	private :obtener_coste_entre, :obtener_suma_costes, :busqueda_global, :busqueda_local
 end
-
-m = MMDP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/MMDP/GKD-Ia_1_n10_m2.txt")
-m.generar_solucion_aleatoria()
-optima, coste = m.solucion_optima()
-puts "#{optima} y su coste #{coste}"
