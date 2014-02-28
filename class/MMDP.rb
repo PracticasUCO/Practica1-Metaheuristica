@@ -65,6 +65,23 @@ class MMDP
 	def busqueda_local(solucion)
 	end
 
+	# Realiza una busqueda global para tratar de obtener un
+	# vector con la maxima distancia entre nodos posible
+	def busqueda_global()
+		solucion = Array.new
+		elementosRestringidos = Array.new(self.total_nodes) {|index| index}
+		coste_actual = 0.0
+
+		while solucion.size < self.solution_nodes
+			posicion_elegida = rand elementosRestringidos.size
+			coste_actual += obtener_suma_costes(solucion, elementosRestringidos[posicion_elegida])
+			solucion << elementosRestringidos[posicion_elegida]
+			elementosRestringidos.delete_at(posicion_elegida)
+		end
+
+		return solucion, coste_actual
+	end
+
 	# Genera una solución aleatoriamente a partir de la base de datos
 	# que se ha leido previamente. La solucion generada trata que
 	# el coste sea el maximo posible. 
@@ -85,18 +102,7 @@ class MMDP
 			srand seed
 		end
 
-		solucion = Array.new
-		elementosRestringidos = Array.new(self.total_nodes) {|index| index}
-		coste_actual = 0.0
-		index = 0
-
-		while solucion.size < self.solution_nodes
-			posicion_elegida = rand elementosRestringidos.size
-			coste_actual += obtener_suma_costes(solucion, elementosRestringidos[posicion_elegida])
-			solucion << elementosRestringidos[posicion_elegida]
-			elementosRestringidos.delete_at(posicion_elegida)
-			index += 1
-		end
+		solucion, coste_actual = self.busqueda_global
 
 		return solucion, coste_actual	
 	end
@@ -136,7 +142,7 @@ class MMDP
 	end
 
 	# Definicion de los metodos privados de la clase
-	private :obtener_coste_entre, :obtener_suma_costes
+	private :obtener_coste_entre, :obtener_suma_costes, :busqueda_global, :busqueda_local
 end
 
 m = MMDP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/MMDP/GKD-Ia_1_n10_m2.txt")
