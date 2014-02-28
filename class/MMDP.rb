@@ -12,6 +12,10 @@ class MMDP
 	# El atributo solution_nodes indica el numero maximo de nodos
 	# que debe aparecer en la solucion
 	attr_reader :solution_nodes
+
+	# El atributo lista_nodos indica la lista de nodos que se ha
+	# leido de la base de datos
+	attr_reader :lista_nodos
 	
 	# Constructor de MMDP. Recibe como parametro un string
 	# con la direccion de la base de datos que se deseea leer
@@ -22,6 +26,7 @@ class MMDP
 	# Lee una base de datos nueva y la carga dentro del fichero
 	def leerInstancia(path_db)
 		@nodes = Hash.new
+		@lista_nodos = Array.new
 
 		File.open(path_db, "r") do |file|
 			m, n = file.gets.chomp.split(/ +/)
@@ -50,6 +55,8 @@ class MMDP
 				signature = Array.new
 				signature << origen << destino
 				signature.sort!
+
+				@lista_nodos << origen if not @lista_nodos.include? origen
 
 				@nodes[signature] = coste.to_f if not @nodes.has_key? signature
 			end
