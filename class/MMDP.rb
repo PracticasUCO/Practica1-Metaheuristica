@@ -9,7 +9,7 @@ class MMDP
 	# hay en la base de datos
 	attr_reader :total_nodes 
 
-	# El atributo max_nodes indica el numero maximo de nodos
+	# El atributo solution_nodes indica el numero maximo de nodos
 	# que debe aparecer en la solucion
 	attr_reader :solution_nodes
 	
