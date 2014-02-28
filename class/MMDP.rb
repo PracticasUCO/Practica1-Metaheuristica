@@ -20,11 +20,11 @@ class MMDP
 	# Constructor de MMDP. Recibe como parametro un string
 	# con la direccion de la base de datos que se deseea leer
 	def initialize(path_db)
-		self.leerInstancia(path_db)
+		self.leer_instancia(path_db)
 	end
 
 	# Lee una base de datos nueva y la carga dentro del fichero
-	def leerInstancia(path_db)
+	def leer_instancia(path_db)
 		@nodes = Hash.new
 		@lista_nodos = Array.new
 
