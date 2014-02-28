@@ -111,10 +111,7 @@ class MMDP
 		end
 
 		solucion, coste_actual = busqueda_global
-		coste = 0#obtener_suma_costes(solucion)
-		puts "s: #{solucion}"
-
-		puts "coste_actual: #{coste_actual} y coste: #{coste}"
+		coste = obtener_suma_costes(solucion)
 
 		return solucion, coste_actual	
 	end
@@ -153,6 +150,9 @@ class MMDP
 					coste += obtener_coste_entre(origen, destino)
 				end
 			end
+
+			# Se divide el coste entre dos ya que se ha sumado cada nodo dos veces
+			coste /= 2 
 
 		else
 			solucion.each do |nodo|
