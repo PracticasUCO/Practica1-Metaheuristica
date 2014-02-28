@@ -56,11 +56,13 @@ class MMDP
 				signature << origen << destino
 				signature.sort!
 
-				@lista_nodos << origen if not @lista_nodos.include? origen
+				@lista_nodos.push(origen) if not @lista_nodos.include? origen
 
 				@nodes[signature] = coste.to_f if not @nodes.has_key? signature
 			end
 		end
+		puts "lista nodos: #{lista_nodos}"
+		puts "tam: #{lista_nodos.length}"
 	end
 
 	# Realiza una busca local para tratar de mejorar lo maximo posible el
@@ -77,7 +79,7 @@ class MMDP
 	# vector con la maxima distancia entre nodos posible
 	def busqueda_global()
 		solucion = Array.new
-		elementosRestringidos = lista_nodos()
+		elementosRestringidos = lista_nodos().dup
 		coste_actual = 0.0
 
 		while solucion.size < self.solution_nodes
@@ -88,6 +90,23 @@ class MMDP
 		end
 
 		return solucion, coste_actual
+	end
+
+	# Devuelve la solucion optima del problema
+	def solucion_optima
+		coste = -1.0
+		candidatos = lista_nodos().combination(solution_nodes())
+		candidato_seleccionado = nil
+
+		candidatos.each do |candidato|
+			coste_candidato = obtener_suma_costes(candidato)
+			if coste_candidato > coste
+				coste = coste_candidato
+				candidato_seleccionado = candidato
+			end
+		end
+
+		return candidato_seleccionado, coste
 	end
 
 	# Genera una solución aleatoriamente a partir de la base de datos
@@ -111,7 +130,6 @@ class MMDP
 		end
 
 		solucion, coste_actual = busqueda_global
-		coste = obtener_suma_costes(solucion)
 
 		return solucion, coste_actual	
 	end
@@ -125,15 +143,16 @@ class MMDP
 		return @nodes[signature] if @nodes.has_key? signature
 	end
 
-	# Devuelve la suma de costes de añadir un nuevo nodo a la solucion
-	# El parametro solucion representa un array con la lista de
-	# de nodos ya escogidos y el parametro nuevo_nodo representa
-	# un nodo que se desea introduccir en la solucion.
+	# Devuelve la suma de distancias o costes de un vector
+	# solucion.
 	#
-	# Tanto los nodos escogidos del array solucion, como el 
-	# nuevo nodo deben de ser nodos leidos anteriormente de
-	# la base de datos, de lo contrario el comportamiento
-	# no esta definido.
+	# Como parametros recibe un Array con lo elementos
+	# que forman parte de la solucion.
+	#
+	# Opcionalmente puede recibir una serie de nuevos nodos
+	# a añadir, en cuyo caso devolvera la cantidad total
+	# que esos nodos contribuiran a la suma de costes (no 
+	# la suma total del vector, sino la suma de los nuevos nodos)
 	def obtener_suma_costes(solucion, *nuevo_nodo)
 		raise TypeError, "El parametro solucion debe de ser un array" unless solucion.class.name == "Array"
 
@@ -171,3 +190,5 @@ end
 
 m = MMDP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/MMDP/GKD-Ia_1_n10_m2.txt")
 m.generar_solucion_aleatoria()
+optima, coste = m.solucion_optima()
+puts "#{optima} y su coste #{coste}"
