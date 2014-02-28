@@ -79,19 +79,23 @@ class MMDP
 		solucion = Array.new
 		elementosRestringidos = Array.new(self.total_nodes) {|index| index}
 		coste_actual = 0.0
+		index = 0
 
 		while solucion.size < self.solution_nodes
 			posicion_elegida = rand elementosRestringidos.size
+			coste_actual += obtener_suma_costes(solucion, elementosRestringidos[posicion_elegida])
 			solucion << elementosRestringidos[posicion_elegida]
 			elementosRestringidos.delete_at(posicion_elegida)
-
+			index += 1
 		end
+
+		return solucion, coste_actual	
 	end
 
 	# Devuelve la distancia o coste entre dos nodos o nil en caso contrario
 	def obtener_coste_entre(nodo_a, nodo_b)
 		signature = Array.new
-		signature << nodo_a << nodo_b
+		signature << nodo_a.to_s << nodo_b.to_s
 		signature.sort!
 
 		return @nodes[signature] if @nodes.has_key? signature
@@ -107,7 +111,7 @@ class MMDP
 	# la base de datos, de lo contrario el comportamiento
 	# no esta definido.
 	def obtener_suma_costes(solucion, nuevo_nodo)
-		raise TypeError, "El parametro soluccion debe de ser un array" unless solucion.to_a? Array
+		raise TypeError, "El parametro solucion debe de ser un array" unless solucion.class.name == "Array"
 
 		if solucion.empty?
 			return 0.0
@@ -124,3 +128,4 @@ class MMDP
 end
 
 m = MMDP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/MMDP/GKD-Ia_1_n10_m2.txt")
+m.generar_solucion_aleatoria()
