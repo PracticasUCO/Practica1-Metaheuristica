@@ -109,6 +109,10 @@ class MMDP
 	def obtener_suma_costes(solucion, nuevo_nodo)
 		raise TypeError, "El parametro soluccion debe de ser un array" unless solucion.to_a? Array
 
+		if solucion.empty?
+			return 0.0
+		end
+
 		coste = 0.0
 
 		for nodo in solucion
