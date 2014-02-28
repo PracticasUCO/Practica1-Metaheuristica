@@ -66,13 +66,39 @@ class MMDP
 	# Realiza una busca local para tratar de mejorar lo maximo posible el
 	# vector solucion
 	# 
-	# Recibe como parametros el array con la soluciones escogidas
+	# Recibe como parametros el array con la soluciones escogidas y
 	#
 	# Devuelve un vector solucion optimizado
 	def busqueda_local(solucion)
 		raise TypeError, "El parametro solucion debe se ser un Array" unless solucion.class.name == "Array"
 
+		alternativa = solucion.dup
+		nodos_lista = lista_nodos()
+		coste_actual = obtener_suma_costes(solucion)
 
+		solucion.each do |origen|
+			nodos_lista do |destino|
+				next if origen == destino
+
+				if alternativa.include? destino
+					copia_alternativa = alternativa.dup.delete(destino)
+
+					nodos_lista.each do |nodo_alternativo|
+						next if nodo_alternativo == origen
+						next if nodo_alternativo == destino
+						copia_alternativa << nodo_alternativo
+						coste_alternativo = obtener_suma_costes(copia_alternativa)
+
+						if coste_alternativo > coste_actual
+							coste_actual = coste_alternativo
+							alternativa = copia_alternativa.dup
+						end
+					end
+				end
+			end
+		end
+
+		return alternativa, coste_actual
 	end
 
 	# Realiza una busqueda global para tratar de obtener un
