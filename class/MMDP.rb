@@ -1,4 +1,4 @@
-#! /usr/bin/env ruby
+#! /usr/bin/env ruby -w
 
 =begin rdoc
 La clase MMDP define una interfaz para el problema Max Min Diversity Problem
@@ -53,7 +53,6 @@ class MMDP
 
 				@nodes[signature] = coste.to_f if not @nodes.has_key? signature
 			end
-			puts @nodes
 		end
 	end
 
@@ -69,6 +68,31 @@ class MMDP
 	# Devuelve un vector con los nodos
 	# seleccionados y un valor flotante con la suma de costes
 	def generar_solucion_aleatoria(seed = 0)
+		raise TypeError, "El tipo del parametro seed es incorrecto" unless seed.is_a? Fixnum or seed.is_a? Bignum
+
+		if seed == 0
+			srand
+		else
+			srand seed
+		end
+
+		solucion = Array.new
+		elementosRestringidos = Array.new(self.total_nodes) {|index| index}
+		coste_actual = 0.0
+
+		while solucion.size < self.solution_nodes
+			posicion_elegida = rand elementosRestringidos.size
+			solucion << elementosRestringidos[posicion_elegida]
+		end
+	end
+
+	# Devuelve la distancia o coste entre dos nodos o nil en caso contrario
+	def obtener_coste_entre(nodo_a, nodo_b)
+		signature = Array.new
+		signature << nodo_a << nodo_b
+		signature.sort!
+
+		return @nodes[signature] if @nodes.has_key? signature
 	end
 end
 
