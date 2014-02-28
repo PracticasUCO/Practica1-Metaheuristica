@@ -109,7 +109,7 @@ class MMDP
 			srand seed
 		end
 
-		solucion, coste_actual = self.busqueda_global
+		solucion, coste_actual = busqueda_global
 
 		return solucion, coste_actual	
 	end
