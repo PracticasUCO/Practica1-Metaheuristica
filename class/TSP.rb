@@ -4,6 +4,25 @@ class TSP
 
 	# Lee el fichero de BD y lo carga en memoria
 	def leer_intancia(path_db)
+		raise TypeError, "path_db debe de ser un String" unless path_db.class.name == "String"
+
+		File.open(path_db, "r") do |f|
+			# La primera linea nos da información acerca del numero de ciudades que hay
+			# almacenadas en el fichero
+			#
+			# Aunque a priori el numero no no importa, ya que en Ruby no tenemos que
+			# que hacer una reserva de memoria anticipada, si nos sirve para no leer toda
+			# la base de datos, teniendo en cuenta que las distancias son simetricas
+			max_ciudades = f.gets.to_i
+
+			# Ahora podemos ir realizando una lectura completa del resto de la base de datos
+			#
+			# Uso el enumerador with_index para parar la ejecucion una vez que se haya leido
+			# la mitad de la base de datos
+			f.each_with_index do |linea, index|
+				break unless index < max_ciudades / 2
+			end
+		end
 	end
 
 	# Constructor de la clase TSP. Recibe como argumento
