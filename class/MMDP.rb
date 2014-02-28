@@ -61,8 +61,6 @@ class MMDP
 				@nodes[signature] = coste.to_f if not @nodes.has_key? signature
 			end
 		end
-		puts "lista nodos: #{lista_nodos}"
-		puts "tam: #{lista_nodos.length}"
 	end
 
 	# Realiza una busca local para tratar de mejorar lo maximo posible el
@@ -73,6 +71,8 @@ class MMDP
 	# Devuelve un vector solucion optimizado
 	def busqueda_local(solucion)
 		raise TypeError, "El parametro solucion debe se ser un Array" unless solucion.class.name == "Array"
+
+
 	end
 
 	# Realiza una busqueda global para tratar de obtener un
