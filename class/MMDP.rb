@@ -117,7 +117,7 @@ class MMDP
 	# Devuelve la distancia o coste entre dos nodos o nil en caso contrario
 	def obtener_coste_entre(nodo_a, nodo_b)
 		signature = Array.new
-		signature << nodo_a.to_s << nodo_b.to_s
+		signature << nodo_a << nodo_b
 		signature.sort!
 
 		return @nodes[signature] if @nodes.has_key? signature
