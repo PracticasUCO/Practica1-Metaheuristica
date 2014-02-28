@@ -53,16 +53,22 @@ class MMDP
 
 				@nodes[signature] = coste.to_f if not @nodes.has_key? signature
 			end
+			puts @nodes
 		end
 	end
 
 	# Genera una solución aleatoriamente a partir de la base de datos
 	# que se ha leido previamente. La solucion generada trata que
 	# el coste sea el maximo posible. 
+	#
+	# Recibe como parametro el valor de seed, que indicara con que
+	# valor se inicializa una secuencia aleatoria, en caso de
+	# no introduccir ningún valor o de introduccir el valor cero
+	# se usara el valor de Random.new_seed
 	# 
 	# Devuelve un vector con los nodos
 	# seleccionados y un valor flotante con la suma de costes
-	def generarSolucionAleatoria()
+	def generar_solucion_aleatoria(seed = 0)
 	end
 end
 
