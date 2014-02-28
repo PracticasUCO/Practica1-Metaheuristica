@@ -22,4 +22,6 @@ class TSP
 		signature << ciudad_a << ciudad_b
 		signature.sort!
 	end
+
+	private :obtener_signature
 end
