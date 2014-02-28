@@ -125,6 +125,9 @@ class MMDP
 
 		return coste
 	end
+
+	# Definicion de los metodos privados de la clase
+	private :obtener_coste_entre, :obtener_suma_costes
 end
 
 m = MMDP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/MMDP/GKD-Ia_1_n10_m2.txt")
