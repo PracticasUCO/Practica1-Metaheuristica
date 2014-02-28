@@ -56,6 +56,15 @@ class MMDP
 		end
 	end
 
+	# Realiza una busca local para tratar de mejorar lo maximo posible el
+	# vector solucion
+	# 
+	# Recibe como parametros el array con la soluciones escogidas
+	#
+	# Devuelve un vector solucion optimizado
+	def busqueda_local(solucion)
+	end
+
 	# Genera una solución aleatoriamente a partir de la base de datos
 	# que se ha leido previamente. La solucion generada trata que
 	# el coste sea el maximo posible. 
