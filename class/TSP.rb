@@ -11,7 +11,7 @@ class TSP
 
 	# Lee el fichero de BD y lo carga en memoria
 	def leer_intancia(path_db)
-		raise TypeError, "path_db debe de ser un String" unless path_db.class.name == "String"
+		raise TypeError, "path_db debe de ser un String" unless path_db.kind_of? String
 
 		@caminos = Array.new
 
