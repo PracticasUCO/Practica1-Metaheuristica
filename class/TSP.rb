@@ -74,6 +74,26 @@ class TSP
 		return coste_actual
 	end
 
+	# Calcula la solucion optima a base de calcular todas las permutaciones
+	# entre las distinas ciudades. Devuelve la permutacion obtenida y
+	# su coste
+	def solucion_optima
+		coste_actual = Float::INFINITY # El coste inicial es infinito
+		permutacion_optima = nil # De momento ninguna
+		ciudades = Array.new(numero_ciudades) {|index| index}
+
+		ciudades.permutation do |p|
+			coste_permutacion = coste_solucion(p)
+
+			if coste_permutacion < coste_actual
+				coste_actual = coste_permutacion
+				permutacion_optima = p.dup
+			end
+		end
+
+		return permutacion_optima, coste_actual
+	end
+
 	# Constructor de la clase TSP. Recibe como argumento
 	# el fichero del cual debe de leer la matriz de distancias
 	def initialize(path_db)
