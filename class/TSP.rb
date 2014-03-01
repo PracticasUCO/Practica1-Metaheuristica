@@ -53,6 +53,9 @@ class TSP
 		end
 	end
 
+	# Calcula el coste de una solucion dada
+	#
+	# Recibe como parametro un Array con las ciudades que se van a visitar
 	def coste_solucion(ciudades)
 		raise TypeError, "ciudades debe de ser un Array" unless ciudades.class.name == "Array"
 		
