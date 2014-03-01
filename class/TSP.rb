@@ -99,6 +99,43 @@ class TSP
 		return permutacion_optima, coste_actual
 	end
 
+	# Genera una solucion aleatoria a traves de la heuristica
+	# Recibe un parametro iteraciones que indica el numero maximo
+	# de iteraciones a realizar para obtener dicha solucion.
+	#
+	# Si no se utiliza el parametro iteraciones, se asume que
+	# vale 15_000 (quince mil)
+	#
+	# Devuelve la solucion generada, junto con el coste obtenido
+	def generar_solucion_aleatoria(iteraciones = 15_000)
+		puts "eh"
+		coste_actual = Float::INFINITY # El coste inicial es infinito
+		ciudades = Array.new(numero_ciudades) {|index| index}
+		index = 0
+		solucion_actual = nil # Aun no se ha almacenado ninguna solucion
+
+		while index < iteraciones
+			candidatos = ciudades.dup
+			solucion = Array.new
+
+			while not candidatos.empty?
+				candidato_elegido = rand(candidatos.length)
+				solucion << candidatos[candidato_elegido]
+				candidatos.delete_at(candidato_elegido)
+			end
+
+			coste = coste_solucion(solucion)
+
+			if coste < coste_actual
+				coste_actual = coste
+				solucion_actual = solucion
+			end
+			index += 1
+		end
+
+		return solucion_actual, coste_actual
+	end
+
 	# Constructor de la clase TSP. Recibe como argumento
 	# el fichero del cual debe de leer la matriz de distancias
 	def initialize(path_db)
@@ -109,5 +146,5 @@ class TSP
 end
 
 a = TSP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/TSP/p01.txt")
-lista, coste = a.solucion_optima
+lista, coste = a.generar_solucion_aleatoria
 puts "Se ha encontrado la siguiente lista: #{lista} con un coste de #{coste}"
