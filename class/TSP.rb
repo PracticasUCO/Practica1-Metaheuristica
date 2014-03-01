@@ -1,6 +1,7 @@
 #! /usr/bin/env ruby -w
 
 class TSP
+	include Enumerable
 
 	# caminos almacena los caminos almacenados de una ciudad a otra
 	attr_reader :caminos
@@ -36,6 +37,14 @@ class TSP
 
 	def [](index_a)
 		@caminos[index_a]
+	end
+
+	def each
+		@caminos.each do |ciudad|
+			ciudad.each do |coste|
+				yield coste
+			end
+		end
 	end
 
 	# Constructor de la clase TSP. Recibe como argumento
