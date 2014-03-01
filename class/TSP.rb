@@ -67,7 +67,9 @@ class TSP
 		second.next
 
 		loop do
-			coste_actual += @ciudades[first][second]
+			indexA = first.next
+			indexB = second.next
+			coste_actual += self[indexA][indexB]
 		end
 
 		coste_actual += self[ciudades[-1]][ciudades[0]]
@@ -77,6 +79,9 @@ class TSP
 	# Calcula la solucion optima a base de calcular todas las permutaciones
 	# entre las distinas ciudades. Devuelve la permutacion obtenida y
 	# su coste
+	#
+	# No se recomienda el uso de este metodo, debido a que puede llegar a ser
+	# bastante lento
 	def solucion_optima
 		coste_actual = Float::INFINITY # El coste inicial es infinito
 		permutacion_optima = nil # De momento ninguna
@@ -104,3 +109,5 @@ class TSP
 end
 
 a = TSP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/TSP/p01.txt")
+lista, coste = a.solucion_optima
+puts "Se ha encontrado la siguiente lista: #{lista} con un coste de #{coste}"
