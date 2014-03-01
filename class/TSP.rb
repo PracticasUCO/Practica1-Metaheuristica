@@ -41,6 +41,7 @@ class TSP
 
 	# Accede a un elemento del la matriz de costes entre ciudades
 	def [](index)
+		raise TypeError, "index must be an integer" unless index.kind_of? Integer
 		@caminos[index]
 	end
 
