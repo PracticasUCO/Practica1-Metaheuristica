@@ -39,8 +39,9 @@ class TSP
 		end
 	end
 
-	def [](index_a)
-		@caminos[index_a]
+	# Accede a un elemento del la matriz de costes entre ciudades
+	def [](index)
+		@caminos[index]
 	end
 
 	def each
