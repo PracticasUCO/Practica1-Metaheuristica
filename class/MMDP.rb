@@ -108,7 +108,7 @@ class MMDP
 
 	# Realiza una busqueda global para tratar de obtener un
 	# vector con la maxima distancia entre nodos posible
-	def busqueda_global()
+	def busqueda_global
 		solucion = Array.new
 		elementosRestringidos = lista_nodos().dup
 		coste_actual = 0.0
@@ -151,7 +151,7 @@ class MMDP
 	# 
 	# Devuelve un vector con los nodos
 	# seleccionados y un valor flotante con la suma de costes
-	def generar_solucion_aleatoria()
+	def generar_solucion_aleatoria
 		solucion, coste_actual = busqueda_global
 		solucion, coste_actual = busqueda_local(solucion)
 
@@ -178,7 +178,7 @@ class MMDP
 	# que esos nodos contribuiran a la suma de costes (no 
 	# la suma total del vector, sino la suma de los nuevos nodos)
 	def obtener_suma_costes(solucion, *nuevo_nodo)
-		raise TypeError, "El parametro solucion debe de ser un array" unless solucion.class.name == "Array"
+		raise TypeError, "El parametro solucion debe de ser un array" unless solucion.kind_of? Array
 
 		if solucion.empty?
 			return 0.0
