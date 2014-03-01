@@ -67,7 +67,7 @@ class TSP
 		second.next
 
 		loop do
-			coste_actual += self[first][second]
+			coste_actual += @ciudades[first][second]
 		end
 
 		coste_actual += self[ciudades[-1]][ciudades[0]]
