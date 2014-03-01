@@ -70,7 +70,7 @@ class MMDP
 	#
 	# Devuelve un vector solucion optimizado
 	def busqueda_local(solucion)
-		raise TypeError, "El parametro solucion debe se ser un Array" unless solucion.class.name == "Array"
+		raise TypeError, "El parametro solucion debe ser un Array" unless solucion.class.name == "Array"
 
 		alternativa = solucion.dup
 		nodos_lista = lista_nodos()

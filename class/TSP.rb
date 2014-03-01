@@ -6,6 +6,8 @@ class TSP
 	def leer_intancia(path_db)
 		raise TypeError, "path_db debe de ser un String" unless path_db.class.name == "String"
 
+		@caminos = Hash.new
+
 		File.open(path_db, "r") do |f|
 			# La primera linea nos da información acerca del numero de ciudades que hay
 			# almacenadas en el fichero
@@ -21,6 +23,12 @@ class TSP
 			# la mitad de la base de datos
 			f.each_with_index do |linea, index|
 				break unless index < max_ciudades / 2
+				linea = linea.chomp
+				ciudades = linea.split(/ +/)
+
+				ciudades.each_with_index do |coste|
+
+				end
 			end
 		end
 	end
