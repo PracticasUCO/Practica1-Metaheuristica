@@ -2,6 +2,9 @@
 
 class TSP
 
+	# caminos almacena los caminos almacenados de una ciudad a otra
+	attr_reader :caminos
+
 	# Lee el fichero de BD y lo carga en memoria
 	def leer_intancia(path_db)
 		raise TypeError, "path_db debe de ser un String" unless path_db.class.name == "String"
