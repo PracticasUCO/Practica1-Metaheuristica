@@ -34,6 +34,10 @@ class TSP
 		end
 	end
 
+	def [](index_a)
+		@caminos[index_a]
+	end
+
 	# Constructor de la clase TSP. Recibe como argumento
 	# el fichero del cual debe de leer la matriz de distancias
 	def initialize(path_db)
