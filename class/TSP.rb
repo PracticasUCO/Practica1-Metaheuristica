@@ -108,7 +108,6 @@ class TSP
 	#
 	# Devuelve la solucion generada, junto con el coste obtenido
 	def generar_solucion_aleatoria(iteraciones = 15_000)
-		puts "eh"
 		coste_actual = Float::INFINITY # El coste inicial es infinito
 		ciudades = Array.new(numero_ciudades) {|index| index}
 		index = 0
