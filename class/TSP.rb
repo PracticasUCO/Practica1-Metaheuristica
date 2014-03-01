@@ -51,6 +51,24 @@ class TSP
 		end
 	end
 
+	def coste_solucion(ciudades)
+		raise TypeError, "ciudades debe de ser un Array" unless ciudades.class.name == "Array"
+		
+		coste_actual = 0.0
+		
+		first = ciudades.each
+		second = ciudades.each
+
+		second.next
+
+		loop do
+			coste_actual += self[first][second]
+		end
+
+		coste_actual += self[ciudades[-1]][ciudades[0]]
+		return coste_actual
+	end
+
 	# Constructor de la clase TSP. Recibe como argumento
 	# el fichero del cual debe de leer la matriz de distancias
 	def initialize(path_db)
