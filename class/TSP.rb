@@ -39,19 +39,6 @@ class TSP
 	def initialize(path_db)
 		self.leer_intancia(path_db)
 	end
-
-	# Devuelve la llave de hash asociada a dos ciuades que se
-	# pasen como argumento
-	def obtener_signature(ciudad_a, ciudad_b)
-		raise TypeError, "ciudad_a debe de ser un String" unless ciudad_a.class.name == "String"
-		raise TypeError, "ciudad_b debe de ser un String" unless ciudad_b.class.name == "String"
-
-		signature = Array.new
-		signature << ciudad_a << ciudad_b
-		signature.sort!
-	end
-
-	private :obtener_signature
 end
 
 a = TSP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/TSP/p01.txt")
