@@ -58,7 +58,7 @@ class TSP
 	#
 	# Recibe como parametro un Array con las ciudades que se van a visitar
 	def coste_solucion(ciudades)
-		raise TypeError, "ciudades debe de ser un Array" unless ciudades.class.name == "Array"
+		raise TypeError, "ciudades debe de ser un Array" unless ciudades.kind_of? Array
 		
 		coste_actual = 0.0
 		
