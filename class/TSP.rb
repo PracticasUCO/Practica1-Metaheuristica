@@ -44,6 +44,7 @@ class TSP
 		@caminos[index]
 	end
 
+	# Iterador que accede a cada elemento de la matriz de costes
 	def each
 		@caminos.each do |ciudad|
 			ciudad.each do |coste|
