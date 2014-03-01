@@ -26,6 +26,7 @@ class MMDP
 	# Lee una base de datos nueva y la carga dentro del fichero
 	def leer_instancia(path_db)
 		raise TypeError, "path_db must be a string" unless path_db.kind_of? String
+
 		@nodes = Hash.new
 		@lista_nodos = Array.new
 
@@ -71,7 +72,7 @@ class MMDP
 	#
 	# Devuelve un vector solucion optimizado
 	def busqueda_local(solucion)
-		raise TypeError, "El parametro solucion debe ser un Array" unless solucion.class.name == "Array"
+		raise TypeError, "El parametro solucion debe ser un Array" unless solucion.kind_of? Array
 
 		alternativa = solucion.dup
 		nodos_lista = lista_nodos()
