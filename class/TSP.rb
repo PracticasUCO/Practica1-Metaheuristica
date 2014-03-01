@@ -6,6 +6,9 @@ class TSP
 	# caminos almacena los caminos almacenados de una ciudad a otra
 	attr_reader :caminos
 
+	# Numero de ciudades guardadas en la clase
+	attr_reader :numero_ciudades
+
 	# Lee el fichero de BD y lo carga en memoria
 	def leer_intancia(path_db)
 		raise TypeError, "path_db debe de ser un String" unless path_db.class.name == "String"
@@ -16,8 +19,9 @@ class TSP
 			# La primera linea nos da información acerca del numero de ciudades que hay
 			# almacenadas en el fichero
 			#
-			# Dicho valor no nos importa a priori, por lo que no lo guardamos
-			f.gets
+			# Nosotros lo guardamos para poder consultarlo rapidamente en el futuro a
+			# traves del metodo TSP#numero_ciudades
+			@numero_ciudades = f.gets.to_i
 
 			# Ahora podemos ir realizando una lectura completa del resto de la base de datos
 			#
