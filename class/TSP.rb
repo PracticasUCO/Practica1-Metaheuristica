@@ -79,6 +79,8 @@ class TSP
 	def initialize(path_db)
 		self.leer_intancia(path_db)
 	end
+
+	private :coste_solucion
 end
 
 a = TSP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/TSP/p01.txt")
