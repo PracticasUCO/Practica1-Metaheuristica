@@ -25,6 +25,7 @@ class MMDP
 
 	# Lee una base de datos nueva y la carga dentro del fichero
 	def leer_instancia(path_db)
+		raise TypeError, "path_db must be a string" unless path_db.kind_of? String
 		@nodes = Hash.new
 		@lista_nodos = Array.new
 
