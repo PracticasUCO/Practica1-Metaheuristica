@@ -158,13 +158,18 @@ class MMDP
 		return solucion, coste_actual	
 	end
 
-	# Devuelve la distancia o coste entre dos nodos o nil en caso contrario
+	# Devuelve la distancia o coste entre dos nodos.
+	# Si no encuentra los nodos, devolvera cero
 	def obtener_coste_entre(nodo_a, nodo_b)
+		raise TypeError, "nodo_a must be a String" unless nodo_a.kind_of? String
+		raise TypeError, "nodo_b must be a String" unless nodo_b.kind_of? String
+		
 		signature = Array.new
 		signature << nodo_a << nodo_b
 		signature.sort!
 
 		return @nodes[signature] if @nodes.has_key? signature
+		return 0 unless @nodes.has_key? signature
 	end
 
 	# Devuelve la suma de distancias o costes de un vector
