@@ -109,16 +109,8 @@ class MMDP
 	# Realiza una busqueda global para tratar de obtener un
 	# vector con la maxima distancia entre nodos posible
 	def busqueda_global
-		solucion = Array.new
-		elementosRestringidos = lista_nodos().dup
-		coste_actual = 0.0
-
-		while solucion.size < self.solution_nodes
-			posicion_elegida = rand elementosRestringidos.size
-			coste_actual += obtener_suma_costes(solucion, elementosRestringidos[posicion_elegida])
-			solucion << elementosRestringidos[posicion_elegida]
-			elementosRestringidos.delete_at(posicion_elegida)
-		end
+		solucion = lista_nodos().sample(solution_nodes)
+		coste_actual = obtener_suma_costes(solucion)
 
 		return solucion, coste_actual
 	end
