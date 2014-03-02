@@ -16,6 +16,13 @@ class MMDP
 	# El atributo lista_nodos indica la lista de nodos que se ha
 	# leido de la base de datos
 	attr_reader :lista_nodos
+
+	# El punto de ruptura representa el valor maximo de busqueda
+	# dentro de la busqueda local. Si este valor es igual a 2
+	# significara que se buscara localmente a través de la mitad
+	# del vector solucion dado por la busqueda global. Si es
+	# tres, sera a través de la tercera parte, y asi sucesivamente
+	attr_reader :punto_ruptura
 	
 	# Constructor de MMDP. Recibe como parametro un string
 	# con la direccion de la base de datos que se deseea leer
@@ -63,6 +70,12 @@ class MMDP
 				@nodes[signature] = coste.to_f if not @nodes.has_key? signature
 			end
 		end
+
+		if solution_nodes > 2
+			@punto_ruptura = Math.log2(solution_nodes).to_i
+		else
+			@punto_ruptura = 1
+		end
 	end
 
 	# Realiza una busca local para tratar de mejorar lo maximo posible el
@@ -75,11 +88,12 @@ class MMDP
 		raise TypeError, "El parametro solucion debe ser un Array" unless solucion.kind_of? Array
 
 		alternativa = solucion.dup
-		nodos_lista = lista_nodos()
+		nodos_lista = lista_nodos().dup
 		coste_actual = obtener_suma_costes(solucion)
 
-		solucion.each do |origen|
-			solucion.each do |destino|
+		alternativa.each_with_index do |origen, index|
+			break if index > solution_nodes / @punto_ruptura
+			alternativa.each do |destino|
 				next if origen == destino
 
 				nueva_alternativa = alternativa.dup
@@ -88,6 +102,7 @@ class MMDP
 				nodos_lista.each do |nodo_alternativo|
 					next if nodo_alternativo == origen
 					next if nodo_alternativo == destino
+					next if nueva_alternativa.include? nodo_alternativo
 
 					nueva_alternativa << nodo_alternativo
 
@@ -109,7 +124,7 @@ class MMDP
 	# Realiza una busqueda global para tratar de obtener un
 	# vector con la maxima distancia entre nodos posible
 	def busqueda_global
-		solucion = lista_nodos().sample(solution_nodes)
+		solucion = lista_nodos().dup.sample(solution_nodes)
 		coste_actual = obtener_suma_costes(solucion)
 
 		return solucion, coste_actual
@@ -208,3 +223,8 @@ class MMDP
 	# Definicion de los metodos privados de la clase
 	private :obtener_coste_entre, :obtener_suma_costes, :busqueda_global, :busqueda_local
 end
+
+m = MMDP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/MMDP/GKD-Ia_75_n30_m24.txt")
+sol, coste = m.generar_solucion_aleatoria
+puts "Solucion heuristica: #{sol}"
+puts "Coste: #{coste}"
