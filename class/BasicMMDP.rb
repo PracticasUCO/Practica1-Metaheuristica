@@ -103,8 +103,8 @@ class BasicMMDP
 	# Devuelve un vector con los nodos
 	# seleccionados y un valor flotante con la suma de costes
 	def generar_solucion_aleatoria
-		solucion, coste_actual = busqueda_global
-		solucion, coste_actual = busqueda_local(solucion)
+		solucion = @lista_nodos.sample(solution_nodes)
+		coste_actual = obtener_suma_costes(solucion)
 
 		return solucion, coste_actual	
 	end
