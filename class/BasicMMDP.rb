@@ -75,6 +75,9 @@ class BasicMMDP
 	end
 
 	# Devuelve la solucion optima del problema
+	#
+	# No se recomiendo su uso, ya que puede tardar mucho
+	# su ejecucion, especialmente con conjuntos de datos muy grandes
 	def solucion_optima
 		coste = -Float::INFINITY
 		candidatos = lista_nodos().combination(solution_nodes())
