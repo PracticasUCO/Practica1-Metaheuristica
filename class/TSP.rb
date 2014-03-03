@@ -116,14 +116,9 @@ class TSP
 		solucion_actual = nil # Aun no se ha almacenado ninguna solucion
 
 		iteraciones.times do
-			candidatos = ciudades.dup
 			solucion = Array.new
 
-			while not candidatos.empty?
-				candidato_elegido = rand(candidatos.length)
-				solucion << candidatos[candidato_elegido]
-				candidatos.delete_at(candidato_elegido)
-			end
+			solucion = ciudades.sample(ciudades.length)
 
 			coste = coste_solucion(solucion)
 
