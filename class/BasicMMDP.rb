@@ -76,7 +76,7 @@ class BasicMMDP
 
 	# Devuelve la solucion optima del problema
 	def solucion_optima
-		coste = -1.0
+		coste = -Float::INFINITY
 		candidatos = lista_nodos().combination(solution_nodes())
 		candidato_seleccionado = nil
 
