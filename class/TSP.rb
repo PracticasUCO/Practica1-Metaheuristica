@@ -108,15 +108,14 @@ class TSP
 	# vale 15_000 (quince mil)
 	#
 	# Devuelve la solucion generada, junto con el coste obtenido
-	def generar_solucion_aleatoria(iteraciones = 15_000)
+	def generar_solucion_aleatoria(iteraciones = 1)
 		raise TypeError, "iteraciones must be an integer" unless iteraciones.kind_of? Integer
 
 		coste_actual = Float::INFINITY # El coste inicial es infinito
 		ciudades = Array.new(numero_ciudades) {|index| index}
-		index = 0
 		solucion_actual = nil # Aun no se ha almacenado ninguna solucion
 
-		while index < iteraciones
+		iteraciones.times do
 			candidatos = ciudades.dup
 			solucion = Array.new
 
@@ -132,7 +131,6 @@ class TSP
 				coste_actual = coste
 				solucion_actual = solucion
 			end
-			index += 1
 		end
 
 		return solucion_actual, coste_actual
@@ -146,3 +144,7 @@ class TSP
 
 	private :coste_solucion
 end
+t = TSP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/TSP/att48.txt")
+sol, coste = t.generar_solucion_aleatoria
+puts "Solucion: #{sol}"
+puts "Coste: #{coste}"
