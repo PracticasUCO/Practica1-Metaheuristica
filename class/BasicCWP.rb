@@ -20,7 +20,7 @@ class BasicCWP
 	# Recibe como parametro la localizacion de dicha instancia.
 	# Este metodo cambia el contenido de :grafo
 	def leer_instancia(path_db)
-		raise TypeError, "path_db must be a string" if not path_db.kind_of? String
+		raise TypeError, "path_db must be a string" unless path_db.kind_of? String
 		
 		@grafo = Hash.new(Array.new(0))
 		
@@ -63,12 +63,12 @@ class BasicCWP
 	# El parametro :v_nodes es un vector con el tamaño total del
 	# numero de nodos que indica las posiciones de cada elemento
 	def funcion_objetivo(v_nodes)
-		raise TypeError, "v_nodes must be an Array" if not v_nodes.kind_of? Array
+		raise TypeError, "v_nodes must be an Array" unless v_nodes.kind_of? Array
 		
 		# Nos aseguramos que no haya nodos repetidos
 		v_nodes.uniq!
 		
-		raise TypeError, "v_nodes must have #{total_nodes} elements" if not v_nodes.length.eql? total_nodes
+		raise TypeError, "v_nodes must have #{total_nodes} elements" unless v_nodes.length.eql? total_nodes
 		
 		# Declaracion de variables auxiliares
 		procesados = Array.new # Elementos ya procesados
