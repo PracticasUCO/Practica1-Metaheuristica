@@ -1,6 +1,15 @@
 #! /usr/bin/env ruby -w
 
-class TSP
+# La clase BasicTSP trata de resolver el problema del viajante de comercio.
+# En este problema, se tiene una serie de ciudades que deben de ser visitadas
+# de manera que se empieze y se acabe en la misma ciudad. El problema consiste
+# en elegir como se visitaran tales ciudades de manera que el coste de
+# transitar por ellas sea el menor posible.
+#
+# Se asume para esta implementacion que el coste entre dos ciudades
+# cualesquiera es simetrica, es decir, el coste de ir desde A hasta B debe ser
+# el mismo que el coste de ir desde B hasta A
+class BasicTSP
 	include Enumerable
 
 	# caminos almacena los caminos almacenados de una ciudad a otra
