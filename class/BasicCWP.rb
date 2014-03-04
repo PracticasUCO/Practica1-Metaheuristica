@@ -30,7 +30,7 @@ class BasicCWP
 			
 			# Ahora leemos el resto del fichero tranquilamente
 			file.each do |linea|
-				linea = linea.chomp
+				linea = linea.chomp.upcase
 				nodoA, nodoB = linea.split(/ +/)
 				@grafo[nodoA] = @grafo[nodoA] << nodoB
 				@grafo[nodoB] = @grafo[nodoB] << nodoA
