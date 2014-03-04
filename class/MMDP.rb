@@ -4,7 +4,8 @@ require_relative("BasicMMDP")
 
 =begin rdoc
 La clase MMDP define una interfaz para el problema Max Min Diversity Problem
-propuesto en clase.
+propuesto en clase. Se usa las funcionalidades ya definidas en BasicMMDP
+para tratar de conseguir una solucion mejor a traves de la heuristica
 =end
 class MMDP < BasicMMDP
 	# Inicializa la clase para que carge los valores de la base de datos
