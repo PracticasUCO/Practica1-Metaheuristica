@@ -23,5 +23,22 @@ class BasicCWP
 		raise TypeError, "path_db must be a string" if not path_db.kind_of? String
 		
 		@grafo = Hash.new(Array.new)
+		
+		File.open(path_db, "r") do |file|
+			# La primera linea se desecha, ya que no me sive
+			file.gets
+			
+			# Ahora leemos el resto del fichero tranquilamente
+			file.each do |linea|
+				nodoA, nodoB = linea.split(/ +/)
+				@grafo[nodoA] = @grafo[nodoA] << nodoB
+				@grafo[nodoB] = @grafo[nodoB] << nodoA
+			end
+		end
+	end
+	
+	# Devuelve el numero total de nodos que hay en el grafo
+	def total_nodes
+		@grafo.keys.length
 	end
 end
