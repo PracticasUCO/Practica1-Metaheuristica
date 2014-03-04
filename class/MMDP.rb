@@ -7,6 +7,9 @@ La clase MMDP define una interfaz para el problema Max Min Diversity Problem
 propuesto en clase.
 =end
 class MMDP < BasicMMDP
+	# Inicializa la clase para que carge los valores de la base de datos
+	# Recibe como parametro un string indicando el lugar de donde
+	# leer la base de datos
 	def initialize(path_db)
 		super
 	end
