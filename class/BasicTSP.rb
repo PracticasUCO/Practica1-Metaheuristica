@@ -139,7 +139,3 @@ class TSP
 
 	private :coste_solucion
 end
-t = TSP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/TSP/att48.txt")
-sol, coste = t.generar_solucion_aleatoria
-puts "Solucion: #{sol}"
-puts "Coste: #{coste}"
