@@ -24,14 +24,11 @@ class TSP
 			@numero_ciudades = f.gets.to_i
 
 			# Ahora podemos ir realizando una lectura completa del resto de la base de datos
-			#
-			# Uso el enumerador with_index para parar la ejecucion una vez que se haya leido
-			# la mitad de la base de datos
-			f.each_with_index do |linea, index|
+			f.each do |linea|
 				fila_costes = linea.chomp.split(/ +/)
 				
 				#Convertimos la fila de string a flotante
-				fila_costes.each_with_index {|coste, index| fila_costes[index] = coste.to_f}
+				fila_costes.map {|coste| coste.to_f}
 
 				#Añadimos la fila completa al array
 				@caminos << fila_costes
