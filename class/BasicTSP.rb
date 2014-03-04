@@ -3,7 +3,7 @@
 class TSP
 	include Enumerable
 
-	# caminos almacena los caminos almacenados de una ciudad a otra
+	# caminos almacena loscaminos almacenados de una ciudad a otra
 	attr_reader :caminos
 
 	# Numero de ciudades guardadas en la clase
