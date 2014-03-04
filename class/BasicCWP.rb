@@ -88,4 +88,15 @@ class BasicCWP
 		end
 		return count
 	end
+	
+	# Genera una solucion aleatoria y devuelve dicha solucion
+	# junto con el numero de cortes que se producen en dicha
+	# solucion.
+	#
+	# La solucion se devuelve en forma de vector.
+	def generar_solucion_aleatoria
+		solucion = @grafo.keys.sample(total_nodes)
+		coste = funcion_objetivo(solucion)
+		return solucion, coste
+	end
 end
