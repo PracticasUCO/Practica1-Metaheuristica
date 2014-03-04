@@ -28,7 +28,7 @@ class TSP
 				fila_costes = linea.chomp.split(/ +/)
 				
 				#Convertimos la fila de string a flotante
-				fila_costes.map {|coste| coste.to_f}
+				fila_costes.map! {|coste| coste.to_f}
 
 				#Añadimos la fila completa al array
 				@caminos << fila_costes
