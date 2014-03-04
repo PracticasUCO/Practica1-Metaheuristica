@@ -1,5 +1,14 @@
 #! /usr/bin/env ruby -w
 
+# La clase BasicMMDP proporciona la funcionalidad basica para la
+# resolucion del problema Max Min Diversity Problem, el cual trata.
+#
+# En este problema se tiene un conjunto de N individuos, de los
+# cuales se trata de escoger M individuos (siendo M < N) de manera
+# que se maximize la diversidad entre los individuos elegidos
+#
+# La clase BasicMMDP solo proporciona una funcionalidad basica a
+# este problema, no alcanzado por ello la solucion optima
 class BasicMMDP
 	# El atributo total_nodes indica el numero total de nodos que
 	# hay en la base de datos
