@@ -95,7 +95,8 @@ class BasicCWP
 	#
 	# La solucion se devuelve en forma de vector.
 	def generar_solucion_aleatoria
-		solucion = @grafo.keys.sample(total_nodes)
+		lista_nodos = @grafo.keys
+		solucion = lista_nodos.sample(lista_nodos.length)
 		coste = funcion_objetivo(solucion)
 		return solucion, coste
 	end
