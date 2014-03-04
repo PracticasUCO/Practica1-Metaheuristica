@@ -1,5 +1,13 @@
 #! /usr/bin/env ruby -w
 
+# BasicCWP establece la estructura basica para el problema Cut Width problem
+# el cual trata de ordenar usa serie de nodos de un grafo no dirigido de manera
+# se produzca el menor numero de cortes entre ellos.
+#
+# La implementacion de BasicCWP es muy basica (como el nombre indica), y es
+# por ello que no proporciona una solucion optima, ni siquiera cercana a la
+# optima, pero puede ser usada por otras clases para acercarse a una solucion
+# que si sea optima o cercana a la solucion optima
 class BasicCWP
 	# El atributo grafo guarda una tabla de hash con cada
 	# uno de los nodos del grafo. La tabla usara como
