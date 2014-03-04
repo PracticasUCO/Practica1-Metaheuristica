@@ -101,3 +101,8 @@ class BasicCWP
 		return solucion, coste
 	end
 end
+
+m = BasicCWP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/CWP/ejemplo.txt")
+sol, cos = m.generar_solucion_aleatoria
+puts "Solucion: #{sol}"
+puts "Coste: #{cos}"
