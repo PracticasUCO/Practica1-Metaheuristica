@@ -8,5 +8,10 @@ class BasicCWP
 	# ir a partir de dicho nodo
 	attr_reader :grafo
 	
-	
+	# Constructor de BasicCWP. Recibe como parametro la localizacion
+	# del archivo de texto que debe de leer para cargar la base
+	# de datos.
+	def initialize(path_db)
+		leer_instancia(path_db)
+	end
 end
