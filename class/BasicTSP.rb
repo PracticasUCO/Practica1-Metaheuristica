@@ -77,29 +77,6 @@ class TSP
 		return coste_actual
 	end
 
-	# Calcula la solucion optima a base de calcular todas las permutaciones
-	# entre las distinas ciudades. Devuelve la permutacion obtenida y
-	# su coste
-	#
-	# No se recomienda el uso de este metodo, debido a que puede llegar a ser
-	# bastante lento
-	def solucion_optima
-		coste_actual = Float::INFINITY # El coste inicial es infinito
-		permutacion_optima = nil # De momento ninguna
-		ciudades = Array.new(numero_ciudades) {|index| index}
-
-		ciudades.permutation do |p|
-			coste_permutacion = coste_solucion(p)
-
-			if coste_permutacion < coste_actual
-				coste_actual = coste_permutacion
-				permutacion_optima = p.dup
-			end
-		end
-
-		return permutacion_optima, coste_actual
-	end
-
 	# Genera una solucion aleatoria al problema del
 	# viajante del comercio
 	def generar_solucion_aleatoria
