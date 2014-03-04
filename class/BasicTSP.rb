@@ -100,35 +100,14 @@ class TSP
 		return permutacion_optima, coste_actual
 	end
 
-	# Genera una solucion aleatoria a traves de la heuristica
-	# Recibe un parametro iteraciones que indica el numero maximo
-	# de iteraciones a realizar para obtener dicha solucion.
-	#
-	# Si no se utiliza el parametro iteraciones, se asume que
-	# vale 15_000 (quince mil)
-	#
-	# Devuelve la solucion generada, junto con el coste obtenido
-	def generar_solucion_aleatoria(iteraciones = 1)
-		raise TypeError, "iteraciones must be an integer" unless iteraciones.kind_of? Integer
-
-		coste_actual = Float::INFINITY # El coste inicial es infinito
+	# Genera una solucion aleatoria al problema del
+	# viajante del comercio
+	def generar_solucion_aleatoria
 		ciudades = Array.new(numero_ciudades) {|index| index}
-		solucion_actual = nil # Aun no se ha almacenado ninguna solucion
+		solucion = ciudades.sample(ciudades.length)
+		coste = coste_solucion(solucion)
 
-		iteraciones.times do
-			solucion = Array.new
-
-			solucion = ciudades.sample(ciudades.length)
-
-			coste = coste_solucion(solucion)
-
-			if coste < coste_actual
-				coste_actual = coste
-				solucion_actual = solucion
-			end
-		end
-
-		return solucion_actual, coste_actual
+		return solucion, coste
 	end
 
 	# Constructor de la clase TSP. Recibe como argumento
