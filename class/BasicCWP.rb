@@ -22,7 +22,7 @@ class BasicCWP
 	def leer_instancia(path_db)
 		raise TypeError, "path_db must be a string" if not path_db.kind_of? String
 		
-		@grafo = Hash.new(Array.new)
+		@grafo = Hash.new(Array.new(0))
 		
 		File.open(path_db, "r") do |file|
 			# La primera linea se desecha, ya que no me sive
@@ -32,8 +32,8 @@ class BasicCWP
 			file.each do |linea|
 				linea = linea.chomp.upcase
 				nodoA, nodoB = linea.split(/ +/)
-				@grafo[nodoA] = @grafo[nodoA] << nodoB
-				@grafo[nodoB] = @grafo[nodoB] << nodoA
+				@grafo[nodoA] = @grafo[nodoA].dup << nodoB
+				@grafo[nodoB] = @grafo[nodoB].dup << nodoA
 			end
 		end
 	end
