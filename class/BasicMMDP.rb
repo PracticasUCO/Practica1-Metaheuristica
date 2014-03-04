@@ -74,26 +74,6 @@ class BasicMMDP
 		end
 	end
 
-	# Devuelve la solucion optima del problema
-	#
-	# No se recomiendo su uso, ya que puede tardar mucho
-	# su ejecucion, especialmente con conjuntos de datos muy grandes
-	def solucion_optima
-		coste = -Float::INFINITY
-		candidatos = lista_nodos().combination(solution_nodes())
-		candidato_seleccionado = nil
-
-		candidatos.each do |candidato|
-			coste_candidato = obtener_suma_costes(candidato)
-			if coste_candidato > coste
-				coste = coste_candidato
-				candidato_seleccionado = candidato
-			end
-		end
-
-		return candidato_seleccionado, coste
-	end
-
 	# Genera una solución aleatoriamente a partir de la base de datos
 	# que se ha leido previamente. La solucion generada trata que
 	# el coste sea el maximo posible. 
