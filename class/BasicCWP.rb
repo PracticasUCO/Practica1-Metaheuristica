@@ -39,6 +39,20 @@ class BasicCWP
 	
 	# Devuelve el numero total de nodos que hay en el grafo
 	def total_nodes
+		# En Ruby no es necesario usar la palabra return en una funcion
+		# ya que siempre se devuelve la ultima expresion evaluada. Es
+		# por ello que en esta funcion (y en otras), no se usa dicha
+		# palabra
 		@grafo.keys.length
+	end
+	
+	# Devuelve el total de aristas que hay en el grafo
+	def total_aristas
+		count = 0
+		@grafo.values.each do |value|
+			count += value.length
+		end
+		
+		count
 	end
 end
