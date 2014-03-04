@@ -14,4 +14,14 @@ class BasicCWP
 	def initialize(path_db)
 		leer_instancia(path_db)
 	end
+	
+	# Lee una instancia de la base de datos y la almacena internamente
+	#
+	# Recibe como parametro la localizacion de dicha instancia.
+	# Este metodo cambia el contenido de :grafo
+	def leer_instancia(path_db)
+		raise TypeError, "path_db must be a string" if not path_db.kind_of? String
+		
+		@grafo = Hash.new(Array.new)
+	end
 end
