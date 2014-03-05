@@ -50,6 +50,11 @@ class CapacitedPHubNode
 		
 		raise TypeError, "La demanda debe de ser un numero positivo o cero" unless demanda.>= 0
 		raise TypeError, "La capacidad del servicio debe de ser positiva o cero" unless capacidad_servicio.>= 0
+		
+		@coordenadas = coordenadas
+		@demanda = demanda
+		@tipo = tipo
+		@capacidad_servicio = capacidad_servicio
 	end
 	
 	
