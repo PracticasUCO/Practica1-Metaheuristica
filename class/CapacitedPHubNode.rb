@@ -21,6 +21,9 @@ Cada nodo concentrador tiene ademas una capacidad maxima de servicio que
 no puede ser sobrepasada
 =end
 class CapacitedPHubNode
+	# Coordenadas almacena las coordenadas en el plano del elemento
+	attr_reader :coordenadas
+	
 	# Constructor de nodo. Recibe como parametros
 	# coordenadas: indica las coordenadas en el plano del vector, por
 	# defecto en el (0,0)
@@ -57,5 +60,14 @@ class CapacitedPHubNode
 		@capacidad_servicio = capacidad_servicio
 	end
 	
+	# Demanda devuelve la necesidad de recursos a ser atendidos por
+	# el nodo cuando este actual de cliente
+	def demanda
+		# Not implemented yet
+	end
+	
+	# capacidad_servicio devuelve la capacidad que tiene el nodo
+	# para servir a los demas nodos cuando este actua de concentrador
+	attr_reader :capacidad_servicio
 	
 end
