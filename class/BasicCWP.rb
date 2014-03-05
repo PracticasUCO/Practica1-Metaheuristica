@@ -62,7 +62,7 @@ class BasicCWP
 			count += value.length
 		end
 		
-		count
+		count/2
 	end
 	
 	# Comprueba el numero de cortes que se produce al tener los
