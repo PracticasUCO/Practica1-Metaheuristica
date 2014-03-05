@@ -23,12 +23,13 @@ class TestBasicMMDP < Test::Unit::TestCase
 	
 	def test_aleatoriedad
 		sol = Array.new
-		1000.times do
+		repeticiones = 1000
+		repeticiones.times do
 			solucion, coste = @t.generar_solucion_aleatoria
 			sol << solucion
 		end
 		
 		sol.uniq!
-		assert_operator(sol.length, :>=, 1000*4/5)
+		assert_operator(sol.length, :>=, repeticiones*8/10)
 	end
 end

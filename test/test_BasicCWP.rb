@@ -45,4 +45,16 @@ class TestBasicCWP < Test::Unit::TestCase
 		end
 	end
 	
+	def test_aleatoriedad
+		soluciones = Array.new
+		repeticiones = 240
+		repeticiones.times do
+			solucion, coste = @c.generar_solucion_aleatoria
+			soluciones << solucion
+		end
+		soluciones.uniq!
+		
+		assert_operator(soluciones.length, :>, repeticiones*8/10)
+	end
+	
 end
