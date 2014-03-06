@@ -6,7 +6,6 @@ require_relative '../class/CapacitedPHubNode'
 class TestCapacitedPHubNode < Test::Unit::TestCase
 	def setup
 		@clientes = Array.new
-		@concentradores = Array.new
 		
 		5.times do
 			coordenadaX = rand(50)
@@ -16,16 +15,6 @@ class TestCapacitedPHubNode < Test::Unit::TestCase
 
 			client = CapacitedPHubNode.new(coordenadas: [coordenadaX, coordenadaY], demanda: demanda, capacidad_servicio: capacidad, tipo: :cliente)
 			@clientes << client
-		end
-		
-		3.times do
-			coordenadaX = rand(50)
-			coordenadaY = rand(50)
-			demanda = rand(35) + 15
-			capacidad = rand(40) + 5
-			
-			c = CapacitedPHubNode.new(coordenadas: [coordenadaX, coordenadaY], demanda: demanda, capacidad_servicio: capacidad, tipo: :concentrador)
-			@concentradores << c
 		end
 		
 		@clienteA = CapacitedPHubNode.new(coordenadas: [1, 3], demanda: 15.3, capacidad_servicio: 21, tipo: :cliente)
