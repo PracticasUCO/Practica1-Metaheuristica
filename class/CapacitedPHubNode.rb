@@ -63,7 +63,8 @@ class CapacitedPHubNode
 	# Demanda devuelve la necesidad de recursos a ser atendidos por
 	# el nodo cuando este actual de cliente
 	def demanda
-		# Not implemented yet
+		raise RuntimeError, "Un nodo concentrador no tiene una demanda asociada" unless tipo.eql? :cliente
+		@demanda
 	end
 	
 	# capacidad_servicio devuelve la capacidad que tiene el nodo
