@@ -79,4 +79,9 @@ class TestCapacitedPHubNode < Test::Unit::TestCase
 		assert_raises(RuntimeError) {@concentradorA.demanda}
 		assert_equal(15.3, @clienteA)
 	end
+	
+	def capacidad_servicio
+		assert_raises(RuntimeError) {@clienteA.capacidad_servicio}
+		assert_equal(50, @concentradorA.capacidad_servicio)
+	end
 end
