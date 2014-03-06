@@ -91,4 +91,9 @@ class TestCapacitedPHubNode < Test::Unit::TestCase
 		@clienteA.tipo = :concentrador
 		assert_equal(:concentrador, @cliente.tipo)
 	end
+	
+	def test_coordenadas
+		assert_equal(2, @clienteA.coordenadas.length)
+		assert_equal([1,3], @clienteA.coordenadas)
+	end
 end
