@@ -74,7 +74,7 @@ class TestCapacitedPHubNode < Test::Unit::TestCase
 		assert_equal(4, d1)
 		assert_equal(2, d2)
 		
-		coordenadaX, coordenadaY = @clientes[0]
+		coordenadaX, coordenadaY = @clientes[0].coordenadas
 		@clientes.each do |cliente|
 			coordenadaX_cliente, coordenadaY_cliente = cliente.coordenadas
 			distancia = Math.sqrt((coordenadaX - coordenadaX_cliente) ** 2 + (coordenadaY - coordenadaY_cliente) ** 2)
