@@ -95,7 +95,7 @@ class CapacitedPHubNode
 		raise TypeError, "other debe de ser otro CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
 		otherX, otherY = other.coordenadas
 		propiaX, propiaY = coordenadas
-		Math.sqrt(((otherX - propiaX) ** 2) - ( (otherY - propiaY ) ** 2 ))
+		Math.sqrt(((otherX - propiaX) ** 2) + ( (otherY - propiaY ) ** 2 ))
 	end
 	
 end
