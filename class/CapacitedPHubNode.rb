@@ -24,6 +24,12 @@ class CapacitedPHubNode
 	# Coordenadas almacena las coordenadas en el plano del elemento
 	attr_reader :coordenadas
 	
+	# tipo establece que tipo de nodo es el que se esta almacenando
+	# puede ser de dos tipos:
+	# :concentrador : une a distintos nodos clientes dandoles servicio
+	# :cliente : para funcionar necesita conectarse a un nodo concentrador
+	attr_accessor :tipo
+	
 	# Constructor de nodo. Recibe como parametros
 	# coordenadas: indica las coordenadas en el plano del vector, por
 	# defecto en el (0,0)
