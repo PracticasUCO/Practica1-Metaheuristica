@@ -95,7 +95,7 @@ class TestCapacitedPHubNode < Test::Unit::TestCase
 	end
 	
 	def test_tipo
-		assert_raises(RuntimeError, "El tipo solo puede ser :cliente o :concentrador") {@clienteA.tipo = :other}
+		assert_raises(TypeError, "El tipo solo puede ser :cliente o :concentrador") {@clienteA.tipo = :other}
 		assert_equal(:cliente, @clienteA.tipo)
 		@clienteA.tipo = :concentrador
 		assert_equal(:concentrador, @cliente.tipo)
