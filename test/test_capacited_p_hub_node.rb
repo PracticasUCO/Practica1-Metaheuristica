@@ -84,4 +84,11 @@ class TestCapacitedPHubNode < Test::Unit::TestCase
 		assert_raises(RuntimeError) {@clienteA.capacidad_servicio}
 		assert_equal(50, @concentradorA.capacidad_servicio)
 	end
+	
+	def test_tipo
+		assert_raises(RuntimeError) {@clienteA.tipo = :other}
+		assert_equal(:cliente, @clienteA.tipo)
+		@clienteA.tipo = :concentrador
+		assert_equal(:concentrador, @cliente.tipo)
+	end
 end
