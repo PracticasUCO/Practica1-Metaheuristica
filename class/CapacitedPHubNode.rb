@@ -85,7 +85,8 @@ class CapacitedPHubNode
 	# :concentrador : une a distintos nodos clientes dandoles servicio
 	# :cliente : para funcionar necesita conectarse a un nodo concentrador
 	def tipo=(value)
-		raise TypeError, "El tipo de un nodo debe de ser :cliente o :concentrador" unless value.eql? :cliente or value.eql? :concentrador
+		raise TypeError, "Value solo puede ser un Symbol con los valores :cliente o :concentrador" unless value.kind_of? Symbol
+		raise TypeError, "El tipo debe de ser :cliente o :concentrador" unless value.=== :cliente or value.=== :concentrador
 		@tipo = value
 	end
 	
