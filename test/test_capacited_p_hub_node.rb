@@ -36,25 +36,25 @@ class TestCapacitedPHubNode < Test::Unit::TestCase
 	
 	def test_errores_constructor
 		##  Comprobando el parametro coordenadas
-		assert_raises(TypeError) {CapacitedPHubNode.new(coordenadas: 12)}
-		assert_raises(TypeError) {CapacitedPHubNode.new(coordenadas: [1, 2, 3])}
-		assert_raises(TypeError) {CapacitedPHubNode.new(coordenadas: ['a', 'b'])}
+		assert_raises(TypeError, "El parametro coordenadas debe aceptar un array de dos numeros") {CapacitedPHubNode.new(coordenadas: 12)}
+		assert_raises(TypeError, "El parametro coordenadas debe aceptar un array de dos numeros") {CapacitedPHubNode.new(coordenadas: [1, 2, 3])}
+		assert_raises(TypeError, "El parametro coordenadas debe aceptar un array de dos numeros") {CapacitedPHubNode.new(coordenadas: ['a', 'b'])}
 		
 		## Comprobando el parametro demanda
-		assert_raises(TypeError) {CapacitedPHubNode.new(demanda = 0)}
-		assert_raises(TypeError) {CapacitedPHubNode.new(demanda = -5)}
-		assert_raises(TypeError) {CapacitedPHubNode.new(demanda = "un valor cualquiera")}
+		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(demanda = 0)}
+		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(demanda = -5)}
+		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(demanda = "other")}
 		
 		## Comprobando el parametro capacidad_servicio
-		assert_raises(TypeError) {CapacitedPHubNode.new(capacidad_servicio: 0)}
-		assert_raises(TypeError) {CapacitedPHubNode.new(capacidad_servicio: -5)}
-		assert_raises(TypeError) {CapacitedPHubNode.new(capacidad_servicio: "5")}
+		assert_raises(TypeError, "El servicio debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(capacidad_servicio: 0)}
+		assert_raises(TypeError, "El servicio debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(capacidad_servicio: -5)}
+		assert_raises(TypeError, "El servicio debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(capacidad_servicio: "5")}
 		
 		## Comprobando el parametro tipo
-		assert_raises(TypeError) {CapacitedPHubNode.new(tipo: 1)}
-		assert_raises(TypeError) {CapacitedPHubNode.new(tipo: rand)}
-		assert_raises(TypeError) {CapacitedPHubNode.new(tipo: "cliente")}
-		assert_raises(TypeError) {CapacitedPHubNode.new(tipo: :otro)}
+		assert_raises(TypeError, "El tipo solo puede ser :cliente o :concentrador") {CapacitedPHubNode.new(tipo: 1)}
+		assert_raises(TypeError, "El tipo solo puede ser :cliente o :concentrador") {CapacitedPHubNode.new(tipo: rand)}
+		assert_raises(TypeError, "El tipo solo puede ser :cliente o :concentrador") {CapacitedPHubNode.new(tipo: "cliente")}
+		assert_raises(TypeError, "El tipo solo puede ser :cliente o :concentrador") {CapacitedPHubNode.new(tipo: :otro)}
 	end
 	
 	def test_constructor_defecto
@@ -83,17 +83,17 @@ class TestCapacitedPHubNode < Test::Unit::TestCase
 	end
 	
 	def test_demanda
-		assert_raises(RuntimeError) {@concentradorA.demanda}
+		assert_raises(RuntimeError, "Un concentrador no tiene una demanda asociada") {@concentradorA.demanda}
 		assert_equal(15.3, @clienteA.demanda)
 	end
 	
 	def capacidad_servicio
-		assert_raises(RuntimeError) {@clienteA.capacidad_servicio}
+		assert_raises(RuntimeError, "Un cliente no tiene una capacidad asociada") {@clienteA.capacidad_servicio}
 		assert_equal(50, @concentradorA.capacidad_servicio)
 	end
 	
 	def test_tipo
-		assert_raises(RuntimeError) {@clienteA.tipo = :other}
+		assert_raises(RuntimeError, "El tipo solo puede ser :cliente o :concentrador") {@clienteA.tipo = :other}
 		assert_equal(:cliente, @clienteA.tipo)
 		@clienteA.tipo = :concentrador
 		assert_equal(:concentrador, @cliente.tipo)
