@@ -26,12 +26,6 @@ class CapacitedPHubNode
 	# Coordenadas almacena las coordenadas en el plano del elemento
 	attr_reader :coordenadas
 	
-	# tipo establece que tipo de nodo es el que se esta almacenando
-	# puede ser de dos tipos:
-	# :concentrador : une a distintos nodos clientes dandoles servicio
-	# :cliente : para funcionar necesita conectarse a un nodo concentrador
-	attr_accessor :tipo
-	
 	# Constructor de nodo. Recibe como parametros
 	# coordenadas: indica las coordenadas en el plano del vector, por
 	# defecto en el (0,0)
@@ -80,6 +74,20 @@ class CapacitedPHubNode
 	def capacidad_servicio
 		raise RuntimeError, "Un nodo cliente no puede ofrecer ningun servicio" unless tipo.eql? :concentrador
 		@capacidad_servicio
+	end
+	
+	# tipo establece que tipo de nodo es el que se esta almacenando
+	# puede ser de dos tipos:
+	# :concentrador : une a distintos nodos clientes dandoles servicio
+	# :cliente : para funcionar necesita conectarse a un nodo concentrador
+	def tipo=(value)
+		raise TypeError, "El tipo de un nodo debe de ser :cliente o :concentrador" unless value.eql? :cliente or value.eql? :concentrador
+		@tipo = value
+	end
+	
+	# Devuelve el tipo de nodo, este valor se corresponde a :cliente o :concentrador
+	def tipo
+		@tipo
 	end
 	
 	# Devuelve la distancia del nodo actual a otro nodo
