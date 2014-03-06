@@ -67,4 +67,11 @@ class TestCapacitedPHubNode < Test::Unit::TestCase
 		assert_equal(:concentrador, other_default.tipo)
 		assert_equal(1, other_default.capacidad_servicio)
 	end
+	
+	def test_distancia
+		d1 = @clienteA.distancia(@clienteB)
+		d2 = @clienteB.distancia(@concentradorA)
+		assert_equal(4, d1)
+		assert_equal(2, d2)
+	end
 end
