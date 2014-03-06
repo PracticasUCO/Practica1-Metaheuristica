@@ -1,5 +1,7 @@
 #! /usr/bin/env ruby -w
 
+require 'mathn'
+
 =begin rdoc
 La clase CapacitedPHubNode representa a un nodo de problema Capacited P Hub.
 Un nodo estara representado por sus coordenadas, su demanda y si es
@@ -78,6 +80,14 @@ class CapacitedPHubNode
 	def capacidad_servicio
 		raise RuntimeError, "Un nodo cliente no puede ofrecer ningun servicio" unless tipo.eql? :concentrador
 		@capacidad_servicio
+	end
+	
+	# Devuelve la distancia del nodo actual a otro nodo
+	def distancia(other)
+		raise TypeError, "other debe de ser otro CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
+		otherX, otherY = other.coordenadas
+		propiaX, propiaY = coordenadas
+		Math.sqrt(((otherX - propiaX) ** 2) - ( (otherY - propiaY ) ** 2 ))
 	end
 	
 end
