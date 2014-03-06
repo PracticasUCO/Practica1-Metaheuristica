@@ -45,7 +45,7 @@ class CapacitedPHubNode
 	# Demanda: 0
 	# Tipo: :cliente
 	# capacidad_servicio: 0
-	def initialize(coordenadas: [0, 0], demanda: 0, tipo: :cliente, capacidad_servicio: 0)
+	def initialize(coordenadas: [0, 0], demanda: 1, tipo: :cliente, capacidad_servicio: 1)
 		raise TypeError, "Las coordenadas deben de ser un Array" unless coordenadas.kind_of? Array
 		raise TypeError, "Solo se aceptan coordenadas del plano" unless coordenadas.length.eql? 2
 		raise TypeError, "La demanda debe de ser un numero" unless demanda.kind_of? Numeric
