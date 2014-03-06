@@ -69,6 +69,9 @@ class CapacitedPHubNode
 	
 	# capacidad_servicio devuelve la capacidad que tiene el nodo
 	# para servir a los demas nodos cuando este actua de concentrador
-	attr_reader :capacidad_servicio
+	def capacidad_servicio
+		raise RuntimeError, "Un nodo cliente no puede ofrecer ningun servicio" unless tipo.eql? :concentrador
+		@capacidad_servicio
+	end
 	
 end
