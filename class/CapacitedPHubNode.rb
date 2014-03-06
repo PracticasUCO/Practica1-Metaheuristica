@@ -53,8 +53,8 @@ class CapacitedPHubNode
 		raise TypeError, "El tipo debe de ser :cliente o :concentrador" unless tipo.eql? :cliente or tipo.eql? :concentrador
 		raise TypeError, "La capacidad de servicio debe de ser un numero" unless capacidad_servicio.kind_of? Numeric
 		
-		raise TypeError, "La demanda debe de ser un numero positivo o cero" unless demanda.>= 0
-		raise TypeError, "La capacidad del servicio debe de ser positiva o cero" unless capacidad_servicio.>= 0
+		raise TypeError, "La demanda debe de ser un numero positivo mayor que cero" unless demanda.> 0
+		raise TypeError, "La capacidad del servicio debe de ser positiva mayor que cero" unless capacidad_servicio.> 0
 		
 		coordenadas.each do |coordenada|
 			raise TypeError, "Las coordenadas deben ser valores numericos" unless coordenada.kind_of? Numeric
