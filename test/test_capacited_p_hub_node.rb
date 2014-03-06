@@ -56,4 +56,15 @@ class TestCapacitedPHubNode < Test::Unit::TestCase
 		assert_raises(TypeError) {CapacitedPHubNode.new(tipo: "cliente")}
 		assert_raises(TypeError) {CapacitedPHubNode.new(tipo: :otro)}
 	end
+	
+	def test_constructor_defecto
+		default = CapacitedPHubNode.new
+		other_default = CapacitedPHubNode.new(tipo: :concentrador)
+		
+		assert_equal([0,0], default.coordenadas)
+		assert_equal(1, default.demanda)
+		assert_equal(:cliente, default.tipo)
+		assert_equal(:concentrador, other_default.tipo)
+		assert_equal(1, other_default.capacidad_servicio)
+	end
 end
