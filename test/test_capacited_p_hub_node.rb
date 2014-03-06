@@ -43,9 +43,9 @@ class TestCapacitedPHubNode < Test::Unit::TestCase
 		assert_raises(TypeError, "El parametro coordenadas debe aceptar un array de dos numeros") {CapacitedPHubNode.new(coordenadas: [1, 'b'])}
 		
 		## Comprobando el parametro demanda
-		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(demanda = 0)}
-		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(demanda = -5)}
-		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(demanda = "other")}
+		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(demanda: 0)}
+		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(demanda: -5)}
+		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(demanda: "other")}
 		
 		## Comprobando el parametro capacidad_servicio
 		assert_raises(TypeError, "El servicio debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(capacidad_servicio: 0)}
