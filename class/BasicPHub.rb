@@ -39,8 +39,8 @@ class BasicPHub
 			capacidad_maxima_concentrador = capacidad_maxima_concentrador.to_f
 			
 			@numero_concentradores = numero_concentradores
-			@clientes = Set.new
-			@concentradores = Set.new
+			@clientes = Array.new
+			@concentradores = Array.new
 			
 			# Ahora procesamos el resto del fichero
 			file.each do |linea|
