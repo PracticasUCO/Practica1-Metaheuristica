@@ -107,8 +107,9 @@ class CapacitedPHubNode
 	# Establece a quien esta conectado
 	def conectado_a=(other)
 		raise TypeError, "other must be a CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
-		raise TypeError, "No se puede especificar a quien esta conectado un concentrador" if other.tipo.eql? :concentrador
+		raise TypeError, "No se puede especificar a quien esta conectado un concentrador" if tipo.eql? :concentrador
 		raise TypeError, "Uno no puede conectarse a si mismo" unless other.eql? self
+		raise RuntimeError, "La conexion se debe hacer con un nodo concentrador" unless other.tipo.eql? :concentrador
 		@connected = other
 	end
 	
