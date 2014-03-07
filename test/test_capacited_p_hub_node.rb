@@ -95,7 +95,7 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_equal([1,3], @clienteA.coordenadas)
 	end
 	
-	def test_conexion_basica
+	def test_errores_conexion
 		assert_equal([], @clienteA.conectado_a, "Un nodo no se inicia con ninguna conexion")
 		assert_raises(TypeError, "Un nodo solo puede conectarse a otro nodo") {@clienteA.conectado_a = "ads"}
 		assert_raises(TypeError, "No se puede conectar dos clientes") {@clienteA.conectado_a = @clienteB}
