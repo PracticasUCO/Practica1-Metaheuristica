@@ -1,9 +1,10 @@
 #! /usr/bin/env ruby -w
  
-require 'test/unit'
+require 'minitest/autorun'
+require 'minitest/benchmark'
 require_relative '../class/BasicMMDP'
 
-class TestBasicMMDP < MiniTest::Unit::TestCase
+class TestBasicMMDP < MiniTest::Test
 	def setup
 		@t = BasicMMDP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/MMDP/GKD-Ia_59_n30_m9.txt")
 	end
@@ -31,5 +32,28 @@ class TestBasicMMDP < MiniTest::Unit::TestCase
 		
 		sol.uniq!
 		assert_operator(sol.length, :>=, repeticiones*8/10)
+	end
+end
+
+## Comprobación de la complejidad temporal
+class TestBasicMMDPBenchmark < Minitest::Benchmark
+	def setup
+		@t = BasicMMDP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/MMDP/GKD-Ia_59_n30_m9.txt")
+	end
+	
+	def bench_range
+		Minitest::Benchmark.bench_exp(2, 2**20, 2)
+	end
+	
+	def bench_solucion_aleatoria
+		assert_performance_constant 0.9999 do |n|
+			@t.generar_solucion_aleatoria
+		end
+	end
+	
+	def bench_constructor
+		assert_performance_constant 0.9999 do |n|
+			c = BasicMMDP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/MMDP/GKD-Ia_59_n30_m9.txt")
+		end
 	end
 end
