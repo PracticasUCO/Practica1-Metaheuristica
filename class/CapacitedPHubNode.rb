@@ -1,6 +1,7 @@
 #! /usr/bin/env ruby -w
 
 require 'mathn'
+require 'signal'
 
 =begin rdoc
 La clase CapacitedPHubNode representa a un nodo de problema Capacited P Hub.
@@ -23,6 +24,8 @@ Cada nodo concentrador tiene ademas una capacidad maxima de servicio que
 no puede ser sobrepasada
 =end
 class CapacitedPHubNode
+	include Signal
+	
 	# Coordenadas almacena las coordenadas en el plano del elemento
 	attr_reader :coordenadas
 	
@@ -68,12 +71,8 @@ class CapacitedPHubNode
 		@demanda = demanda
 		@tipo = tipo
 		@capacidad_servicio = capacidad_servicio
+		@connected = Array.new
 		
-		if @tipo == :cliente
-			@connected = :none
-		else
-			@conected = self
-		end
 	end
 	
 	# Demanda devuelve la necesidad de recursos a ser atendidos por
@@ -121,15 +120,11 @@ class CapacitedPHubNode
 	# Establece a quien esta conectado
 	def conectado_a=(other)
 		raise TypeError, "other must be a CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
-		raise TypeError, "No se puede especificar a quien esta conectado un concentrador" if tipo.eql? :concentrador
-		raise TypeError, "Uno no puede conectarse a si mismo" unless other.eql? self
-		raise RuntimeError, "La conexion se debe hacer con un nodo concentrador" unless other.tipo.eql? :concentrador
-		@connected = other
 	end
 	
 	# Devuelve a quien esta conectado el nodo
 	def conectado_a
-		@connected
+		
 	end
 	
 end
