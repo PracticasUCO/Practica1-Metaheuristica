@@ -121,7 +121,7 @@ class CapacitedPHubNode
 	def conectado_a=(other)
 		raise TypeError, "other must be a CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
 		raise TypeError, "un nodo no puede conectarse a si mismo" if self.eql? other
-		raise TypeError, "Un concentrador solo pude conectarse a clientes y viceversa" unless self.tipo.eql? other.tipo
+		raise TypeError, "Un concentrador solo pude conectarse a clientes y viceversa" if self.tipo.eql? other.tipo
 		cambio_realizado = false
 		
 		if tipo == :cliente
