@@ -124,8 +124,10 @@ class CapacitedPHubNode
 		raise TypeError, "Un concentrador solo pude conectarse a clientes y viceversa" if self.tipo.eql? other.tipo
 		
 		if tipo == :cliente
+			antiguo = @connected[0]
 			@connected.clear
 			@connected << other
+			emit(:delete_connection, self, antiguo)
 		else
 			@connected << other unless @connected.include? other
 		end
@@ -141,10 +143,21 @@ class CapacitedPHubNode
 	def on_add_nodo_connection(origen, destino)
 		if destino.=== self and not self.conectado_a.include? origen
 			if tipo == :cliente
+				antiguo = @connected[0]
 				@connected.clear
 				@connected << origen
+				emit(:delete_connection, self, antiguo)
 			else
 				@connected << origen
+			end
+		end
+	end
+	
+	# El siguiente metodo gestiona las desconexiones de nodos
+	def on_delete_connection(origen, destino)
+		if destino === self
+			if @connected.include? origen
+				@connected.delete(origen)
 			end
 		end
 	end
