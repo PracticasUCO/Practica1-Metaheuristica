@@ -135,7 +135,22 @@ class CapacitedPHubNode
 		end
 		
 		if cambio_realizado
-			emit(:update_nodo_type, self, other)
+			other.listeners << self unless other.listeners.include? self
+			emit(:update_nodo_connection, self, other)
+		end
+	end
+	
+	# El siguiente metodo gestiona las conexiones entre nodos
+	# destino es quien debe actualizar su tabla para que no
+	# existan datos no concruentes
+	def on_update_nodo_connection(origen, destino)
+		if destino.=== self
+			if tipo == :cliente
+				@connected.clear
+				@connected << origen
+			else
+				@connected << origen
+			end
 		end
 	end
 	
