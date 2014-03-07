@@ -122,28 +122,24 @@ class CapacitedPHubNode
 		raise TypeError, "other must be a CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
 		raise TypeError, "un nodo no puede conectarse a si mismo" if self.eql? other
 		raise TypeError, "Un concentrador solo pude conectarse a clientes y viceversa" if self.tipo.eql? other.tipo
-		cambio_realizado = false
 		
 		if tipo == :cliente
 			@connected.clear
 			@connected << other
-			cambio_realizado = true
 		else
 			@connected << other unless @connected.include? other
-			cambio_realizado = true unless @connected.include? other
 		end
 		
-		if cambio_realizado
-			other.listeners << self unless other.listeners.include? self
-			emit(:update_nodo_connection, self, other)
-		end
+		other.listeners << self unless other.listeners.include? self
+		self.listeners << other unless self.listeners.include? other
+		emit(:update_nodo_connection, self, other)
 	end
 	
 	# El siguiente metodo gestiona las conexiones entre nodos
 	# destino es quien debe actualizar su tabla para que no
 	# existan datos no concruentes
 	def on_update_nodo_connection(origen, destino)
-		if destino.=== self
+		if destino.=== self and not self.conectado_a.include? origen
 			if tipo == :cliente
 				@connected.clear
 				@connected << origen
