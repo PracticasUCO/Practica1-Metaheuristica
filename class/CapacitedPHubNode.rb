@@ -92,6 +92,11 @@ class CapacitedPHubNode
 	def tipo=(value)
 		raise TypeError, "Value solo puede ser un Symbol con los valores :cliente o :concentrador" unless value.kind_of? Symbol
 		raise TypeError, "El tipo debe de ser :cliente o :concentrador" unless value.=== :cliente or value.=== :concentrador
+		
+		if value == :concentrador
+			@connected = :none
+		end
+		
 		@tipo = value
 	end
 	
