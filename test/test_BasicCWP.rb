@@ -1,7 +1,7 @@
 require 'test/unit'
 require_relative '../class/BasicCWP'
 
-class TestBasicCWP < Test::Unit::TestCase
+class TestBasicCWP < MiniTest::Unit::TestCase
 	
 	# Agradeceria que alguien me ayudara a reemplazar esto con algo que no dependiera de mi
 	# maquina actual.

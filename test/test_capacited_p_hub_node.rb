@@ -3,7 +3,7 @@
 require 'test/unit'
 require_relative '../class/CapacitedPHubNode'
 
-class TestCapacitedPHubNode < Test::Unit::TestCase
+class TestCapacitedPHubNode < MiniTest::Unit::TestCase
 	def setup
 		@clientes = Array.new
 		

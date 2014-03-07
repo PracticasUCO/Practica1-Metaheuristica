@@ -3,7 +3,7 @@
 require 'test/unit'
 require_relative '../class/BasicMMDP'
 
-class TestBasicMMDP < Test::Unit::TestCase
+class TestBasicMMDP < MiniTest::Unit::TestCase
 	def setup
 		@t = BasicMMDP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/MMDP/GKD-Ia_59_n30_m9.txt")
 	end
