@@ -68,7 +68,12 @@ class CapacitedPHubNode
 		@demanda = demanda
 		@tipo = tipo
 		@capacidad_servicio = capacidad_servicio
-		@connected = :none
+		
+		if @tipo == :cliente
+			@connected = :none
+		else
+			@conected = self
+		end
 	end
 	
 	# Demanda devuelve la necesidad de recursos a ser atendidos por
@@ -94,7 +99,7 @@ class CapacitedPHubNode
 		raise TypeError, "El tipo debe de ser :cliente o :concentrador" unless value.=== :cliente or value.=== :concentrador
 		
 		if value == :concentrador
-			@connected = :none
+			@connected = self
 		end
 		
 		@tipo = value
