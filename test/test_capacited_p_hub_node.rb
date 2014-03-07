@@ -106,15 +106,15 @@ class TestCapacitedPHubNode < MiniTest::Test
 	def test_conexion
 		@clienteA.conectar_a = @concentradorA
 		@clienteB.conectar_a = @concentradorA
-		assert_equal(true, @concentradorA.conectar_a.included? @clienteA, "El concentradorA no tiene al clienteA conectado")
-		assert_equal(true, @concentradorA.conectar_a.included? @clienteB, "El concentradorA no tiene al clienteB conectado")
-		assert_equal(true, @clienteA.conectar_a.included? @concentradorA, "El clienteA no esta conectado al concentrador")
-		assert_equal(true, @clienteB.conectar_a.included? @concentradorA, "El clienteB no esta conectado al concentrador")
+		assert_equal(true, @concentradorA.conectar_a.include?(@clienteA), "El concentradorA no tiene al clienteA conectado")
+		assert_equal(true, @concentradorA.conectar_a.include?(@clienteB), "El concentradorA no tiene al clienteB conectado")
+		assert_equal(true, @clienteA.conectar_a.include?(@concentradorA), "El clienteA no esta conectado al concentrador")
+		assert_equal(true, @clienteB.conectar_a.include?(@concentradorA), "El clienteB no esta conectado al concentrador")
 		
 		@concentradorB.conectar_a = @clienteA
-		assert_equal(true, @clienteA.conectar_a.included? @concentradorB, "El clienteA no se conecto al segundo concentrador")
-		assert_equal(true, @concentradorB.conectar_a.included? @clienteA, "El concentradorB no registro la conexion al clienteA")
-		assert_equal(false, @clienteA.conectar_a.included? @concentradorA, "El clienteA no borro la conexion con el concentradorA")
-		assert_equal(false, @concentradorA.conectar_a.included? @clienteA, "El concentradorA no borro de la conexion al clienteA")
+		assert_equal(true, @clienteA.conectar_a.include?(@concentradorB), "El clienteA no se conecto al segundo concentrador")
+		assert_equal(true, @concentradorB.conectar_a.include?(@clienteA), "El concentradorB no registro la conexion al clienteA")
+		assert_equal(false, @clienteA.conectar_a.include?(@concentradorA), "El clienteA no borro la conexion con el concentradorA")
+		assert_equal(false, @concentradorA.conectar_a.include?(@clienteA), "El concentradorA no borro de la conexion al clienteA")
 	end
 end
