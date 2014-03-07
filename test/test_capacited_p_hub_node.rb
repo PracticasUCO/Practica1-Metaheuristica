@@ -94,4 +94,12 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_equal(2, @clienteA.coordenadas.length)
 		assert_equal([1,3], @clienteA.coordenadas)
 	end
+	
+	def test_conexion_basica
+		assert_equal([], @clienteA.conectado_a, "Un nodo no se inicia con ninguna conexion")
+		assert_raises(TypeError, "Un nodo solo puede conectarse a otro nodo") {@clienteA.conectado_a = "ads"}
+		assert_raises(TypeError, "No se puede conectar dos clientes") {@clienteA.conectado_a = @clienteB}
+		assert_raises(TypeError, "No se puede conectar un nodo a si mismo") {@clienteA.conectado_a = @clienteA}
+		assert_raises(TypeError, "Un concentrador solo pude conectarse a clientes y viceversa") {@concentradorA.conectado_a = @concentradorB}
+	end
 end
