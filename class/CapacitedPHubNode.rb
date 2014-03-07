@@ -46,6 +46,9 @@ class CapacitedPHubNode
 	# Demanda: 0
 	# Tipo: :cliente
 	# capacidad_servicio: 0
+	#
+	# Inicialmente todos los nodos estan desconectados, esto signifia que no podran funcionar
+	# si son clientes hasta que se conecten a un concentrador
 	def initialize(coordenadas: [0, 0], demanda: 1, tipo: :cliente, capacidad_servicio: 1)
 		raise TypeError, "Las coordenadas deben de ser un Array" unless coordenadas.kind_of? Array
 		raise TypeError, "Solo se aceptan coordenadas del plano" unless coordenadas.length.eql? 2
@@ -65,6 +68,7 @@ class CapacitedPHubNode
 		@demanda = demanda
 		@tipo = tipo
 		@capacidad_servicio = capacidad_servicio
+		@connected = :none
 	end
 	
 	# Demanda devuelve la necesidad de recursos a ser atendidos por
