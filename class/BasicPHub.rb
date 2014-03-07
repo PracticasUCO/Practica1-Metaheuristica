@@ -11,6 +11,17 @@ los nodos del problema.
 Además de esto, debe dar un solución basica generada de forma aleatoria
 =end
 class BasicPHub
+	## El atributo numero_concentradores almacena el numero de concentradores
+	## que deben de aparecer en la solucion
+	attr_reader :numero_concentradores
+	
+	## El atributo clientes indica los nodos que actuan como clientes
+	attr_reader :clientes
+	
+	## El atributo concentradores indica el numero de nodos que actuan
+	## como concentradores
+	attr_reader :concentradores
+	
 	## Constructor de la clase, recibe como parametro la ruta del
 	## fichero que debe de leer
 	def initialize(path)
