@@ -120,6 +120,23 @@ class CapacitedPHubNode
 	# Establece a quien esta conectado
 	def conectado_a=(other)
 		raise TypeError, "other must be a CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
+		raise TypeError, "un nodo no puede conectarse a si mismo" if self.eql? other
+		raise TypeError, "Dos clientes no puede conectarse" if self.tipo.eql? :cliente and other.tipo.eql? :cliente
+		
+		cambio_realizado = false
+		
+		if tipo == :cliente
+			@connected.clear
+			@connected << other
+			cambio_realizado = true
+		else
+			@connected << other unless @connected.include? other
+			cambio_realizado = true unless @connected.include? other
+		end
+		
+		if cambio_realizado
+			emit(:update_nodo_type, self, other)
+		end
 	end
 	
 	# Devuelve a quien esta conectado el nodo
