@@ -1,9 +1,9 @@
 #! /usr/bin/env ruby -w
  
-require 'test/unit'
+require 'minitest/autorun'
 require_relative '../class/CapacitedPHubNode'
 
-class TestCapacitedPHubNode < MiniTest::Unit::TestCase
+class TestCapacitedPHubNode < MiniTest::Test
 	def setup
 		@clientes = Array.new
 		
