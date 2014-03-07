@@ -1,7 +1,8 @@
-require 'test/unit'
+require 'minitest/autorun'
+require 'minitest/benchmark'
 require_relative '../class/BasicCWP'
 
-class TestBasicCWP < MiniTest::Unit::TestCase
+class TestBasicCWP < MiniTest::Test
 	
 	# Agradeceria que alguien me ayudara a reemplazar esto con algo que no dependiera de mi
 	# maquina actual.
@@ -56,5 +57,20 @@ class TestBasicCWP < MiniTest::Unit::TestCase
 		
 		assert_operator(soluciones.length, :>, repeticiones*8/10)
 	end
+end
+
+## Ahora nos aseguramos que la complejida temporal del algoritmo
+## sea constante (dese cuenta de que en realidad se generan numeros aleatorios), 
+## para que en el futuro no de problemas
+
+class TestBasicCWPPerfomance < Minitest::Benchmark
+	def setup
+		@c = BasicCWP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/CWP/ejemplo.txt")
+	end
 	
+	def bench_complejidad_obtencion_solucion_constante
+		assert_performance_constant 0.9999 do |n| # n is a range value
+			@c.generar_solucion_aleatoria
+		end
+	end
 end
