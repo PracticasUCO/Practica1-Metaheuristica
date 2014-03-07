@@ -111,6 +111,14 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_equal(true, @clienteA.conectado_a.include?(@concentradorA), "El clienteA no esta conectado al concentrador")
 		assert_equal(true, @clienteB.conectado_a.include?(@concentradorA), "El clienteB no esta conectado al concentrador")
 		
+		numero_listeners = @clienteA.listeners.length
+		@clienteA.conectado_a = @concentradorA
+		assert_equal(numero_listeners, @clienteA.listeners.length, "El numero de escuchas debe permanecer constante si no se producen cambios")
+		
+		numero_listeners = @concentradorA.listeners.length
+		@concentradorA.conectado_a = @clienteA
+		assert_equal(numero_listeners, @concentradorA.listeners.length, "El numero de escuchas debe permanecer constante si no se producen cambios")
+		
 		@concentradorB.conectado_a = @clienteA
 		assert_equal(true, @clienteA.conectado_a.include?(@concentradorB), "El clienteA no se conecto al segundo concentrador")
 		assert_equal(true, @concentradorB.conectado_a.include?(@clienteA), "El concentradorB no registro la conexion al clienteA")
