@@ -40,6 +40,7 @@ class CapacitedPHubNode
 	# capacidad_servicio: Indica la cantidad de recursos maxima que puede
 	# servir el nodo cuando actua como concentrador
 	#
+	#
 	# Todos los parametros tiene valores por defecto, los cuales son:
 	# Coordenadas: [0, 0]
 	# Demanda: 0
