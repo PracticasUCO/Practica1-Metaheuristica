@@ -1,9 +1,10 @@
 #! /usr/bin/env ruby -w
  
-require 'test/unit'
+require 'minitest/autorun'
+require 'minitest/benchmark'
 require_relative '../class/BasicTSP'
 
-class TestBasicTSP < Test::Unit::TestCase
+class TestBasicTSP < MiniTest::Test
 	def setup
 		@t = BasicTSP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/TSP/p01.txt")
 	end

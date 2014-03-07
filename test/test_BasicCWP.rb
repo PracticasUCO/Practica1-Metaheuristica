@@ -58,29 +58,3 @@ class TestBasicCWP < MiniTest::Test
 		assert_operator(soluciones.length, :>, repeticiones*7/10)
 	end
 end
-
-## Ahora nos aseguramos que la complejida temporal del algoritmo
-## sea constante (dese cuenta de que en realidad se generan numeros aleatorios), 
-## para que en el futuro no de problemas
-
-class TestBasicCWPPerfomance < Minitest::Benchmark
-	def setup
-		@c = BasicCWP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/CWP/ejemplo.txt")
-	end
-	
-	def bench_range
-		Minitest::Benchmark.bench_exp(2, 2**20, 2)
-	end
-	
-	def bench_complejidad_obtencion_solucion_constante
-		assert_performance_constant 0.9999 do |n| # n is a range value
-			@c.generar_solucion_aleatoria
-		end
-	end
-	
-	def bench_constructor
-		assert_performance_constant 0.9999 do |n|
-			a = TestBasicCWP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/CWP/ejemplo.txt")
-		end
-	end
-end
