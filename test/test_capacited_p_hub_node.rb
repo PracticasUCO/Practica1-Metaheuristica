@@ -102,4 +102,19 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_raises(TypeError, "No se puede conectar un nodo a si mismo") {@clienteA.conectado_a = @clienteA}
 		assert_raises(TypeError, "Un concentrador solo pude conectarse a clientes y viceversa") {@concentradorA.conectado_a = @concentradorB}
 	end
+	
+	def test_conexion
+		@clienteA.conectar_a = @concentradorA
+		@clienteB.conectar_a = @concentradorA
+		assert_equal(true, @concentradorA.conectar_a.included? @clienteA, "El concentradorA no tiene al clienteA conectado")
+		assert_equal(true, @concentradorA.conectar_a.included? @clienteB, "El concentradorA no tiene al clienteB conectado")
+		assert_equal(true, @clienteA.conectar_a.included? @concentradorA, "El clienteA no esta conectado al concentrador")
+		assert_equal(true, @clienteB.conectar_a.included? @concentradorA, "El clienteB no esta conectado al concentrador")
+		
+		@concentradorB.conectar_a = @clienteA
+		assert_equal(true, @clienteA.conectar_a.included? @concentradorB, "El clienteA no se conecto al segundo concentrador")
+		assert_equal(true, @concentradorB.conectar_a.included? @clienteA, "El concentradorB no registro la conexion al clienteA")
+		assert_equal(false, @clienteA.conectar_a.included? @concentradorA, "El clienteA no borro la conexion con el concentradorA")
+		assert_equal(false, @concentradorA.conectar_a.included? @clienteA, "El concentradorA no borro de la conexion al clienteA")
+	end
 end
