@@ -141,7 +141,7 @@ class CapacitedPHubNode
 	
 	# Devuelve a quien esta conectado el nodo
 	def conectado_a
-		
+		@connected
 	end
 	
 end
