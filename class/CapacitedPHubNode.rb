@@ -117,8 +117,8 @@ class CapacitedPHubNode
 		Math.sqrt(((otherX - propiaX) ** 2) + ( (otherY - propiaY ) ** 2 ))
 	end
 	
-	# Establece a quien esta conectado
-	def conectado_a=(other)
+	# Establece a quien conectar el nodo
+	def conectar_a=(other)
 		raise TypeError, "other must be a CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
 		raise TypeError, "un nodo no puede conectarse a si mismo" if self.eql? other
 		raise TypeError, "Un concentrador solo pude conectarse a clientes y viceversa" if self.tipo.eql? other.tipo
