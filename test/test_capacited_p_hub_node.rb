@@ -97,29 +97,29 @@ class TestCapacitedPHubNode < MiniTest::Test
 	
 	def test_errores_conexion
 		assert_equal([], @clienteA.conectado_a, "Un nodo no se inicia con ninguna conexion")
-		assert_raises(TypeError, "Un nodo solo puede conectarse a otro nodo") {@clienteA.conectado_a = "ads"}
-		assert_raises(TypeError, "No se puede conectar dos clientes") {@clienteA.conectado_a = @clienteB}
-		assert_raises(TypeError, "No se puede conectar un nodo a si mismo") {@clienteA.conectado_a = @clienteA}
-		assert_raises(TypeError, "Un concentrador solo pude conectarse a clientes y viceversa") {@concentradorA.conectado_a = @concentradorB}
+		assert_raises(TypeError, "Un nodo solo puede conectarse a otro nodo") {@clienteA.conectar_a = "ads"}
+		assert_raises(TypeError, "No se puede conectar dos clientes") {@clienteA.conectar_a = @clienteB}
+		assert_raises(TypeError, "No se puede conectar un nodo a si mismo") {@clienteA.conectar_a = @clienteA}
+		assert_raises(TypeError, "Un concentrador solo pude conectarse a clientes y viceversa") {@concentradorA.conectar_a = @concentradorB}
 	end
 	
 	def test_conexion
-		@clienteA.conectado_a = @concentradorA
-		@clienteB.conectado_a = @concentradorA
+		@clienteA.conectar_a = @concentradorA
+		@clienteB.conectar_a = @concentradorA
 		assert_equal(true, @concentradorA.conectado_a.include?(@clienteA), "El concentradorA no tiene al clienteA conectado")
 		assert_equal(true, @concentradorA.conectado_a.include?(@clienteB), "El concentradorA no tiene al clienteB conectado")
 		assert_equal(true, @clienteA.conectado_a.include?(@concentradorA), "El clienteA no esta conectado al concentrador")
 		assert_equal(true, @clienteB.conectado_a.include?(@concentradorA), "El clienteB no esta conectado al concentrador")
 		
 		numero_listeners = @clienteA.listeners.length
-		@clienteA.conectado_a = @concentradorA
+		@clienteA.conectar_a = @concentradorA
 		assert_equal(numero_listeners, @clienteA.listeners.length, "El numero de escuchas debe permanecer constante si no se producen cambios")
 		
 		numero_listeners = @concentradorA.listeners.length
-		@concentradorA.conectado_a = @clienteA
+		@concentradorA.conectar_a = @clienteA
 		assert_equal(numero_listeners, @concentradorA.listeners.length, "El numero de escuchas debe permanecer constante si no se producen cambios")
 		
-		@concentradorB.conectado_a = @clienteA
+		@concentradorB.conectar_a = @clienteA
 		assert_equal(true, @clienteA.conectado_a.include?(@concentradorB), "El clienteA no se conecto al segundo concentrador")
 		assert_equal(true, @concentradorB.conectado_a.include?(@clienteA), "El concentradorB no registro la conexion al clienteA")
 		assert_equal(false, @clienteA.conectado_a.include?(@concentradorA), "El clienteA no borro la conexion con el concentradorA")
