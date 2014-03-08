@@ -21,7 +21,7 @@ class TestCapacitedPHubNode < MiniTest::Test
 		@clienteB = CapacitedPHubNode.new(coordenadas: [5, 3], demanda: 13, capacidad_servicio: 22.1, tipo: :cliente)
 		@clienteC = CapacitedPHubNode.new(coordenadas: [1,1], demanda: 1)
 		@clienteD = CapacitedPHubNode.new(coordenadas: [1,2], demanda: 0.5)
-		@concentradorA = CapacitedPHubNode.new(coordenadas: [5, 1], capacidad_servicio: 50, tipo: :concentrador)
+		@concentradorA = CapacitedPHubNode.new(coordenadas: [5, 1], capacidad_servicio: 100, tipo: :concentrador)
 		@concentradorB = CapacitedPHubNode.new(coordenadas: [4, 10], capacidad_servicio: 35, tipo: :concentrador)
 		@concentradorC = CapacitedPHubNode.new(capacidad_servicio: 14, tipo: :concentrador)
 	end
@@ -155,5 +155,19 @@ class TestCapacitedPHubNode < MiniTest::Test
 		@concentradorC.conectar_a = @clienteA ## No puede produccirse ya que concentradorC puede ofrecer 11 y clienteA necesita 15.3
 		assert_equal(false, @concentradorC.conectado_a.include?(@clienteA), "Se ha registrado una conexion imposible")
 		assert_equal(false, @clienteA.conectado_a.include?(@concentradorC), "Se ha registrado una conexion imposible")
+	end
+	
+	def test_conectado_a
+		assert_equal(false, @concentradorA.conectado_a(@clienteA), "El nodo no puede tener conexiones activas aun")
+		assert_equal(false, @clienteA.conectado_a(@concentradorA), "El nodo no puede tener conexiones activas aun")
+		@clienteA.conectar_a = @concentradorA
+		@clienteB.conectar_a = @concentradorA
+		@clienteC.conectar_a = @concentradorA
+		assert_equal(true, @concentradorA.conectado_a(@clienteA))
+		assert_equal(true, @concentradorA.conectado_a(@clienteB))
+		assert_equal(true, @concentradorA.conectado_a(@clienteC))
+		assert_equal(3, @concentradorA.conectado_a.length)
+		assert_equal(true, @concentradorA.conectado_a(@clienteA, @clienteB, @clienteC))
+		assert_equal(false, @concentradorA.conectado_a(@clienteB, @clienteD))
 	end
 end
