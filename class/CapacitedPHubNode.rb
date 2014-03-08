@@ -26,6 +26,14 @@ no puede ser sobrepasada
 class CapacitedPHubNode
 	include Signal
 	
+	# cuenta_id es un atributo global que lleva la cuenta del proximo
+	# id a establecer
+	@@cuenta_id = 0
+	
+	# id es el numero de identificacion del nodo creado, este numero
+	# es unico para cada nodo
+	attr_reader :id
+	
 	# Coordenadas almacena las coordenadas en el plano del elemento
 	attr_reader :coordenadas
 	
@@ -73,6 +81,9 @@ class CapacitedPHubNode
 		@capacidad_servicio = capacidad_servicio
 		@connected = Array.new
 		
+		# Estableciendo un id
+		@id = @@cuenta_id
+		@@cuenta_id += 1
 	end
 	
 	# Demanda devuelve la necesidad de recursos a ser atendidos por
