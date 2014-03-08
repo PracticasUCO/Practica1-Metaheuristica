@@ -154,9 +154,7 @@ class CapacitedPHubNode
 	# El siguiente metodo gestiona las desconexiones de nodos
 	def on_delete_connection(origen, destino)
 		if destino === self
-			if @connected.include? origen
-				@connected.delete(origen)
-			end
+			@connected.delete(origen)
 		end
 	end
 	
