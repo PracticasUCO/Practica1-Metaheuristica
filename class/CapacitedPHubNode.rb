@@ -231,4 +231,13 @@ class CapacitedPHubNode
 		end
 	end
 	
+	# Permite convertir el nodo a cadena para que se pueda leer mejor
+	def to_s
+		if tipo === :concentrador
+			"Concentrador nodo #{id} en #{coordenadas} con #{reserva}/#{capacidad_servicio} (#{(100*reserva/capacidad_servicio).to_i} %)"
+		else
+			"Cliente nodo #{id} en #{coordenadas} con una demanda de #{demanda}"
+		end
+	end
+	
 end
