@@ -42,6 +42,14 @@ class CapacitedPHubNode
 	# que ya tiene conectados.
 	attr_reader :reserva
 	
+	# capacidad_servicio devuelve la capacidad que tiene el nodo
+	# para servir a los demas nodos cuando este actua de concentrador
+	attr_reader :capacidad_servicio
+	
+	# demanda devuelve la necesidad de recursos de un nodo cuando
+	# este actua como cliente
+	attr_reader :demanda
+	
 	# Constructor de nodo. Recibe como parametros
 	# coordenadas: indica las coordenadas en el plano del vector, por
 	# defecto en el (0,0)
@@ -91,27 +99,7 @@ class CapacitedPHubNode
 		@id = @@cuenta_id
 		@@cuenta_id += 1
 	end
-	
-	# Demanda devuelve la necesidad de recursos a ser atendidos por
-	# el nodo cuando este actual de cliente
-	def demanda
-		raise RuntimeError, "Un nodo concentrador no tiene una demanda asociada" unless tipo.eql? :cliente
-		@demanda
-	end
-	
-	# capacidad_servicio devuelve la capacidad que tiene el nodo
-	# para servir a los demas nodos cuando este actua de concentrador
-	def capacidad_servicio
-		raise RuntimeError, "Un nodo cliente no puede ofrecer ningun servicio" unless tipo.eql? :concentrador
-		@capacidad_servicio
-	end
-	
-	# ver_capacidad_servicio devuelve la capacidad de servicio del nodo
-	# sin lanzar una excepcion cuando este no es concentrador.
-	def ver_capacidad_servicio
-		@capacidad_servicio
-	end
-	
+
 	# tipo establece que tipo de nodo es el que se esta almacenando
 	# puede ser de dos tipos:
 	# :concentrador : une a distintos nodos clientes dandoles servicio
