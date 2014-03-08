@@ -106,6 +106,12 @@ class CapacitedPHubNode
 		@capacidad_servicio
 	end
 	
+	# ver_capacidad_servicio devuelve la capacidad de servicio del nodo
+	# sin lanzar una excepcion cuando este no es concentrador.
+	def ver_capacidad_servicio
+		@capacidad_servicio
+	end
+	
 	# tipo establece que tipo de nodo es el que se esta almacenando
 	# puede ser de dos tipos:
 	# :concentrador : une a distintos nodos clientes dandoles servicio
