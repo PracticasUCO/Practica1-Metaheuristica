@@ -130,5 +130,12 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_equal(0, @concentradorB.conectado_a.length, "El concentrador aun tiene nodos conectados")
 		assert_equal(0, @clienteA.conectado_a.length, "El clienteA no registro la desconexion con el concentrador")
 		assert_equal(0, @clienteB.conectado_a.length, "El clienteB no registro la desconexion con el conentrador")
+		
+		@clienteA.conectar_a = @concentradorA
+		@clienteB.conectar_a = @concentradorA
+		@clienteA.desconectar
+		assert_equal(false, @clienteA.conectado_a.include?(@concentradorA), "El clienteA sigue conectado al concentrador")
+		assert_equal(0, @clienteA.conectado_a.length, "El cliente sigue teniendo conexiones")
+		assert_equal(false, @concentradorA.conectado_a.include?(@clienteA), "El concentrador no registro la desconexion")
 	end
 end
