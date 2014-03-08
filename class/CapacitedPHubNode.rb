@@ -37,6 +37,11 @@ class CapacitedPHubNode
 	# Coordenadas almacena las coordenadas en el plano del elemento
 	attr_reader :coordenadas
 	
+	# La reserva es la cantidad de recursos que un nodo concentrador
+	# pude seguir supliendo, teniendo en cuenta a los nodos clientes
+	# que ya tiene conectados.
+	attr_reader :reserva
+	
 	# Constructor de nodo. Recibe como parametros
 	# coordenadas: indica las coordenadas en el plano del vector, por
 	# defecto en el (0,0)
@@ -80,6 +85,7 @@ class CapacitedPHubNode
 		@tipo = tipo
 		@capacidad_servicio = capacidad_servicio
 		@connected = Array.new
+		@reserva = capacidad_servicio
 		
 		# Estableciendo un id
 		@id = @@cuenta_id
@@ -111,6 +117,7 @@ class CapacitedPHubNode
 		desconectar
 		
 		@tipo = value
+		@reserva = @capacidad_servicio
 	end
 	
 	# Devuelve el tipo de nodo, este valor se corresponde a :cliente o :concentrador
@@ -138,7 +145,14 @@ class CapacitedPHubNode
 			@connected << other
 			emit(:delete_connection, self, antiguo)
 		else
-			@connected << other unless @connected.include? other
+			unless @connected.include? other
+				@connected << other
+				@reserva -= other.demanda
+				
+				if reserva < 0
+					emit(:delete_connection, self, other)
+				end
+			end
 		end
 		
 		other.listeners << self unless other.listeners.include? self
@@ -158,6 +172,11 @@ class CapacitedPHubNode
 				emit(:delete_connection, self, antiguo)
 			else
 				@connected << origen
+				@reserva -= origen.demanda
+				
+				if reserva < 0
+					emit(:delete_connection, self, origen)
+				end
 			end
 		end
 	end
@@ -166,6 +185,10 @@ class CapacitedPHubNode
 	def on_delete_connection(origen, destino)
 		if destino === self
 			@connected.delete(origen)
+			
+			if tipo == :concentrador
+				@reserva += origen.demanda
+			end
 		end
 	end
 	
