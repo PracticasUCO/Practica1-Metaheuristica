@@ -138,4 +138,13 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_equal(0, @clienteA.conectado_a.length, "El cliente sigue teniendo conexiones")
 		assert_equal(false, @concentradorA.conectado_a.include?(@clienteA), "El concentrador no registro la desconexion")
 	end
+	
+	def test_id
+		@clientes.each do |cliente|
+			refute_operator(@clienteA.id, :==, cliente.id)
+			refute_operator(@clienteB.id, :==, cliente.id)
+			refute_operator(@concentradorA.id, :==, cliente.id)
+			refute_operator(@concentradorB.id, :==, cliente.id)
+		end
+	end
 end
