@@ -19,8 +19,11 @@ class TestCapacitedPHubNode < MiniTest::Test
 		
 		@clienteA = CapacitedPHubNode.new(coordenadas: [1, 3], demanda: 15.3, capacidad_servicio: 21, tipo: :cliente)
 		@clienteB = CapacitedPHubNode.new(coordenadas: [5, 3], demanda: 13, capacidad_servicio: 22.1, tipo: :cliente)
+		@clienteC = CapacitedPHubNode.new(coordenadas: [1,1], demanda: 1)
+		@clienteD = CapacitedPHubNode.new(coordenadas: [1,2], demanda: 0.5)
 		@concentradorA = CapacitedPHubNode.new(coordenadas: [5, 1], capacidad_servicio: 50, tipo: :concentrador)
-		@concentradorB = CapacitedPHubNode.new(coordenadas: [4, 10], capacidad_servicio: 10, tipo: :concentrador)
+		@concentradorB = CapacitedPHubNode.new(coordenadas: [4, 10], capacidad_servicio: 35, tipo: :concentrador)
+		@concentradorC = CapacitedPHubNode.new(capacidad_servicio: 14, tipo: :concentrador)
 	end
 	
 	def test_errores_constructor
@@ -146,5 +149,11 @@ class TestCapacitedPHubNode < MiniTest::Test
 			refute_operator(@concentradorA.id, :==, cliente.id)
 			refute_operator(@concentradorB.id, :==, cliente.id)
 		end
+	end
+	
+	def test_capacidad_servicio
+		@concentradorC.conectar_a = @clienteA ## No puede produccirse ya que concentradorC puede ofrecer 11 y clienteA necesita 15.3
+		assert_equal(false, @concentradorC.conectado_a.include?(@clienteA), "Se ha registrado una conexion imposible")
+		assert_equal(false, @clienteA.conectado_a.include?(@concentradorC), "Se ha registrado una conexion imposible")
 	end
 end
