@@ -59,7 +59,7 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_equal(1, default.demanda)
 		assert_equal(:cliente, default.tipo)
 		assert_equal(:concentrador, other_default.tipo)
-		assert_equal(1, other_default.capacidad_servicio)
+		assert_equal(Float::INFINITY, other_default.capacidad_servicio)
 	end
 	
 	def test_distancia
