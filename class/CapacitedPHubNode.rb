@@ -133,7 +133,10 @@ class CapacitedPHubNode
 		Math.sqrt(((otherX - propiaX) ** 2) + ( (otherY - propiaY ) ** 2 ))
 	end
 	
-	# Establece a quien conectar el nodo
+	# Establece a quien conectar el nodo. Si se trata de conectar a un concentrador que esta
+	# saturado, la conexion no se llevara a cabo.
+	# Debido a esto, se devuelve true cuando la conexion se pueda completar y false en caso
+	# contrario
 	def conectar_a=(other)
 		raise TypeError, "other must be a CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
 		raise TypeError, "un nodo no puede conectarse a si mismo" if self.eql? other
@@ -162,7 +165,12 @@ class CapacitedPHubNode
 			end
 		end
 		
-		emit(:add_nodo_connection, self, other) unless cancel_connection
+		unless cancel_connection
+			emit(:add_nodo_connection, self, other)
+			true
+		else
+			false
+		end
 	end
 	
 	# El siguiente metodo gestiona las conexiones entre nodos
