@@ -77,7 +77,6 @@ class TestCapacitedPHubNode < MiniTest::Test
 	end
 	
 	def test_demanda
-		assert_raises(RuntimeError, "Un concentrador no tiene una demanda asociada") {@concentradorA.demanda}
 		assert_equal(15.3, @clienteA.demanda)
 	end
 	
