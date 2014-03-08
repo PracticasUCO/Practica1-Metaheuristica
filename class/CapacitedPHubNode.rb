@@ -162,15 +162,10 @@ class CapacitedPHubNode
 	
 	## Desconecta el nodo de todos los demas nodos
 	def desconectar
-		if tipo == :cliente
-			emit(:delete_connection, self, @connected[0])
-			@connected.clear
-		else
-			@connected.each do |nodo|
-				emit(:delete_connection, self, nodo)
-			end
-			@connected.clear
+		@connected.each do |nodo|
+			emit(:delete_connection, self, nodo)
 		end
+		@connected.clear
 	end
 	
 	# Devuelve a quien esta conectado el nodo
