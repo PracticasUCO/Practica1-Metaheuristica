@@ -135,8 +135,8 @@ class CapacitedPHubNode
 	
 	# Establece a quien conectar el nodo. Si se trata de conectar a un concentrador que esta
 	# saturado, la conexion no se llevara a cabo.
-	# Debido a esto, se devuelve true cuando la conexion se pueda completar y false en caso
-	# contrario
+	# Se debe por tanto comprobar siempre si se ha efectuado la conexion, que se puede hacer
+	# facilmente con un conectado_a otro
 	def conectar_a=(other)
 		raise TypeError, "other must be a CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
 		raise TypeError, "un nodo no puede conectarse a si mismo" if self.eql? other
@@ -165,12 +165,7 @@ class CapacitedPHubNode
 			end
 		end
 		
-		unless cancel_connection
-			emit(:add_nodo_connection, self, other)
-			true
-		else
-			false
-		end
+		emit(:add_nodo_connection, self, other) unless cancel_connection
 	end
 	
 	# El siguiente metodo gestiona las conexiones entre nodos
@@ -214,9 +209,26 @@ class CapacitedPHubNode
 		@connected.clear
 	end
 	
-	# Devuelve a quien esta conectado el nodo
-	def conectado_a
-		@connected
+	# Devuelve a quien esta conectado el nodo.
+	# Si no recibe parametros devuelve la lista de nodos a las que se encuentra conectado.
+	# En caso contrario, devuelve si esta conectado a cada uno de los nodos de la lista
+	def conectado_a(*other)
+		if other.length == 0
+			@connected
+		else
+			resultado = false
+			other.each do |nodo|
+				raise TypeError, "Todos los parametros de conectado_a deben de ser nodos" unless nodo.kind_of? CapacitedPHubNode
+				
+				if @connected.include? nodo
+					resultado = true
+				else
+					resultado = false
+					break
+				end
+			end
+			return resultado
+		end
 	end
 	
 end
