@@ -59,13 +59,13 @@ class CapacitedPHubNode
 	#
 	# Todos los parametros tiene valores por defecto, los cuales son:
 	# Coordenadas: [0, 0]
-	# Demanda: 0
+	# Demanda: 1
 	# Tipo: :cliente
-	# capacidad_servicio: 0
+	# capacidad_servicio: Infinita
 	#
 	# Inicialmente todos los nodos estan desconectados, esto signifia que no podran funcionar
 	# si son clientes hasta que se conecten a un concentrador
-	def initialize(coordenadas: [0, 0], demanda: 1, tipo: :cliente, capacidad_servicio: 1)
+	def initialize(coordenadas: [0, 0], demanda: 1, tipo: :cliente, capacidad_servicio: Float::INFINITY)
 		raise TypeError, "Las coordenadas deben de ser un Array" unless coordenadas.kind_of? Array
 		raise TypeError, "Solo se aceptan coordenadas del plano" unless coordenadas.length.eql? 2
 		raise TypeError, "La demanda debe de ser un numero" unless demanda.kind_of? Numeric
