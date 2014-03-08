@@ -139,6 +139,11 @@ class CapacitedPHubNode
 		raise TypeError, "un nodo no puede conectarse a si mismo" if self.eql? other
 		raise TypeError, "Un concentrador solo pude conectarse a clientes y viceversa" if self.tipo.eql? other.tipo
 		
+		other.listeners << self unless other.listeners.include? self
+		self.listeners << other unless self.listeners.include? other
+		
+		cancel_connection = false
+		
 		if tipo == :cliente
 			antiguo = @connected[0]
 			@connected.clear
@@ -151,13 +156,13 @@ class CapacitedPHubNode
 				
 				if reserva < 0
 					emit(:delete_connection, self, other)
+					@connected.delete(other)
+					cancel_connection = true
 				end
 			end
 		end
 		
-		other.listeners << self unless other.listeners.include? self
-		self.listeners << other unless self.listeners.include? other
-		emit(:add_nodo_connection, self, other)
+		emit(:add_nodo_connection, self, other) unless cancel_connection
 	end
 	
 	# El siguiente metodo gestiona las conexiones entre nodos
@@ -176,6 +181,7 @@ class CapacitedPHubNode
 				
 				if reserva < 0
 					emit(:delete_connection, self, origen)
+					@connected.delete(origen)
 				end
 			end
 		end
