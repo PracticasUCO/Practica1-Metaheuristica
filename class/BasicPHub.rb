@@ -16,6 +16,10 @@ class BasicPHub
 	# o no, dependiendo de si ha elegido conectarlos o no
 	attr_reader :nodos
 	
+	# numero_concentradores indica el numero de concentradores que debe
+	# de aparecer en la solucion
+	attr_reader :numero_concentradores
+	
 	# Constructor de la clase BasicPHub, recibe como paremetro un
 	# String que indica de donde leer la base de datos.
 	def initialize(path_db)
