@@ -92,4 +92,13 @@ class BasicPHub
 			return true
 		end
 	end
+	
+	# Genera una solucion aleatoria
+	def generar_solucion_aleatoria
+		if solucion_factible?
+			concentradores = nodos.sample(numero_concentradores)
+		else
+			pass
+		end
+	end
 end
