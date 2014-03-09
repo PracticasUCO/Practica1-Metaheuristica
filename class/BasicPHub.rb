@@ -1,7 +1,6 @@
 #! /usr/bin/env ruby -w
 
 require_relative 'CapacitedPHubNode'
-require 'set'
 
 =begin rdoc
 La clase BasicPHub es la responsable de leer el fichero de base de datos
@@ -48,5 +47,21 @@ class BasicPHub
 				@nodos << nodo
 			end
 		end
+	end
+	
+	# La funcion objetivo devuelve la suma de las distancias de todos los nodos clientes a su concentrador
+	def funcion_objetivo(solucion)
+		raise TypeError, "La solucion debe de ser un Array de elementos" unless solucion.kind_of? Array
+		
+		suma = 0
+		
+		solucion.each do |nodo|
+			raise RuntimeError, "Se ha pasado un elemento que no es un nodo a funcion objetivo.\n Elemento erroneo: #{nodo}" unless nodo.kind_of? CapacitedPHubNode
+			next unless nodo.tipo.eql? :cliente
+			
+			suma += nodo.distancia(*nodo.conectado_a)
+		end
+		
+		return suma
 	end
 end
