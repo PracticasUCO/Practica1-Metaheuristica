@@ -7,7 +7,7 @@ class TestBasicCWP < MiniTest::Test
 	# Agradeceria que alguien me ayudara a reemplazar esto con algo que no dependiera de mi
 	# maquina actual.
 	def setup
-		@c = BasicCWP.new("/home/gowikel/Practicas con Git/Practica1-Metaheuristica/instancias/CWP/ejemplo.txt")
+		@c = BasicCWP.new("instancias/CWP/ejemplo.txt")
 	end
 	
 	def test_total_nodes
