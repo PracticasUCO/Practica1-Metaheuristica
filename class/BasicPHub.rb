@@ -19,6 +19,10 @@ class BasicPHub
 	# de aparecer en la solucion
 	attr_reader :numero_concentradores
 	
+	# Devuelve la capacidad de un concentrador, ya que todos tienen
+	# la misma capacidad
+	attr_reader :capacidad_concentrador
+	
 	# Constructor de la clase BasicPHub, recibe como paremetro un
 	# String que indica de donde leer la base de datos.
 	def initialize(path_db)
@@ -63,5 +67,29 @@ class BasicPHub
 		end
 		
 		return suma
+	end
+	
+	# Comprueba que se puede llegar a una solucion.
+	# Devuelve true si es posible o false en caso contrario
+	def solucion_factible?
+		nodos_solucion = nodos.sort
+		
+		suma = 0
+		
+		numero_concentradores.times do
+			nodos_solucion.delete_at(0)
+		end
+		
+		nodos_solucion.each do |candidato|
+			suma += candidato.demanda
+		end
+		
+		suma /= numero_concentradores # Esto es así ya que todos los concentradores tiene la misma capacidad
+		
+		if suma > capacidad_concentrador
+			return false
+		else
+			return true
+		end
 	end
 end
