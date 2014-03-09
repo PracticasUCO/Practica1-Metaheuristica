@@ -169,4 +169,23 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_equal(true, @concentradorA.conectado_a(@clienteA, @clienteB, @clienteC))
 		assert_equal(false, @concentradorA.conectado_a(@clienteB, @clienteD))
 	end
+	
+	def test_ordenacion
+		vector = Array.new
+		vector << @clienteA
+		vector << @clienteD
+		vector << @clienteC
+		vector << @clienteB
+		
+		vector = vector.sort
+		assert_equal(@clienteD, vector[0])
+		assert_equal(@clienteC, vector[1])
+		assert_equal(@clienteB, vector[2])
+		assert_equal(@clienteA, vector[3])
+		
+		vector = vector.sort_by { |nodo| nodo.capacidad_servicio}
+		
+		assert_equal(@clienteA, vector[0])
+		assert_equal(@clienteB, vector[1])
+	end
 end
