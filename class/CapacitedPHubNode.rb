@@ -25,6 +25,7 @@ no puede ser sobrepasada
 =end
 class CapacitedPHubNode
 	include Signal
+	include Enumerable
 	
 	# cuenta_id es un atributo global que lleva la cuenta del proximo
 	# id a establecer
@@ -232,6 +233,11 @@ class CapacitedPHubNode
 		else
 			"Cliente nodo #{id} en #{coordenadas} con una demanda de #{demanda}"
 		end
+	end
+	
+	# Se compara con otro metodo
+	def <=>(other)
+		self.demanda.<=> other.demanda
 	end
 	
 end
