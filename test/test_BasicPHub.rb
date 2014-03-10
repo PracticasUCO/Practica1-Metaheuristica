@@ -26,4 +26,34 @@ class TestBasicPHub < MiniTest::Test
 			assert_equal(5, numero_concentradores, "El numero de concentradores de la solucion es incorrecto")
 		end
 	end
+	
+	def test_conexiones_solucion
+		solucion, coste = @t.generar_solucion_aleatoria
+		concentradores = Array.new
+		clientes = Array.new
+		conectado = 0
+		sin_conectar = Array.new
+		
+		solucion.each do |nodo|
+			if nodo.tipo == :concentrador
+				concentradores << nodo
+			else
+				clientes << nodo
+				
+				if nodo.esta_conectado?
+					conectado += 1
+				else
+					sin_conectar << nodo
+				end
+			end
+		end
+		
+		assert_operator(conectado, :>=, (@t.nodos.length - @t.numero_concentradores) * 0.9)
+		
+		sin_conectar.each do |candidato|
+			concentradores.each do |concentrador|
+				assert_operator(candidato.demanda, :>, concentrador.reserva)
+			end
+		end
+	end
 end
