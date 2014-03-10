@@ -240,4 +240,19 @@ class CapacitedPHubNode
 		self.demanda.<=> other.demanda
 	end
 	
+	# Comprueba si se puede conectar a otro nodo
+	def se_puede_conectar?(other)
+		raise TypeError, "other debe de ser un nodo" unless other.kind_of? CapacitedPHubNode
+		
+		if other.tipo == tipo
+			return false
+		else
+			if other.tipo == :concentrador
+				return other.reserva >= demanda
+			else
+				return other.reserva < demanda
+			end
+		end
+	end
+	
 end
