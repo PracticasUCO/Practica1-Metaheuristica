@@ -251,7 +251,7 @@ class CapacitedPHubNode
 			if other.tipo == :concentrador
 				return other.reserva >= demanda
 			else
-				return other.reserva < demanda
+				return reserva >= other.demanda
 			end
 		end
 	end
