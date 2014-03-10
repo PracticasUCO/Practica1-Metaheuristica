@@ -256,4 +256,15 @@ class CapacitedPHubNode
 		end
 	end
 	
+	# Indica si el nodo esta conectado o no. Devuelve true si
+	# el nodo esta conectado a algun otro nodo o false en caso
+	# contrario
+	def esta_conectado?
+		if conectado_a.length == 0
+			false
+		else
+			true
+		end
+	end
+	
 end
