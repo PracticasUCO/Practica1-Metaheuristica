@@ -241,6 +241,7 @@ class CapacitedPHubNode
 	end
 	
 	# Comprueba si se puede conectar a otro nodo
+	# Recibe como parametro un nodo CapacitedPHubNode
 	def se_puede_conectar?(other)
 		raise TypeError, "other debe de ser un nodo" unless other.kind_of? CapacitedPHubNode
 		
