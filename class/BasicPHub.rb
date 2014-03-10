@@ -121,4 +121,6 @@ class BasicPHub
 			return Array.new, Float::INFINITY
 		end
 	end
+	
+	private :funcion_objetivo :solucion_factible?
 end
