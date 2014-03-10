@@ -20,9 +20,9 @@ class TestCapacitedPHubNode < MiniTest::Test
 		@clienteA = CapacitedPHubNode.new(coordenadas: [1, 3], demanda: 15.3, capacidad_servicio: 21, tipo: :cliente)
 		@clienteB = CapacitedPHubNode.new(coordenadas: [5, 3], demanda: 13, capacidad_servicio: 22.1, tipo: :cliente)
 		@clienteC = CapacitedPHubNode.new(coordenadas: [1,1], demanda: 1)
-		@clienteD = CapacitedPHubNode.new(coordenadas: [1,2], demanda: 0.5)
+		@clienteD = CapacitedPHubNode.new(coordenadas: [1,2], demanda: 0.9)
 		@concentradorA = CapacitedPHubNode.new(coordenadas: [5, 1], capacidad_servicio: 100, tipo: :concentrador)
-		@concentradorB = CapacitedPHubNode.new(coordenadas: [4, 10], capacidad_servicio: 35, tipo: :concentrador)
+		@concentradorB = CapacitedPHubNode.new(coordenadas: [4, 10], capacidad_servicio: 30, tipo: :concentrador)
 		@concentradorC = CapacitedPHubNode.new(capacidad_servicio: 14, tipo: :concentrador)
 	end
 	
@@ -187,5 +187,17 @@ class TestCapacitedPHubNode < MiniTest::Test
 		
 		assert_equal(@clienteA, vector[0])
 		assert_equal(@clienteB, vector[1])
+	end
+	
+	def test_comprobacion_conexion
+		assert_equal(false, @clienteA.se_puede_conectar?(@clienteB), "Dos clientes no puede conectarse")
+		assert_equal(false, @concentradorA.se_puede_conectar?(@concentradorB), "Dos concentradores no pueden conectarse")
+		assert_equal(false, @clienteA.se_puede_conectar?(@concentradorC), "No hay capacidad de servicio suficiente")
+		assert_equal(false, @concentradorC.se_puede_conectar?(@clienteA), "No hay capacidad de servicio suficiente")
+		assert_equal(true, @concentradorC.se_puede_conectar?(@clienteB))
+		assert_equal(true, @clienteB.se_puede_conectar?(@concentradorC))
+		@clienteB.conectar_a = @concentradorC
+		@clienteC.conectar_a = @concentradorC
+		assert_equal(false, @clienteD.se_puede_conectar?(@concentradorC), "No queda espacio disponible para la conexion")
 	end
 end
