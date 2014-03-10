@@ -26,6 +26,7 @@ class BasicPHub
 	# Constructor de la clase BasicPHub, recibe como paremetro un
 	# String que indica de donde leer la base de datos.
 	def initialize(path_db)
+		@nodos = Array.new
 		leer_instancia(path_db)
 	end
 	
@@ -47,7 +48,12 @@ class BasicPHub
 			file.each do |linea|
 				linea = linea.chomp
 				*, coorX, coorY, demanda = linea.split(/ +/)
-				nodo = CapacitedPHubNode.new(coordenadas: [coorX, coorY], demanda: demanda, capacidad_servicio: capacidad_concentrador)
+				
+				coorX = coorX.to_f
+				coorY = coorY.to_f
+				demanda = demanda.to_f
+				
+				nodo = CapacitedPHubNode.new(coordenadas: [coorX, coorY], demanda: demanda, capacidad_servicio: @capacidad_concentrador)
 				@nodos << nodo
 			end
 		end
