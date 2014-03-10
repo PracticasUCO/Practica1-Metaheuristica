@@ -99,8 +99,26 @@ class BasicPHub
 			concentradores = nodos.sample(numero_concentradores)
 			
 			candidatos = nodos.dup - concentradores
+			
+			# Revuelvo la lista de candidatos para que se seleccionen
+			# en orden aleatorio a la lista de concentradores
+			candidatos.sort_by! {rand}
+			
+			concentradores.each do |concentrador|
+				candidatos.each do |candidato|
+					if not candidato.esta_conectado? and candidato.se_puede_conectar? concentrador
+						candidato.conectar_a = concentrador
+					end
+				end
+			end
+			
+			solucion = candidatos + concentradores
+			
+			coste = funcion_objetivo(solucion)
+			
+			return solucion, coste
 		else
-			pass
+			return Array.new, Float::INFINITY
 		end
 	end
 end
