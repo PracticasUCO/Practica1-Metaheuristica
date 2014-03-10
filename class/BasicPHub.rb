@@ -64,16 +64,19 @@ class BasicPHub
 	def funcion_objetivo(solucion)
 		raise TypeError, "La solucion debe de ser un Array de elementos" unless solucion.kind_of? Array
 		
-		suma = 0
+		suma = 0.0
 		
 		solucion.each do |nodo|
 			raise RuntimeError, "Se ha pasado un elemento que no es un nodo a funcion objetivo.\n Elemento erroneo: #{nodo}" unless nodo.kind_of? CapacitedPHubNode
-			next unless nodo.tipo.eql? :cliente
+			solucion.each do |nodo_destino|
+				next unless nodo_destino.tipo.eql? :cliente
+				next if nodo_destino == nodo
 			
-			suma += nodo.distancia(*nodo.conectado_a)
+				suma += nodo_destino.distancia(nodo)
+			end
 		end
 		
-		return suma
+		return suma/solucion.length
 	end
 	
 	# Comprueba que se puede llegar a una solucion.
