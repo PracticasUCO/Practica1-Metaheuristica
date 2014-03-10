@@ -46,6 +46,7 @@ class BasicPHub
 			
 			# Ahora se lee el resto del fichero
 			file.each do |linea|
+				next if linea.length.eql? 1
 				linea = linea.chomp
 				*, coorX, coorY, demanda = linea.split(/ +/)
 				
