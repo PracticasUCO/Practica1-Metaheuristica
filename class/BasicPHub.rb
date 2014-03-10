@@ -110,6 +110,16 @@ class BasicPHub
 			
 			candidatos = nodos.dup - concentradores
 			
+			# Se convierten los concentradores en concentradores
+			concentradores.each do |concentrador|
+				concentrador.tipo = :concentrador
+			end
+			
+			# Se convierten los clientes en clientes
+			candidatos.each do |cliente|
+				cliente.tipo = :cliente
+			end
+			
 			# Revuelvo la lista de candidatos para que se seleccionen
 			# en orden aleatorio a la lista de concentradores
 			candidatos.sort_by! {rand}
