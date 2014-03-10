@@ -97,6 +97,8 @@ class BasicPHub
 	def generar_solucion_aleatoria
 		if solucion_factible?
 			concentradores = nodos.sample(numero_concentradores)
+			
+			candidatos = nodos.dup - concentradores
 		else
 			pass
 		end
