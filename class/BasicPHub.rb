@@ -129,5 +129,5 @@ class BasicPHub
 		end
 	end
 	
-	private :funcion_objetivo, :solucion_factible?
+	private :funcion_objetivo
 end
