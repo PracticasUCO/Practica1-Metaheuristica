@@ -1,3 +1,7 @@
+require_relative 'bench_BasicCWP'
+require_relative 'bench_BasicMMDP'
+require_relative 'bench_BasicPHub'
+require_relative 'bench_BasicTSP'
 require_relative 'test_BasicPHub'
 require_relative 'test_BasicCWP'
 require_relative 'test_BasicMMDP'
