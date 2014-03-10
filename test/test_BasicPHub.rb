@@ -28,7 +28,7 @@ class TestBasicPHub < MiniTest::Test
 	end
 	
 	def test_conexiones_solucion
-		solucion, coste = @t.generar_solucion_aleatoria
+		solucion, * = @t.generar_solucion_aleatoria
 		concentradores = Array.new
 		clientes = Array.new
 		conectado = 0
@@ -55,5 +55,19 @@ class TestBasicPHub < MiniTest::Test
 				assert_operator(candidato.demanda, :>, concentrador.reserva)
 			end
 		end
+	end
+	
+	def test_aleatoriedad
+		soluciones = Array.new
+		repeticiones = 40
+		
+		repeticiones.times do
+			solucion, * = @t.generar_solucion_aleatoria
+			soluciones << solucion
+		end
+		
+		soluciones.uniq!
+		
+		assert_operator(soluciones.length, :>=, (0.75 * repeticiones))
 	end
 end
