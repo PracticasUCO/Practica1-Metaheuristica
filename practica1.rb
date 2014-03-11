@@ -6,6 +6,17 @@ require_relative 'class/BasicPHub'
 require_relative 'class/BasicTSP'
 require 'getopt/long'
 
+def mostrar_error_fichero_no_encontrado(fichero)
+	puts "El fichero introduccido no pudo abrirse. Compruebe si es correcto"
+	puts "Fichero: #{fichero}"
+end
+
+def mostrar_error_fichero_incorrecto(fichero)
+	puts "El fichero no parece ser correcto. Compruebe el fichero antes de ejecutar"
+	puts "el programa"
+	puts "Fichero: #{fichero}"
+end
+
 begin
 
 opt = Getopt::Long.getopts(
@@ -56,20 +67,15 @@ end
 if opt["type"] == "MMDP"
 	
 	begin
-	problem = BasicMMDP.new(opt["instance"])
+		problem = BasicMMDP.new(opt["instance"])
 	rescue Errno::ENOENT => e
-		puts "El fichero introduccido no pudo abrirse. Compruebe si es correcto"
-		puts "Fichero: #{opt["instance"]}"
+		mostrar_error_fichero_no_encontrado opt["instance"]
 		exit
 	rescue TypeError => e
-		puts "El fichero no parece ser correcto. Compruebe el fichero antes de ejecutar"
-		puts "el programa"
-		puts "Fichero: #{opt["instance"]}"
+		mostrar_error_fichero_incorrecto opt["instance"]
 		exit
 	rescue RuntimeError => e
-		puts "El fichero no parece ser correcto. Compruebe el fichero antes de ejecutar"
-		puts "el programa"
-		puts "Fichero: #{opt["instance"]}"
+		mostrar_error_fichero_incorrecto opt["instance"]
 		exit
 	end
 	
