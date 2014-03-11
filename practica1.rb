@@ -32,7 +32,12 @@ if opt["help"]
 end
 
 if opt["seed"]
-	opt["seed"] = opt["seed"].to_i
-	srand opt["seed"]
+	srand opt["seed"].to_i
 	puts "Semilla establecida a: #{opt["seed"]}"
+end
+
+unless opt["type"] and opt["instance"]
+	puts "Los argumenos --type and --instance son obligatorios"
+	puts "Escriba --help para más información"
+	exit
 end
