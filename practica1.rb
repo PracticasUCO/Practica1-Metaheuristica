@@ -1,5 +1,9 @@
 #! /usr/bin/env ruby -w
- 
+
+require_relative 'class/BasicMMDP'
+require_relative 'class/BasicCWP'
+require_relative 'class/BasicPHub'
+require_relative 'class/BasicTSP'
 require 'getopt/long'
 
 opt = Getopt::Long.getopts(
@@ -40,4 +44,17 @@ unless opt["type"] and opt["instance"]
 	puts "Los argumenos --type and --instance son obligatorios"
 	puts "Escriba --help para más información"
 	exit
+end
+
+if opt["type"] == "MMDP"
+	
+	begin
+	problem = BasicMMDP.new(opt["instance"])
+	rescue Errno::ENOENT => e
+		puts "El fichero introduccido no pudo abrirse. Compruebe si es correcto"
+		puts "Fichero: #{opt["instance"]}"
+		exit
+	end
+	
+	puts "Instancia Max Min Diversity Problem seleccionada"
 end
