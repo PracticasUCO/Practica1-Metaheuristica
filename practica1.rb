@@ -117,8 +117,26 @@ else
 	exit
 end
 
-opt["loops"] = 1000 unless opt["loops"]	
+if opt["loops"]
+	opt["loops"] = opt["loops"].to_i
+else
+	opt["loops"] = 1000
+end
 
 puts "Numero de iteraciones establecido: #{opt["loops"]}"
 
+minimo = Float::INFINITY
+maximo = -Float::INFINITY
+
+opt["loops"].times.with_index do |index|
+	puts "Iteracion #{index + 1}"
+	solucion, coste = problem.generar_solucion_aleatoria
+	puts "Solucion: #{solucion}"
+	puts "Coste: #{coste}"
+	puts
+	
+	minimo = coste if coste < minimo
+	maximo = coste if coste > maximo
 end
+
+puts "minimo= #{minimo}  maximo=#{maximo}"
