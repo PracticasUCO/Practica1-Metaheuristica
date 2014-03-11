@@ -116,5 +116,9 @@ else
 	puts "Argumento no reconocido: #{opt["type"]}"
 	exit
 end
-	
+
+opt["loops"] = 1000 unless opt["loops"]	
+
+puts "Numero de iteraciones establecido: #{opt["loops"]}"
+
 end
