@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 require 'minitest/benchmark'
 require_relative '../class/BasicMMDP'
 
