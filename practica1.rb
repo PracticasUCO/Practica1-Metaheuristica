@@ -6,12 +6,19 @@ require_relative 'class/BasicPHub'
 require_relative 'class/BasicTSP'
 require 'getopt/long'
 
+begin
+
 opt = Getopt::Long.getopts(
 	["--help", "-h", Getopt::BOOLEAN],
 	["--type", "-p", Getopt::REQUIRED],
 	["--instance", "-f", Getopt::REQUIRED],
 	["--seed", "-s", Getopt::REQUIRED]
 	)
+rescue Getopt::Long::Error => e
+	puts "Una o varias de las opciones introduccidas es incorrecta."
+	puts "Comprueba la entrada antes de continuar"
+	exit
+end
 
 if opt["help"]
 	puts "La forma de uso de este script es:"
