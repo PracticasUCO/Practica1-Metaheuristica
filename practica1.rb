@@ -81,5 +81,16 @@ if opt["type"] == "MMDP"
 	
 	puts "Instancia Max Min Diversity Problem cargada correctamente"
 elsif opt["type"] == "CWP"
-	
+	begin
+		problem = BasicCWP.new(opt["instance"])
+	rescue Errno::ENOENT => e
+		mostrar_error_fichero_no_encontrado opt["instance"]
+		exit
+	rescue TypeError => e
+		mostrar_error_fichero_incorrecto opt["instance"]
+		exit
+	rescue RuntimeError => e
+		mostrar_error_fichero_incorrecto opt["instance"]
+		exit
+	end
 end
