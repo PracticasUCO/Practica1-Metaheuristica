@@ -54,7 +54,19 @@ if opt["type"] == "MMDP"
 		puts "El fichero introduccido no pudo abrirse. Compruebe si es correcto"
 		puts "Fichero: #{opt["instance"]}"
 		exit
+	rescue TypeError => e
+		puts "El fichero no parece ser correcto. Compruebe el fichero antes de ejecutar"
+		puts "el programa"
+		puts "Fichero: #{opt["instance"]}"
+		exit
+	rescue RuntimeError => e
+		puts "El fichero no parece ser correcto. Compruebe el fichero antes de ejecutar"
+		puts "el programa"
+		puts "Fichero: #{opt["instance"]}"
+		exit
 	end
 	
-	puts "Instancia Max Min Diversity Problem seleccionada"
+	puts "Instancia Max Min Diversity Problem cargada correctamente"
+elsif opt["type"] == "CWP"
+	
 end
