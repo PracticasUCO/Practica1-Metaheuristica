@@ -9,12 +9,14 @@ require 'getopt/long'
 def mostrar_error_fichero_no_encontrado(fichero)
 	puts "El fichero introduccido no pudo abrirse. Compruebe si es correcto"
 	puts "Fichero: #{fichero}"
+	exit
 end
 
 def mostrar_error_fichero_incorrecto(fichero)
 	puts "El fichero no parece ser correcto. Compruebe el fichero antes de ejecutar"
 	puts "el programa"
 	puts "Fichero: #{fichero}"
+	exit
 end
 
 begin
@@ -70,13 +72,10 @@ if opt["type"] == "MMDP"
 		problem = BasicMMDP.new(opt["instance"])
 	rescue Errno::ENOENT => e
 		mostrar_error_fichero_no_encontrado opt["instance"]
-		exit
 	rescue TypeError => e
 		mostrar_error_fichero_incorrecto opt["instance"]
-		exit
 	rescue RuntimeError => e
 		mostrar_error_fichero_incorrecto opt["instance"]
-		exit
 	end
 	
 	puts "Instancia Max Min Diversity Problem cargada correctamente"
@@ -85,12 +84,9 @@ elsif opt["type"] == "CWP"
 		problem = BasicCWP.new(opt["instance"])
 	rescue Errno::ENOENT => e
 		mostrar_error_fichero_no_encontrado opt["instance"]
-		exit
 	rescue TypeError => e
 		mostrar_error_fichero_incorrecto opt["instance"]
-		exit
 	rescue RuntimeError => e
 		mostrar_error_fichero_incorrecto opt["instance"]
-		exit
 	end
 end
