@@ -137,6 +137,7 @@ opt["loops"].times.with_index do |index|
 	
 	minimo = coste if coste < minimo
 	maximo = coste if coste > maximo
+	solucion.clear
 end
 
 puts "minimo= #{minimo}  maximo=#{maximo}"

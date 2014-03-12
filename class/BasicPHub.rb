@@ -106,9 +106,10 @@ class BasicPHub
 	# Genera una solucion aleatoria
 	def generar_solucion_aleatoria
 		if solucion_factible?
-			concentradores = nodos.sample(numero_concentradores)
+			lista_de_nodos = nodos.dup
+			concentradores = lista_de_nodos.sample(numero_concentradores)
 			
-			candidatos = nodos.dup - concentradores
+			candidatos = lista_de_nodos.dup - concentradores
 			
 			# Se convierten los concentradores en concentradores
 			concentradores.each do |concentrador|
@@ -136,11 +137,25 @@ class BasicPHub
 			
 			coste = funcion_objetivo(solucion)
 			
+			solucion = pretty_solution(solucion)
+			
 			return solucion, coste
 		else
 			return Array.new, Float::INFINITY
 		end
 	end
 	
-	private :funcion_objetivo
+	def pretty_solution(solucion)
+		raise TypeError, "Solucion debe de ser un Array" unless solucion.kind_of? Array
+		
+		nueva_solucion = Array.new
+		
+		solucion.each do |nodo|
+			nueva_solucion << "#{nodo.to_s}\n"
+		end
+		
+		return nueva_solucion
+	end
+	
+	private :funcion_objetivo, :pretty_solution
 end
