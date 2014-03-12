@@ -151,7 +151,7 @@ class BasicPHub
 		nueva_solucion = Array.new
 		
 		solucion.each do |nodo|
-			nueva_solucion << "#{nodo.to_s}\n"
+			nueva_solucion << "#{nodo.to_s}"
 		end
 		
 		return nueva_solucion
