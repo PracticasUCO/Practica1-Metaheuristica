@@ -120,20 +120,6 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_operator(@concentradorC.reserva, :<, 0, "Las reservar deben ser inferiores a la capacidad")
 	end
 	
-	def test_conectado_a
-		assert_equal(false, @concentradorA.conectado_a(@clienteA), "El nodo no puede tener conexiones activas aun")
-		assert_equal(false, @clienteA.conectado_a(@concentradorA), "El nodo no puede tener conexiones activas aun")
-		@clienteA.conectar_a = @concentradorA
-		@clienteB.conectar_a = @concentradorA
-		@clienteC.conectar_a = @concentradorA
-		assert_equal(true, @concentradorA.conectado_a(@clienteA))
-		assert_equal(true, @concentradorA.conectado_a(@clienteB))
-		assert_equal(true, @concentradorA.conectado_a(@clienteC))
-		assert_equal(3, @concentradorA.conectado_a.length)
-		assert_equal(true, @concentradorA.conectado_a(@clienteA, @clienteB, @clienteC))
-		assert_equal(false, @concentradorA.conectado_a(@clienteB, @clienteD))
-	end
-	
 	def test_ordenacion
 		vector = Array.new
 		vector << @clienteA
