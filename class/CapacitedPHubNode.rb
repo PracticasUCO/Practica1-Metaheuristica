@@ -1,7 +1,6 @@
 #! /usr/bin/env ruby -w
 
 require 'mathn'
-require 'signal'
 
 =begin rdoc
 La clase CapacitedPHubNode representa a un nodo de problema Capacited P Hub.
@@ -24,7 +23,6 @@ Cada nodo concentrador tiene ademas una capacidad maxima de servicio que
 no puede ser sobrepasada
 =end
 class CapacitedPHubNode
-	include Signal
 	include Enumerable
 	
 	# cuenta_id es un atributo global que lleva la cuenta del proximo
@@ -109,8 +107,6 @@ class CapacitedPHubNode
 		raise TypeError, "Value solo puede ser un Symbol con los valores :cliente o :concentrador" unless value.kind_of? Symbol
 		raise TypeError, "El tipo debe de ser :cliente o :concentrador" unless value.=== :cliente or value.=== :concentrador
 		
-		desconectar
-		
 		@tipo = value
 		@reserva = @capacidad_servicio
 	end
@@ -161,47 +157,6 @@ class CapacitedPHubNode
 		end
 		
 		emit(:add_nodo_connection, self, other) unless cancel_connection
-	end
-	
-	# El siguiente metodo gestiona las conexiones entre nodos
-	# destino es quien debe actualizar su tabla para que no
-	# existan datos no concruentes
-	def on_add_nodo_connection(origen, destino)
-		if destino.=== self and not self.conectado_a.include? origen
-			if tipo == :cliente
-				antiguo = @connected[0]
-				@connected.clear
-				@connected << origen
-				emit(:delete_connection, self, antiguo)
-			else
-				@connected << origen
-				@reserva -= origen.demanda
-				
-				if reserva < 0
-					emit(:delete_connection, self, origen)
-					@connected.delete(origen)
-				end
-			end
-		end
-	end
-	
-	# El siguiente metodo gestiona las desconexiones de nodos
-	def on_delete_connection(origen, destino)
-		if destino === self
-			@connected.delete(origen)
-			
-			if tipo == :concentrador
-				@reserva += origen.demanda
-			end
-		end
-	end
-	
-	## Desconecta el nodo de todos los demas nodos
-	def desconectar
-		@connected.each do |nodo|
-			emit(:delete_connection, self, nodo)
-		end
-		@connected.clear
 	end
 	
 	# Devuelve a quien esta conectado el nodo.
