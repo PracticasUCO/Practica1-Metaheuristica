@@ -159,4 +159,17 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_equal(false, @clienteA.esta_conectado?, "El cliente no se ha enterado de la conexion")
 		assert_equal(true, @concentradorA.esta_conectado?, "Realizo la conexion")
 	end
+	
+	def test_conectar_a_basico
+		assert_raises(TypeError, "Se deben de conectar nodos") {@clienteA.conectar_a = 15}
+		assert_raises(TypeError, "No se pueden conectar nodos iguales") {@clienteA.conectar_a = @clienteA}
+		assert_raises(TypeError, "No se pueden conectar nodos del mismo tipo") {@clienteA.conectar_a = @clienteB}
+		@clienteA.conectar_a = @concentradorA
+		@concentradorA.conectar_a = @clienteA
+		assert_equal(true, @clienteA.esta_conectado?, "Los nodos deben de estar conectados")
+		assert_equal(true, @concentradorA.esta_conectado?, "Los nodos deben de estar conectados")
+		assert_equal(true, @clienteA.conectado_a(@concentradorA), "Los nodos deben de estar conectados")
+		assert_equal(true, @concentradorA.conectado_a(@clienteA), "Los nodos deben de estar conectados")
+		assert_equal(1, @clienteA.conectado_a().length, "Los clientes solo pueden almacenar una conexion")
+	end
 end
