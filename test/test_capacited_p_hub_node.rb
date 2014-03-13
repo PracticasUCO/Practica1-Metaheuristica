@@ -115,9 +115,9 @@ class TestCapacitedPHubNode < MiniTest::Test
 	end
 	
 	def test_capacidad_servicio
-		@concentradorC.conectar_a = @clienteA ## No puede produccirse ya que concentradorC puede ofrecer 11 y clienteA necesita 15.3
-		assert_equal(false, @concentradorC.conectado_a.include?(@clienteA), "Se ha registrado una conexion imposible")
-		assert_equal(false, @clienteA.conectado_a.include?(@concentradorC), "Se ha registrado una conexion imposible")
+		# Aunque es posible saturar a un nodo, esto se vera reflejado en las reservas, que se volveran negativas
+		@concentradorC.conectar_a = @clienteA 
+		assert_operator(@concentradorC.reserva, :<, 0, "Las reservar deben ser inferiores a la capacidad")
 	end
 	
 	def test_conectado_a
