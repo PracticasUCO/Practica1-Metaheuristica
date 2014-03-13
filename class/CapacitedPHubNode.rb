@@ -222,4 +222,9 @@ class CapacitedPHubNode
 		end
 	end
 	
+	# Desconecta completamente el nodo
+	def desconectar
+		@connected.clear
+	end
+	
 end
