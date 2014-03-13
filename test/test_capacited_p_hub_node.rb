@@ -90,6 +90,7 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_equal(:cliente, @clienteA.tipo)
 		@clienteA.tipo = :concentrador
 		assert_equal(:concentrador, @clienteA.tipo)
+		assert_equal(false, @clienteA.esta_conectado?)
 	end
 	
 	def test_coordenadas
