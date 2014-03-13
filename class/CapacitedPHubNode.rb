@@ -217,6 +217,7 @@ class CapacitedPHubNode
 	# Desconecta completamente el nodo
 	def desconectar
 		@connected.clear
+		@id_concentrador = nil
 	end
 	
 end
