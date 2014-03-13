@@ -172,4 +172,17 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_equal(true, @concentradorA.conectado_a(@clienteA), "Los nodos deben de estar conectados")
 		assert_equal(1, @clienteA.conectado_a().length, "Los clientes solo pueden almacenar una conexion")
 	end
+	
+	def test_desconectar
+		@clienteA.conectar_a = @concentradorA
+		@concentradorA.conectar_a = @clienteA
+		@concentradorA.conectar_a = @clienteB
+		@concentradorA.conectar_a = @clienteC
+		
+		@clienteA.desconectar
+		@concentradorA.desconectar
+		
+		assert_equal(false, @clienteA.esta_conectado?, "El nodo deberia de haberse desconectado")
+		assert_equal(false, @concentradorA.esta_conectado?, "El nodo deberia de haberse desconectado")
+	end
 end
