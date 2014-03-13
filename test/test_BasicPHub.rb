@@ -63,6 +63,19 @@ class TestBasicPHub < MiniTest::Test
 		
 	end
 	
+	def test_conexiones_completo
+		*,solucion = @t.generar_solucion_aleatoria
+		
+		solucion.each do |nodo|
+			if nodo.tipo == :cliente
+				if nodo.esta_conectado?
+					concentrador = nodo.conectado_a().pop
+					assert_equal(true, concentrador.conectado_a(nodo), "Debe de haber una conexion mutua entre los nodos")
+				end
+			end
+		end
+	end
+	
 	def test_aleatoriedad
 		soluciones = Array.new
 		repeticiones = 40
