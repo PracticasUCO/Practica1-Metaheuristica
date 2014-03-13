@@ -127,7 +127,7 @@ class TestCapacitedPHubNode < MiniTest::Test
 		vector << @clienteC
 		vector << @clienteB
 		
-		vector = vector.sort
+		vector = vector.sort_by {|node| node.demanda}
 		assert_equal(@clienteD, vector[0])
 		assert_equal(@clienteC, vector[1])
 		assert_equal(@clienteB, vector[2])
