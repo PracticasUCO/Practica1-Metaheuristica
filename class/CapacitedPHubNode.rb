@@ -126,39 +126,24 @@ class CapacitedPHubNode
 		Math.sqrt(((otherX - propiaX) ** 2) + ( (otherY - propiaY ) ** 2 ))
 	end
 	
-	# Establece a quien conectar el nodo. Si se trata de conectar a un concentrador que esta
-	# saturado, la conexion no se llevara a cabo.
-	# Se debe por tanto comprobar siempre si se ha efectuado la conexion, que se puede hacer
-	# facilmente con un conectado_a otro
+	# Establece a quien conectar el nodo. Ojo que no se comprueba que la conexion no sature
+	# a un concentrador. Es responsabilidad del encargado de la conexion de verificar los fallos
+	# La conexion siempre se efectua, al no ser que se intenten conectar dos nodos del mismo tipo
+	# o se mande un parametro no correcto. En caso de error se levanta una excepcion del tipo TypeError
 	def conectar_a=(other)
 		raise TypeError, "other must be a CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
 		raise TypeError, "un nodo no puede conectarse a si mismo" if self.eql? other
 		raise TypeError, "Un concentrador solo pude conectarse a clientes y viceversa" if self.tipo.eql? other.tipo
 		
-		other.listeners << self unless other.listeners.include? self
-		self.listeners << other unless self.listeners.include? other
-		
-		cancel_connection = false
-		
 		if tipo == :cliente
-			antiguo = @connected[0]
-			@connected.clear
+			desconectar # Nos desconectamos del nodo al que estuviesemos conectados
 			@connected << other
-			emit(:delete_connection, self, antiguo)
 		else
-			unless @connected.include? other
+			unless conectado_a(other)
 				@connected << other
 				@reserva -= other.demanda
-				
-				if reserva < 0
-					emit(:delete_connection, self, other)
-					@connected.delete(other)
-					cancel_connection = true
-				end
 			end
 		end
-		
-		emit(:add_nodo_connection, self, other) unless cancel_connection
 	end
 	
 	# Devuelve a quien esta conectado el nodo.
