@@ -16,7 +16,7 @@ class TestBasicPHub < MiniTest::Test
 	
 	def test_numero_concentradores_solucion
 		numero_concentradores = 0
-		solucion, coste = @t.generar_solucion_aleatoria
+		*, coste, solucion = @t.generar_solucion_aleatoria
 		
 		solucion.each do |nodo|
 			numero_concentradores += 1 if nodo.tipo.eql? :concentrador
@@ -32,7 +32,7 @@ class TestBasicPHub < MiniTest::Test
 		
 		paths.each do |path|
 			t = BasicPHub.new(path)
-			solucion, * = t.generar_solucion_aleatoria
+			*, solucion = t.generar_solucion_aleatoria
 			concentradores = Array.new
 			clientes = Array.new
 			conectado = 0
@@ -68,7 +68,7 @@ class TestBasicPHub < MiniTest::Test
 		repeticiones = 40
 		
 		repeticiones.times do
-			solucion, * = @t.generar_solucion_aleatoria
+			*, solucion = @t.generar_solucion_aleatoria
 			soluciones << solucion
 		end
 		
