@@ -142,6 +142,7 @@ class CapacitedPHubNode
 		if tipo == :cliente
 			desconectar # Nos desconectamos del nodo al que estuviesemos conectados
 			@connected << other
+			@id_concentrador = other.id
 		else
 			unless conectado_a(other)
 				@connected << other
