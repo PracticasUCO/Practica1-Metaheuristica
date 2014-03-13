@@ -37,7 +37,7 @@ do
 		fi
 		if [ ! -z "$tipo" ]
 		then
-			salida=$(ruby practica1.rb -p $tipo -f "$f" -s 80 --loops 100 | grep "extremos")
+			salida=$(ruby practica1.rb -p $tipo -f "$f" -s 80 | grep "extremos")
 			maximo=$(echo $salida | sed 's/.*máximo=\([^ ]*\).*/\1/')
 			minimo=$(echo $salida | sed 's/.*mínimo=\([^ ]*\).*/\1/')
 			tiempo=$(echo "$(date +%s.%N)-$tiempoInicio" | bc)
