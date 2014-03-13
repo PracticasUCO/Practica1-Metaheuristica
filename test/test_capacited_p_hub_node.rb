@@ -162,7 +162,7 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_equal(true, @clienteB.se_puede_conectar?(@concentradorC))
 		@clienteB.conectar_a = @concentradorC
 		@clienteC.conectar_a = @concentradorC
-		assert_equal(false, @clienteD.se_puede_conectar?(@concentradorC), "No queda espacio disponible para la conexion")
+		assert_equal(true, @clienteD.se_puede_conectar?(@concentradorC), "La comprobación de errores no se realiza en esta capa")
 	end
 	
 	def test_esta_conectado
