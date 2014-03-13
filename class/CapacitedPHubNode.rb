@@ -49,6 +49,10 @@ class CapacitedPHubNode
 	# este actua como cliente
 	attr_reader :demanda
 	
+	# id_concentrador devuelve el id del concentrador al que se conecto
+	# por ultima vez un nodo como cliente
+	attr_reader :id_concentrador
+	
 	# Constructor de nodo. Recibe como parametros
 	# coordenadas: indica las coordenadas en el plano del vector, por
 	# defecto en el (0,0)
@@ -173,7 +177,7 @@ class CapacitedPHubNode
 		if tipo === :concentrador
 			"Concentrador nodo #{id} en #{coordenadas} con #{reserva}/#{capacidad_servicio} (#{(100*reserva/capacidad_servicio).to_i} %)"
 		else
-			"Cliente nodo #{id} en #{coordenadas} con una demanda de #{demanda}"
+			"Cliente nodo #{id} en #{coordenadas} con una demanda de #{demanda}."
 		end
 	end
 	
