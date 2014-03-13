@@ -105,42 +105,6 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_raises(TypeError, "Un concentrador solo pude conectarse a clientes y viceversa") {@concentradorA.conectar_a = @concentradorB}
 	end
 	
-	def test_conexion
-		@clienteA.conectar_a = @concentradorA
-		@clienteB.conectar_a = @concentradorA
-		assert_equal(true, @concentradorA.conectado_a.include?(@clienteA), "El concentradorA no tiene al clienteA conectado")
-		assert_equal(true, @concentradorA.conectado_a.include?(@clienteB), "El concentradorA no tiene al clienteB conectado")
-		assert_equal(true, @clienteA.conectado_a.include?(@concentradorA), "El clienteA no esta conectado al concentrador")
-		assert_equal(true, @clienteB.conectado_a.include?(@concentradorA), "El clienteB no esta conectado al concentrador")
-		
-		numero_listeners = @clienteA.listeners.length
-		@clienteA.conectar_a = @concentradorA
-		assert_equal(numero_listeners, @clienteA.listeners.length, "El numero de escuchas debe permanecer constante si no se producen cambios")
-		
-		numero_listeners = @concentradorA.listeners.length
-		@concentradorA.conectar_a = @clienteA
-		assert_equal(numero_listeners, @concentradorA.listeners.length, "El numero de escuchas debe permanecer constante si no se producen cambios")
-		
-		@concentradorB.conectar_a = @clienteA
-		assert_equal(true, @clienteA.conectado_a.include?(@concentradorB), "El clienteA no se conecto al segundo concentrador")
-		assert_equal(true, @concentradorB.conectado_a.include?(@clienteA), "El concentradorB no registro la conexion al clienteA")
-		assert_equal(false, @clienteA.conectado_a.include?(@concentradorA), "El clienteA no borro la conexion con el concentradorA")
-		assert_equal(false, @concentradorA.conectado_a.include?(@clienteA), "El concentradorA no borro de la conexion al clienteA")
-		
-		@clienteB.conectar_a = @concentradorB
-		@concentradorB.desconectar
-		assert_equal(0, @concentradorB.conectado_a.length, "El concentrador aun tiene nodos conectados")
-		assert_equal(0, @clienteA.conectado_a.length, "El clienteA no registro la desconexion con el concentrador")
-		assert_equal(0, @clienteB.conectado_a.length, "El clienteB no registro la desconexion con el conentrador")
-		
-		@clienteA.conectar_a = @concentradorA
-		@clienteB.conectar_a = @concentradorA
-		@clienteA.desconectar
-		assert_equal(false, @clienteA.conectado_a.include?(@concentradorA), "El clienteA sigue conectado al concentrador")
-		assert_equal(0, @clienteA.conectado_a.length, "El cliente sigue teniendo conexiones")
-		assert_equal(false, @concentradorA.conectado_a.include?(@clienteA), "El concentrador no registro la desconexion")
-	end
-	
 	def test_id
 		@clientes.each do |cliente|
 			refute_operator(@clienteA.id, :==, cliente.id)
