@@ -138,9 +138,9 @@ class BasicPHub
 			
 			coste = funcion_objetivo(solucion)
 			
-			solucion = pretty_solution(solucion)
+			solucion_texto = pretty_solution(solucion)
 			
-			return solucion, coste
+			return solucion_texto, coste, solucion
 		else
 			return Array.new, Float::INFINITY
 		end
