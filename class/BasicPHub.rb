@@ -129,6 +129,7 @@ class BasicPHub
 				candidatos.each do |candidato|
 					if not candidato.esta_conectado? and candidato.se_puede_conectar? concentrador
 						candidato.conectar_a = concentrador
+						concentrador.conectar_a = candidato
 					end
 				end
 			end
