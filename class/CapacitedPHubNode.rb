@@ -107,6 +107,8 @@ class CapacitedPHubNode
 		raise TypeError, "Value solo puede ser un Symbol con los valores :cliente o :concentrador" unless value.kind_of? Symbol
 		raise TypeError, "El tipo debe de ser :cliente o :concentrador" unless value.=== :cliente or value.=== :concentrador
 		
+		desconectar # Desconectamos al nodo de la red
+		
 		@tipo = value
 		@reserva = @capacidad_servicio
 	end
