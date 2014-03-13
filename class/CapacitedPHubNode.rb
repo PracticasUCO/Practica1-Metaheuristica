@@ -179,7 +179,7 @@ class CapacitedPHubNode
 	
 	# Se compara con otro metodo
 	def <=>(other)
-		self.demanda.<=> other.demanda
+		self.id.<=> other.id
 	end
 	
 	# Comprueba si se puede conectar a otro nodo
