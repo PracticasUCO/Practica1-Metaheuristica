@@ -178,7 +178,7 @@ class CapacitedPHubNode
 		if tipo === :concentrador
 			"Concentrador nodo #{id} en #{coordenadas} con #{reserva}/#{capacidad_servicio} (#{(100*reserva/capacidad_servicio).to_i} %)"
 		else
-			"Cliente nodo #{id} en #{coordenadas} con una demanda de #{demanda}."
+			"Cliente nodo #{id} en #{coordenadas} con una demanda de #{demanda}. Conectado a #{id_concentrador}"
 		end
 	end
 	
