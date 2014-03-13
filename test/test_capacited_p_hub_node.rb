@@ -155,7 +155,7 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_equal(false, @clienteA.esta_conectado?, "No estan conectados los nodos")
 		assert_equal(false, @concentradorA.esta_conectado?, "No estan conectados los nodos")
 		@concentradorA.conectar_a = @clienteA
-		assert_equal(true, @clienteA.esta_conectado?, "Los nodos estan conectados")
-		assert_equal(true, @concentradorA.esta_conectado?, "Los nodos estan conectados")
+		assert_equal(false, @clienteA.esta_conectado?, "El cliente no se ha enterado de la conexion")
+		assert_equal(true, @concentradorA.esta_conectado?, "Realizo la conexion")
 	end
 end
