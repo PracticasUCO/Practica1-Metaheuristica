@@ -72,48 +72,54 @@ end
 if opt["type"] == "MMDP"
 	
 	begin
-		problem = BasicMMDP.new(opt["instance"])
+		problem = BasicMMDP.new(opt['instance'])
 	rescue Errno::ENOENT => e
-		mostrar_error_fichero_no_encontrado opt["instance"]
+		mostrar_error_fichero_no_encontrado(opt['instance'])
 	rescue TypeError => e
-		mostrar_error_fichero_incorrecto opt["instance"]
+		mostrar_error_fichero_incorrecto(opt['instance'])
 	rescue RuntimeError => e
-		mostrar_error_fichero_incorrecto opt["instance"]
+		mostrar_error_fichero_incorrecto(opt['instance'])
 	end
 	
 	puts "Instancia Max Min Diversity Problem cargada correctamente"
 elsif opt["type"] == "CWP"
 	begin
-		problem = BasicCWP.new(opt["instance"])
+		problem = BasicCWP.new(opt['instance'])
 	rescue Errno::ENOENT => e
-		mostrar_error_fichero_no_encontrado opt["instance"]
+		mostrar_error_fichero_no_encontrado(opt['instance'])
 	rescue TypeError => e
-		mostrar_error_fichero_incorrecto opt["instance"]
+		mostrar_error_fichero_incorrecto(opt['instance'])
 	rescue RuntimeError => e
-		mostrar_error_fichero_incorrecto opt["instance"]
+		mostrar_error_fichero_incorrecto(opt['instance'])
 	end
+	
+	puts "Instancia CutWidth Problem cargada correctamente"
 elsif opt["type"] == "TSP"
 	begin
-		problem = BasicTSP.new(opt["instance"])
+		problem = BasicTSP.new(opt['instance'])
 	rescue Errno::ENOENT => e
-		mostrar_error_fichero_no_encontrado opt["instance"]
+		mostrar_error_fichero_no_encontrado(opt['instance'])
 	rescue TypeError => e
-		mostrar_error_fichero_incorrecto opt["instance"]
+		mostrar_error_fichero_incorrecto(opt['instance'])
 	rescue RuntimeError => e
-		mostrar_error_fichero_incorrecto opt["instance"]
+		mostrar_error_fichero_incorrecto(opt['instance'])
 	end
+	
+	puts "Instancia Travelling Salesman Problem cargada correctamente"
 elsif opt["type"] == "CPH"
 	begin
-		problem = BasicPHub.new(opt["instance"])
+		problem = BasicPHub.new(opt['instance'])
 	rescue Errno::ENOENT => e
-		mostrar_error_fichero_no_encontrado opt["instance"]
+		mostrar_error_fichero_no_encontrado(opt['instance'])
 	rescue TypeError => e
-		mostrar_error_fichero_incorrecto opt["instance"]
+		mostrar_error_fichero_incorrecto(opt['instance'])
 	rescue RuntimeError => e
-		mostrar_error_fichero_incorrecto opt["instance"]
+		mostrar_error_fichero_incorrecto(opt['instance'])
 	end
+	
+	puts "Instancia Capacited PHub cargada correctamente"
 else
-	puts "Argumento no reconocido: #{opt["type"]}"
+	puts "Argumento no reconocido: #{opt['type']}"
 	exit
 end
 
