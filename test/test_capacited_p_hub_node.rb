@@ -63,8 +63,8 @@ class TestCapacitedPHubNode < MiniTest::Test
 	end
 	
 	def test_distancia
-		d1 = @clienteA.distancia(@clienteB)
-		d2 = @clienteB.distancia(@concentradorA)
+		d1 = @clienteA.distancia(@clienteB.coordenadas, @clienteA.coordenadas)
+		d2 = @clienteB.distancia(@concentradorA.coordenadas, @clienteB.coordenadas)
 		assert_equal(4, d1)
 		assert_equal(2, d2)
 		
@@ -72,7 +72,7 @@ class TestCapacitedPHubNode < MiniTest::Test
 		@clientes.each do |cliente|
 			coordenadaX_cliente, coordenadaY_cliente = cliente.coordenadas
 			distancia = Math.sqrt((coordenadaX - coordenadaX_cliente) ** 2 + (coordenadaY - coordenadaY_cliente) ** 2)
-			assert_equal(distancia, @clientes[0].distancia(cliente))
+			assert_equal(distancia, @clientes[0].distancia(cliente.coordenadas, @clientes[0].coordenadas))
 		end
 	end
 	
