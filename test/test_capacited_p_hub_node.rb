@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby -w
  
 require 'minitest/autorun'
-require_relative '../class/CapacitedPHubNode'
+require_relative '../class/PHUB/CapacitedPHubNode'
 
 class TestCapacitedPHubNode < MiniTest::Test
 	def setup

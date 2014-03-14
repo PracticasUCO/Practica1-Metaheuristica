@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/benchmark'
-require_relative '../class/BasicCWP'
+require_relative '../class/CWP/BasicCWP'
 
 class Test_BasicCWPBenchmark < MiniTest::Benchmark
 	def self.bench_range()
