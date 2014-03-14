@@ -72,7 +72,7 @@ class BasicPHub
 				next unless nodo_destino.tipo.eql? :cliente
 				next if nodo_destino == nodo
 			
-				suma += nodo_destino.distancia(nodo)
+				suma += nodo_destino.distancia(nodo_destino.coordenadas, nodo.coordenadas)
 			end
 		end
 		
