@@ -16,7 +16,7 @@ gema_c_basic_cwp:
 	rm *.o
 	
 gema_c_capacited_phub:
-	@cd class/PHUB/;\
+	@cd class/PHUB/CapacitedPHubNode/;\
 	echo "Creando makefile para la gema c_capacited_phub";\
 	ruby extconf.rb;\
 	echo "Compilando gema...";\
@@ -25,8 +25,8 @@ gema_c_capacited_phub:
 	rm *.o
 	
 clean:
-	-@cd class/CWP/; \
+	-cd class/CWP/; \
 	rm *.so;
 	
-	-@cd class/PHUB/; \
+	-cd class/PHUB/CapacitedPHubNode/; \
 	rm *.so;
