@@ -146,4 +146,4 @@ opt["loops"].times.with_index do |index|
 	solucion.clear
 end
 
-puts "minimo= #{minimo}  maximo=#{maximo}"
+puts "extremos mínimo=#{minimo} máximo=#{maximo}"
