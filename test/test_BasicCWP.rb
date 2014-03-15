@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require_relative '../class/CWP/BasicCWP'
+require_relative '../class/CWP/BasicCWP/BasicCWP'
 
 class TestBasicCWP < MiniTest::Test
 	

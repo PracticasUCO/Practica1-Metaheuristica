@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/benchmark'
-require_relative '../class/TSP/BasicTSP'
+require_relative '../class/TSP/BasicTSP/BasicTSP'
 
 class BenchBasicTSP < MiniTest::Benchmark
 	def self.bench_range

@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/benchmark'
-require_relative '../class/PHUB/BasicPHub'
+require_relative '../class/PHUB/BasicPHub/BasicPHub'
 
 class BenchBasicPHub < MiniTest::Benchmark
 	def self.bench_range

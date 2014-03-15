@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby -w
 
 require 'minitest/autorun'
-require_relative '../class/PHUB/BasicPHub'
+require_relative '../class/PHUB/BasicPHub/BasicPHub'
 
 class TestBasicPHub < MiniTest::Test
 	def setup

@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby -w
  
 require 'minitest/autorun'
-require_relative '../class/TSP/BasicTSP'
+require_relative '../class/TSP/BasicTSP/BasicTSP'
 
 class TestBasicTSP < MiniTest::Test
 	def setup

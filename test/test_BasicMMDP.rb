@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby -w
  
 require 'minitest/autorun'
-require_relative '../class/MMDP/BasicMMDP'
+require_relative '../class/MMDP/BasicMMDP/BasicMMDP'
 
 class TestBasicMMDP < MiniTest::Test
 	def setup
