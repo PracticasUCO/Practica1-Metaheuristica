@@ -10,7 +10,12 @@ VALUE rb_funcion_objetivo(VALUE self, VALUE solucion);
 
 VALUE rb_funcion_objetivo(VALUE self, VALUE solucion)
 {
-	fprintf(stderr, "EEEEEEEEEEEESO ES\n");
+	VALUE tipoParametro = TYPE(solucion);
+	
+	if(tipoParametro != T_ARRAY)
+	{
+		rb_raise(rb_eTypeError, "Solucion debe de ser un Array\n");
+	}
 	return INT2NUM(18);
 }
 
