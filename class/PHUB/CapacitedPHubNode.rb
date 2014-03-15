@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby -w
 
 require 'mathn'
-require_relative 'math_nodos_phub'
+require_relative 'c_basic_capacited_phub_node'
 
 =begin rdoc
 La clase CapacitedPHubNode representa a un nodo de problema Capacited P Hub.
@@ -25,7 +25,6 @@ no puede ser sobrepasada
 =end
 class CapacitedPHubNode
 	include Enumerable
-	include MathNodosPHub
 	
 	# cuenta_id es un atributo global que lleva la cuenta del proximo
 	# id a establecer

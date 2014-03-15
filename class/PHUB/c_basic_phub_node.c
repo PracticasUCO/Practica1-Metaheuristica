@@ -3,22 +3,22 @@
 #include <math.h>
 
 // Defining a space for information and references about the module to be stored internally
-VALUE MathNodosPHub = Qnil;
+VALUE CBasicPHubNode = Qnil;
 
 // Prototype for our method 'distancia' - methods are prefixed by 'method_' here
 VALUE method_distancia(VALUE self, VALUE propias, VALUE vecino);
 
 // Prototype for the initialization method - Ruby calls this, not you
-void Init_math_nodos_phub() {
-	MathNodosPHub = rb_define_module("MathNodosPHub");
-	rb_define_method(MathNodosPHub, "distancia", method_distancia, 2);
+void Init_c_basic_capacited_phub_node() {
+	CBasicPHubNode = rb_define_class("CapacitedPHubNode", rb_cObject);
+	rb_define_method(CBasicPHubNode, "distancia", method_distancia, 2);
 };
 
 // The initialization method for this module
-void Init_distancia() {
-	MathNodosPHub = rb_define_module("MathNodosPHub");
-	rb_define_method(MathNodosPHub, "distancia", method_distancia, 0);
-}
+/*void Init_distancia() {
+	CBasicPHubNode = rb_define_module("CBasicPHubNode");
+	rb_define_method(CBasicPHubNode, "distancia", method_distancia, 0);
+}*/
 
 // Our 'test1' method.. it simply returns a value of '10' for now.
 VALUE method_distancia(VALUE self, VALUE propias, VALUE vecino) {

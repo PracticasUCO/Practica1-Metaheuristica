@@ -2,7 +2,7 @@
 require 'mkmf'
 
 # Give it a name
-extension_name = 'math_nodos_phub'
+extension_name = 'c_basic_capacited_phub_node'
 
 # The destination
 dir_config(extension_name)
