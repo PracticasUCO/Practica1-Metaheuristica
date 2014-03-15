@@ -21,6 +21,8 @@ class TestCapacitedPHubNode < MiniTest::Test
 		@clienteB = CapacitedPHubNode.new(coordenadas: [5, 3], demanda: 13, capacidad_servicio: 22.1, tipo: :cliente)
 		@clienteC = CapacitedPHubNode.new(coordenadas: [1,1], demanda: 1)
 		@clienteD = CapacitedPHubNode.new(coordenadas: [1,2], demanda: 0.9)
+		@clienteE = CapacitedPHubNode.new(demanda: 0.9)
+		@clienteF = CapacitedPHubNode.new(coordenadas: [0,2], demanda: 0.9)
 		@concentradorA = CapacitedPHubNode.new(coordenadas: [5, 1], capacidad_servicio: 100, tipo: :concentrador)
 		@concentradorB = CapacitedPHubNode.new(coordenadas: [4, 10], capacidad_servicio: 30, tipo: :concentrador)
 		@concentradorC = CapacitedPHubNode.new(capacidad_servicio: 14, tipo: :concentrador)
@@ -63,16 +65,16 @@ class TestCapacitedPHubNode < MiniTest::Test
 	end
 	
 	def test_distancia
-		d1 = @clienteA.distancia(@clienteB.coordenadas, @clienteA.coordenadas)
-		d2 = @clienteB.distancia(@concentradorA.coordenadas, @clienteB.coordenadas)
-		assert_equal(4, d1)
+		d1 = @clienteA.distancia(@clienteA)
+		d2 = @clienteE.distancia(@clienteF)
+		assert_equal(0, d1)
 		assert_equal(2, d2)
 		
 		coordenadaX, coordenadaY = @clientes[0].coordenadas
 		@clientes.each do |cliente|
 			coordenadaX_cliente, coordenadaY_cliente = cliente.coordenadas
 			distancia = Math.sqrt((coordenadaX - coordenadaX_cliente) ** 2 + (coordenadaY - coordenadaY_cliente) ** 2)
-			assert_equal(distancia, @clientes[0].distancia(cliente.coordenadas, @clientes[0].coordenadas))
+			assert_equal(distancia, @clientes[0].distancia(cliente))
 		end
 	end
 	

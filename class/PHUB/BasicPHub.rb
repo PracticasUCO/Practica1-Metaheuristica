@@ -45,7 +45,7 @@ class BasicPHub
 			@capacidad_concentrador = capacidad_concentrador.to_f
 			
 			# Ahora se lee el resto del fichero
-			file.each do |linea|
+			file.each_with_index do |linea, index|
 				next if linea.length.eql? 1
 				linea = linea.chomp
 				*, coorX, coorY, demanda = linea.split(/ +/)
@@ -55,6 +55,7 @@ class BasicPHub
 				demanda = demanda.to_f
 				
 				nodo = CapacitedPHubNode.new(coordenadas: [coorX, coorY], demanda: demanda, capacidad_servicio: @capacidad_concentrador)
+				
 				@nodos << nodo
 			end
 		end
@@ -72,7 +73,7 @@ class BasicPHub
 				next unless nodo_destino.tipo.eql? :cliente
 				next if nodo_destino == nodo
 			
-				suma += nodo_destino.distancia(nodo_destino.coordenadas, nodo.coordenadas)
+				suma += nodo_destino.distancia(nodo)
 			end
 		end
 		
@@ -135,6 +136,12 @@ class BasicPHub
 			end
 			
 			solucion = candidatos + concentradores
+			
+			solucion.each do |s|
+				if s.coordenadas == []
+					puts "AQUI ESTA"
+				end
+			end
 			
 			coste = funcion_objetivo(solucion)
 			

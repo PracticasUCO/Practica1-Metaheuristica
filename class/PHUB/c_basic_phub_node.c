@@ -6,12 +6,12 @@
 VALUE CBasicPHubNode = Qnil;
 
 // Prototype for our method 'distancia' - methods are prefixed by 'method_' here
-VALUE method_distancia(VALUE self, VALUE propias, VALUE vecino);
+VALUE method_distancia(VALUE self, VALUE vecino);
 
 // Prototype for the initialization method - Ruby calls this, not you
 void Init_c_basic_capacited_phub_node() {
 	CBasicPHubNode = rb_define_class("CapacitedPHubNode", rb_cObject);
-	rb_define_method(CBasicPHubNode, "distancia", method_distancia, 2);
+	rb_define_method(CBasicPHubNode, "distancia", method_distancia, 1);
 };
 
 // The initialization method for this module
@@ -21,35 +21,35 @@ void Init_c_basic_capacited_phub_node() {
 }*/
 
 // Our 'test1' method.. it simply returns a value of '10' for now.
-VALUE method_distancia(VALUE self, VALUE propias, VALUE vecino) {
+VALUE method_distancia(VALUE self, VALUE vecino) {
+	VALUE coordenadasPropias = rb_iv_get(self, "@coordenadas");
+	VALUE coordenadasVecino = rb_iv_get(vecino, "@coordenadas");
 	
-	propias = rb_check_array_type(propias);
-	vecino = rb_check_array_type(vecino);
+	coordenadasPropias = rb_ary_dup(coordenadasPropias);
+	coordenadasVecino = rb_ary_dup(coordenadasVecino);
 	
-	if((propias != Qnil) && (vecino != Qnil))
+	VALUE tipoP = TYPE(coordenadasPropias);
+	VALUE tipoV = TYPE(coordenadasVecino);
+	
+	if((tipoP == T_ARRAY) && (tipoV == T_ARRAY))
 	{
-		propias = rb_ary_dup(propias);
-		vecino = rb_ary_dup(vecino);
 		double vecinoX;
 		double vecinoY;
 		double propiaX;
 		double propiaY;
 		double resultado;
 		
-		vecinoX = NUM2DBL(rb_ary_shift(vecino));
-		vecinoY = NUM2DBL(rb_ary_shift(vecino));
-		propiaX = NUM2DBL(rb_ary_shift(propias));
-		propiaY = NUM2DBL(rb_ary_shift(propias));
+		vecinoX = NUM2DBL(rb_ary_shift(coordenadasVecino));
+		vecinoY = NUM2DBL(rb_ary_shift(coordenadasVecino));
+		propiaX = NUM2DBL(rb_ary_shift(coordenadasPropias));
+		propiaY = NUM2DBL(rb_ary_shift(coordenadasPropias));
 		
 		resultado = sqrt(((vecinoX-propiaX) * (vecinoX-propiaX)) + ((vecinoY - propiaY) * (vecinoY - propiaY)));
-		
-		rb_ary_free(propias);
-		rb_ary_free(vecino);
 		
 		return DBL2NUM(resultado);
 	}
 	else
 	{
-		return Qnil;
+		rb_raise(rb_eRuntimeError, "No se pasaron las coordenadas correctas\n");
 	}
 } 

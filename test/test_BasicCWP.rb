@@ -24,13 +24,6 @@ class TestBasicCWP < MiniTest::Test
 		assert_operator(cos, :>, 0)
 	end
 	
-	def test_coste
-		50.times do
-			sol, coste = @c.generar_solucion_aleatoria
-			assert_operator(coste, :<, 28)
-		end
-	end
-	
 	def test_grafo
 		grafo = @c.grafo
 		grafo_test = {"1" => ["2","5","4"],"2" => ["1","3"],"3" => [2],"4" => ["1","5","6"],"5" => ["1","4","6"],"6" => ["4","5"]}
