@@ -1,6 +1,6 @@
 #! /usr/bin/env ruby -w
 
-require_relative("BasicMMDP")
+require_relative("../BasicMMDP/BasicMMDP")
 
 =begin rdoc
 La clase MMDP define una interfaz para el problema Max Min Diversity Problem
