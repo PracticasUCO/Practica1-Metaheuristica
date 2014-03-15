@@ -137,12 +137,6 @@ class BasicPHub
 			
 			solucion = candidatos + concentradores
 			
-			solucion.each do |s|
-				if s.coordenadas == []
-					puts "AQUI ESTA"
-				end
-			end
-			
 			coste = funcion_objetivo(solucion)
 			
 			solucion_texto = pretty_solution(solucion)
