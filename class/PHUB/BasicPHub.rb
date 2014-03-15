@@ -1,6 +1,6 @@
 #! /usr/bin/env ruby -w
 
-require_relative 'CapacitedPHubNode'
+require_relative 'CapacitedPHubNode/CapacitedPHubNode'
 
 =begin rdoc
 La clase BasicPHub es la responsable de leer el fichero de base de datos
