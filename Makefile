@@ -7,7 +7,7 @@ gemas: gema_c_basic_cwp gema_c_capacited_phub
 	@echo "Gemas compiladas correctamente"
 	
 gema_c_basic_cwp:
-	@cd class/CWP/ ; \
+	@cd class/CWP/BasicCWP/ ; \
 	echo "Creando makefile para la gema c_basic_cwp...";\
 	ruby extconf.rb;\
 	echo "Compilando gema...";\
@@ -25,7 +25,7 @@ gema_c_capacited_phub:
 	rm *.o
 	
 clean:
-	-cd class/CWP/; \
+	-cd class/CWP/BasicCWP/; \
 	rm *.so;
 	
 	-cd class/PHUB/CapacitedPHubNode/; \
