@@ -1,9 +1,9 @@
 #! /usr/bin/env ruby -w
 
-require_relative 'class/MMDP/BasicMMDP'
-require_relative 'class/CWP/BasicCWP'
-require_relative 'class/PHUB/BasicPHub'
-require_relative 'class/TSP/BasicTSP'
+require_relative 'class/MMDP/BasicMMDP/BasicMMDP'
+require_relative 'class/CWP/BasicCWP/BasicCWP'
+require_relative 'class/PHUB/BasicPHub/BasicPHub'
+require_relative 'class/TSP/BasicTSP/BasicTSP'
 require 'getopt/long'
 
 def mostrar_error_fichero_no_encontrado(fichero)
