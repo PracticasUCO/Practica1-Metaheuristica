@@ -31,7 +31,7 @@ VALUE rb_funcion_objetivo(VALUE self, VALUE solucion)
 		if (type == c)
 		{
 			VALUE destino = rb_funcall(nodo, conectado_a_method, 0);
-			destino = rb_ary_shift(destino);
+			destino = rb_ary_entry(destino,0);
 			
 			double dis = NUM2DBL(method_distancia(nodo, destino));
 			suma += dis;
