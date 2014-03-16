@@ -20,10 +20,10 @@ void Init_c_basic_capacited_phub_node() {
 };
 
 // The initialization method for this module
-/*void Init_distancia() {
+void Init_distancia() {
 	CBasicPHubNode = rb_define_module("CBasicPHubNode");
 	rb_define_method(CBasicPHubNode, "distancia", method_distancia, 0);
-}*/
+}
 
 // Our 'test1' method.. it simply returns a value of '10' for now.
 VALUE method_distancia(VALUE self, VALUE vecino) {
@@ -73,6 +73,8 @@ VALUE method_se_puede_conectar(VALUE self, VALUE otro)
 	VALUE mi_tipo = rb_funcall(self, get_tipo, 0);
 	VALUE otro_tipo = rb_funcall(otro, get_tipo, 0);
 	VALUE tipo_concentrador = ID2SYM(rb_intern("concentrador")); 
+	double demanda;
+	double reserva;
 	
 	if(mi_tipo == otro_tipo)
 	{
@@ -80,17 +82,15 @@ VALUE method_se_puede_conectar(VALUE self, VALUE otro)
 	}
 	else
 	{
-		VALUE reserva;
-		VALUE demanda;
-		if(tipo_concentrador == otro_tipo)
-		{
-			reserva = rb_funcall(otro, get_reserva, 0);
-			demanda = rb_funcall(self, get_demanda, 0);
-		}
-		else
+		if(mi_tipo == tipo_concentrador)
 		{
 			reserva = rb_funcall(self, get_reserva, 0);
 			demanda = rb_funcall(otro, get_demanda, 0);
+		}
+		else
+		{
+			demanda = NUM2DBL(rb_funcall(self, get_demanda, 0));
+			reserva = NUM2DBL(rb_funcall(otro, get_reserva, 0));
 		}
 		
 		if(reserva >= demanda)

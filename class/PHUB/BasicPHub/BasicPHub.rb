@@ -127,12 +127,21 @@ class BasicPHub
 			# Revuelvo la lista de candidatos para que se seleccionen
 			# en orden aleatorio a la lista de concentradores
 			candidatos.sort_by! {rand}
-			
+			conectados = 0
+			sin_conectar = 0
 			concentradores.each do |concentrador|
 				candidatos.each do |candidato|
-					if not candidato.esta_conectado? and candidato.se_puede_conectar? concentrador
+					if not candidato.esta_conectado? and candidato.se_puede_conectar?(concentrador)
 						candidato.conectar_a = concentrador
 						concentrador.conectar_a = candidato
+						
+						if candidato.conectado_a(concentrador)
+							conectados += 1
+						else
+							sin_conectar += 1
+						end
+					else
+						sin_conectar += 1
 					end
 				end
 			end

@@ -151,6 +151,8 @@ class TestCapacitedPHubNode < MiniTest::Test
 		assert_equal(true, @clienteB.se_puede_conectar?(@concentradorC))
 		@clienteB.conectar_a = @concentradorC
 		@clienteC.conectar_a = @concentradorC
+		@concentradorC.conectar_a = @clienteB
+		@concentradorC.conectar_a = @clienteC
 		assert_equal(false, @clienteD.se_puede_conectar?(@concentradorC), "El concentrador no puede realizar la conexion")
 	end
 	

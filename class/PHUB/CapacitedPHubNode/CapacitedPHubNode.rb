@@ -145,12 +145,12 @@ class CapacitedPHubNode
 		raise TypeError, "un nodo no puede conectarse a si mismo" if self.eql? other
 		raise TypeError, "Un concentrador solo pude conectarse a clientes y viceversa" if self.tipo.eql? other.tipo
 		
-		if tipo == :cliente
+		if self.tipo == :cliente
 			desconectar # Nos desconectamos del nodo al que estuviesemos conectados
 			@connected << other
 			@id_concentrador = other.id
 		else
-			unless conectado_a(other)
+			if not conectado_a(other)
 				@connected << other
 				@reserva -= other.demanda
 			end
