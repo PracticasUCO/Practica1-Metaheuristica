@@ -195,19 +195,19 @@ class CapacitedPHubNode
 	
 	# Comprueba si se puede conectar a otro nodo
 	# Recibe como parametro un nodo CapacitedPHubNode
-	def se_puede_conectar?(other)
-		raise TypeError, "other debe de ser un nodo" unless other.kind_of? CapacitedPHubNode
-		
-		if other.tipo == tipo
-			return false
-		else
-			if other.tipo == :concentrador
-				return other.reserva >= demanda
-			else
-				return reserva >= other.demanda
-			end
-		end
-	end
+# 	def se_puede_conectar?(other)
+# 		raise TypeError, "other debe de ser un nodo" unless other.kind_of? CapacitedPHubNode
+# 		
+# 		if other.tipo == tipo
+# 			return false
+# 		else
+# 			if other.tipo == :concentrador
+# 				return other.reserva >= demanda
+# 			else
+# 				return reserva >= other.demanda
+# 			end
+# 		end
+# 	end
 	
 	# Indica si el nodo esta conectado o no. Devuelve true si
 	# el nodo esta conectado a algun otro nodo o false en caso
