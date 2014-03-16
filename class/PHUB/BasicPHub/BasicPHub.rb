@@ -49,13 +49,13 @@ class BasicPHub
 			file.each_with_index do |linea, index|
 				next if linea.length.eql? 1
 				linea = linea.chomp
-				*, coorX, coorY, demanda = linea.split(/ +/)
+				id, coorX, coorY, demanda = linea.split(/ +/)
 				
 				coorX = coorX.to_f
 				coorY = coorY.to_f
 				demanda = demanda.to_f
 				
-				nodo = CapacitedPHubNode.new(coordenadas: [coorX, coorY], demanda: demanda, capacidad_servicio: @capacidad_concentrador)
+				nodo = CapacitedPHubNode.new(coordenadas: [coorX, coorY], demanda: demanda, capacidad_servicio: @capacidad_concentrador, id: id)
 				
 				@nodos << nodo
 			end
