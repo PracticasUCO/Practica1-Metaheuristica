@@ -72,7 +72,7 @@ VALUE method_se_puede_conectar(VALUE self, VALUE otro)
 	
 	VALUE mi_tipo = rb_funcall(self, get_tipo, 0);
 	VALUE otro_tipo = rb_funcall(otro, get_tipo, 0);
-	VALUE tipo_concentrador = rb_intern("cliente");
+	VALUE tipo_concentrador = ID2SYM(rb_intern("concentrador")); 
 	
 	if(mi_tipo == otro_tipo)
 	{
@@ -82,7 +82,7 @@ VALUE method_se_puede_conectar(VALUE self, VALUE otro)
 	{
 		VALUE reserva;
 		VALUE demanda;
-		if(tipo_concentrador == otro)
+		if(tipo_concentrador == otro_tipo)
 		{
 			reserva = rb_funcall(otro, get_reserva, 0);
 			demanda = rb_funcall(self, get_demanda, 0);
