@@ -107,3 +107,17 @@ VALUE method_se_puede_conectar(VALUE self, VALUE otro)
 		}
 	}
 }
+
+VALUE method_esta_conectado(VALUE self)
+{
+	VALUE conexion = rb_iv_get(self, "@connected");
+	
+	if(RARRAY_LEN(conexion) > 0)
+	{
+		return Qtrue;
+	}
+	else
+	{
+		return Qfalse;
+	}
+}
