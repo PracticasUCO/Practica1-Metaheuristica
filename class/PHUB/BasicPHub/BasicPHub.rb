@@ -85,12 +85,12 @@ class BasicPHub
 	# Comprueba que se puede llegar a una solucion.
 	# Devuelve true si es posible o false en caso contrario
 	def solucion_factible?
-		nodos_solucion = nodos.sort
+		nodos_solucion = nodos.sort_by {|nodo| nodo.demanda}
 		
 		suma = 0
 		
 		numero_concentradores.times do
-			nodos_solucion.delete_at(0)
+			nodos_solucion.delete_at(-1)
 		end
 		
 		nodos_solucion.each do |candidato|
