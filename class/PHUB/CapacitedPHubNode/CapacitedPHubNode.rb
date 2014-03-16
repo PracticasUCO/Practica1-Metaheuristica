@@ -140,22 +140,22 @@ class CapacitedPHubNode
 	# a un concentrador. Es responsabilidad del encargado de la conexion de verificar los fallos
 	# La conexion siempre se efectua, al no ser que se intenten conectar dos nodos del mismo tipo
 	# o se mande un parametro no correcto. En caso de error se levanta una excepcion del tipo TypeError
-	def conectar_a=(other)
-		raise TypeError, "other must be a CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
-		raise TypeError, "un nodo no puede conectarse a si mismo" if self.eql? other
-		raise TypeError, "Un concentrador solo pude conectarse a clientes y viceversa" if self.tipo.eql? other.tipo
-		
-		if self.tipo == :cliente
-			desconectar # Nos desconectamos del nodo al que estuviesemos conectados
-			@connected << other
-			@id_concentrador = other.id
-		else
-			if not conectado_a(other)
-				@connected << other
-				@reserva -= other.demanda
-			end
-		end
-	end
+# 	def conectar_a=(other)
+# 		raise TypeError, "other must be a CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
+# 		raise TypeError, "un nodo no puede conectarse a si mismo" if self.eql? other
+# 		raise TypeError, "Un concentrador solo pude conectarse a clientes y viceversa" if self.tipo.eql? other.tipo
+# 		
+# 		if self.tipo == :cliente
+# 			desconectar # Nos desconectamos del nodo al que estuviesemos conectados
+# 			@connected << other
+# 			@id_concentrador = other.id
+# 		else
+# 			if not conectado_a(other)
+# 				@connected << other
+# 				@reserva -= other.demanda
+# 			end
+# 		end
+# 	end
 	
 	# Devuelve a quien esta conectado el nodo.
 	# Si no recibe parametros devuelve la lista de nodos a las que se encuentra conectado.
