@@ -20,9 +20,8 @@ VALUE rb_funcion_objetivo(VALUE self, VALUE solucion)
 	double suma = 0;
 	long int i, j;
 	int p = 0;
-
-	ID conectado_a_method = rb_intern("conectado_a");
 	
+	ID conectado_a_method = rb_intern("conectado_a");
 	for(i = 0; i < RARRAY_LEN(solucion); i++)
 	{
 		VALUE nodo = rb_ary_entry(solucion, i);
@@ -33,13 +32,16 @@ VALUE rb_funcion_objetivo(VALUE self, VALUE solucion)
 			VALUE destino = rb_funcall(nodo, conectado_a_method, 0);
 			destino = rb_ary_entry(destino,0);
 			
-			double dis = NUM2DBL(method_distancia(nodo, destino));
-			suma += dis;
+			VALUE tipo_des = TYPE(destino);
+			if(tipo_des != T_NIL)
+			{
+				double dis = NUM2DBL(method_distancia(nodo, destino));
+				suma += dis;
+			}
 		}	
 	}
-	
+
 	suma /= RARRAY_LEN(solucion);
-	
 	return DBL2NUM(suma);
 }
 

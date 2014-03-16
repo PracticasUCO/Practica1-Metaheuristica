@@ -61,6 +61,45 @@ VALUE method_distancia(VALUE self, VALUE vecino) {
 
 VALUE method_se_puede_conectar(VALUE self, VALUE otro)
 {
-	fprintf(stderr, "Se puede conectar activo\n");
-	rb_obj_is_kind_of(otro, CBasicPHubNode);
+	if(!rb_obj_is_kind_of(otro, CBasicPHubNode))
+	{
+		rb_raise(rb_eTypeError, "otro debe de ser un CapacitedPHubNode");
+	}
+	
+	ID get_tipo = rb_intern("tipo");
+	ID get_reserva = rb_intern("reserva");
+	ID get_demanda = rb_intern("demanda");
+	
+	VALUE mi_tipo = rb_funcall(self, get_tipo, 0);
+	VALUE otro_tipo = rb_funcall(otro, get_tipo, 0);
+	VALUE tipo_concentrador = rb_intern("cliente");
+	
+	if(mi_tipo == otro_tipo)
+	{
+		return Qfalse;
+	}
+	else
+	{
+		VALUE reserva;
+		VALUE demanda;
+		if(tipo_concentrador == otro)
+		{
+			reserva = rb_funcall(otro, get_reserva, 0);
+			demanda = rb_funcall(self, get_demanda, 0);
+		}
+		else
+		{
+			reserva = rb_funcall(self, get_reserva, 0);
+			demanda = rb_funcall(otro, get_demanda, 0);
+		}
+		
+		if(reserva >= demanda)
+		{
+			return Qtrue;
+		}
+		else
+		{
+			return Qfalse;
+		}
+	}
 }
