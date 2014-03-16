@@ -1,4 +1,5 @@
 #! /usr/bin/env ruby -w
+# encoding: utf-8
 
 require 'minitest/autorun'
 require_relative '../class/PHUB/BasicPHub/BasicPHub'

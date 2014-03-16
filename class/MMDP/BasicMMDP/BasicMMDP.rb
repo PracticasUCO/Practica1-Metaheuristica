@@ -1,4 +1,6 @@
 #! /usr/bin/env ruby -w
+#! /usr/bin/env ruby
+# encoding: utf-8
 
 # La clase BasicMMDP proporciona la funcionalidad basica para la
 # resolucion del problema Max Min Diversity Problem, el cual trata.

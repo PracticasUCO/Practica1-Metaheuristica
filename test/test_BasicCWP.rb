@@ -1,3 +1,6 @@
+#! /usr/bin/env ruby
+# encoding: utf-8
+
 require 'minitest/autorun'
 require_relative '../class/CWP/BasicCWP/BasicCWP'
 

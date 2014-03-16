@@ -1,3 +1,5 @@
+#! /usr/bin/env ruby
+# encoding: utf-8
 require_relative 'bench_BasicCWP'
 require_relative 'bench_BasicMMDP'
 require_relative 'bench_BasicPHub'

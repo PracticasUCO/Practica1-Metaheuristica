@@ -1,4 +1,5 @@
 #! /usr/bin/env ruby -w
+# encoding: utf-8
 
 require_relative '../CapacitedPHubNode/CapacitedPHubNode'
 require_relative 'c_basic_phub'

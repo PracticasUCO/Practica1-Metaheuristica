@@ -1,4 +1,5 @@
 #! /usr/bin/env ruby -w
+# encoding: utf-8
 
 require 'mathn'
 require_relative 'c_basic_capacited_phub_node'

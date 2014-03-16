@@ -1,5 +1,8 @@
 #! /usr/bin/env ruby -w
 
+#! /usr/bin/env ruby
+# encoding: utf-8
+
 require_relative 'c_basic_cwp'
 
 # BasicCWP establece la estructura basica para el problema Cut Width problem

@@ -1,4 +1,5 @@
 #! /usr/bin/env ruby -w
+# encoding: utf-8
 
 require_relative 'class/MMDP/BasicMMDP/BasicMMDP'
 require_relative 'class/CWP/BasicCWP/BasicCWP'
@@ -44,10 +45,10 @@ if opt["help"]
 	puts "\t --type o -p: Indica el tipo de problema a tratar, es un"
 	puts "\t parametro que debe de introduccirse siempre. Puede contener"
 	puts "\t los siguientes valores:"
-	puts "\t\t -MMDP: Resolución de Max Min Diversity Problem"
-	puts "\t\t -CWP: Resolución de problema CutWidth Problem"
-	puts "\t\t -TSP: Resolución de Travelling Salesman Problem"
-	puts "\t\t -CPH: Resolución de Capacited P-Hub Problem"
+	puts "\t \t -MMDP: Resolución de Max Min Diversity Problem"
+	puts "\t \t -CWP: Resolución de problema CutWidth Problem"
+	puts "\t \t -TSP: Resolución de Travelling Salesman Problem"
+	puts "\t \t -CPH: Resolución de Capacited P-Hub Problem"
 	puts
 	puts "\t --instance o -f: Indica de donde leer la instancia. Debe de introduccirse"
 	puts "\t siempre este parametro"

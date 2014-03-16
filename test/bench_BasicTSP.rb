@@ -1,3 +1,6 @@
+#! /usr/bin/env ruby
+# encoding: utf-8
+
 require 'minitest/autorun'
 require 'minitest/benchmark'
 require_relative '../class/TSP/BasicTSP/BasicTSP'
