@@ -125,3 +125,53 @@ VALUE method_esta_conectado(VALUE self)
 		return Qfalse;
 	}
 }
+
+VALUE method_conectar_a(VALUE self, VALUE otro)
+{
+	if(!rb_obj_is_kind_of(otro, CBasicPHubNode))
+	{
+		rb_raise(rb_eTypeError, "otro debe de ser un CapacitedPHubNode");
+	}
+	
+	//Metodos
+	VALUE get_tipo = rb_intern("tipo");
+	VALUE get_demanda = rb_intern("demanda");
+	VALUE get_id = rb_intern("id");
+	VALUE metodo_desconectar = rb_intern("desconectar");
+	VALUE conectado_a = rb_intern("conectado_a");
+	
+	//Variables
+	VALUE connected = rb_iv_get(self, "@connected");
+	VALUE id_concentrador = rb_iv_get(self, "@id_concentrador");
+	double reserva = NUM2DBL(rb_iv_get(self, "@reserva"));
+	
+	VALUE mi_tipo = rb_funcall(self, get_tipo, 0);
+	VALUE tipo_otro = rb_funcall(otro, get_tipo, 0);
+	VALUE tipo_cliente = ID2SYM(rb_intern("cliente"));
+	
+	if(mi_tipo == tipo_otro)
+	{
+		rb_raise(rb_eTypeError, "No se puede conectar dos nodos iguales\n");
+	}
+	
+	if(mi_tipo == tipo_cliente)
+	{
+		rb_funcall(self, metodo_desconectar, 0);
+		rb_ary_push(connected, otro);
+		
+		rb_iv_set(self, "@id_concentrador", rb_funcall(otro, get_id, 0));
+		rb_iv_set(self, "@connected", connected);
+	}
+	else
+	{
+		VALUE ya_existe = rb_funcall(self, conectado_a, 1, otro);
+		
+		if(ya_existe == Qfalse)
+		{
+			rb_ary_push(connected, otro);
+			reserva -= NUM2DBL(rb_funcall(otro, get_demanda, 0));
+			rb_iv_set(self, "@connected", connected);
+			rb_iv_set(self, "@reserva", DBL2NUM(reserva));
+		}
+	}
+}
