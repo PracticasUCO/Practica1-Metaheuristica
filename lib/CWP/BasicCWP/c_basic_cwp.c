@@ -4,6 +4,9 @@
 // Value to start
 VALUE c_basic_cwp = Qnil;
 
+// Modulo CWP
+VALUE module_cwp = Qnil;
+
 // Prototipo para la inicializacion de la clase
 void Init_c_basic_cwp();
 
@@ -12,7 +15,8 @@ VALUE method_funcion_objetivo(VALUE self, VALUE v_nodes);
 
 // Inicializacion de la clase
 void Init_c_basic_cwp() {
-	c_basic_cwp = rb_define_class("BasicCWP", rb_cObject);
+	module_cwp = rb_define_module("CWP");
+	c_basic_cwp = rb_define_class_under(module_cwp, "BasicCWP", rb_cObject);
 	rb_define_method(c_basic_cwp, "funcion_objetivo", method_funcion_objetivo, 1);
 }
 

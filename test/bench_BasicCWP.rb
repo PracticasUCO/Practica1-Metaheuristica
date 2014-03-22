@@ -14,7 +14,7 @@ class Test_BasicCWPBenchmark < MiniTest::Benchmark
 		path = `find . | grep instancias/P1/CWP/`.split(/\n/)
 		
 		assert_performance_constant 0.9999 do |index| # n is a range value
-			b = BasicCWP.new(path[index])
+			b = CWP::BasicCWP.new(path[index])
 			b.generar_solucion_aleatoria
 		end
 	end
