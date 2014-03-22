@@ -6,7 +6,7 @@ require_relative '../lib/TSP/BasicTSP/BasicTSP'
 
 class TestBasicTSP < MiniTest::Test
 	def setup
-		@t = BasicTSP.new("instancias/P1/TSP/p01.txt")
+		@t = TSP::BasicTSP.new("instancias/P1/TSP/p01.txt")
 	end
 	
 	def test_numero_ciudades

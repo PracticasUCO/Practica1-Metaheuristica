@@ -15,7 +15,7 @@ class BenchBasicTSP < MiniTest::Benchmark
 		paths = `find . | grep 'instancias/P1/TSP/'`.split(/\n/)
 		
 		assert_performance_constant 0.99 do |index|
-			b = BasicTSP.new(paths[index])
+			b = TSP::BasicTSP.new(paths[index])
 			b.generar_solucion_aleatoria
 		end
 	end
