@@ -2,7 +2,7 @@
 # encoding: utf-8
  
 require 'minitest/autorun'
-require_relative '../class/PHUB/CapacitedPHubNode/CapacitedPHubNode'
+require_relative '../lib/PHUB/CapacitedPHubNode/CapacitedPHubNode'
 
 class TestCapacitedPHubNode < MiniTest::Test
 	def setup

@@ -3,7 +3,7 @@
 
 require 'minitest/autorun'
 require 'minitest/benchmark'
-require_relative '../class/MMDP/BasicMMDP/BasicMMDP'
+require_relative '../lib/MMDP/BasicMMDP/BasicMMDP'
 
 class BenchBasicMMDP < MiniTest::Benchmark
 	def self.bench_range

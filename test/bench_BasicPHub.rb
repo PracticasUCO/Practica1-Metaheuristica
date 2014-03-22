@@ -2,7 +2,7 @@
 # encoding: utf-8
 require 'minitest/autorun'
 require 'minitest/benchmark'
-require_relative '../class/PHUB/BasicPHub/BasicPHub'
+require_relative '../lib/PHUB/BasicPHub/BasicPHub'
 
 class BenchBasicPHub < MiniTest::Benchmark
 	def self.bench_range

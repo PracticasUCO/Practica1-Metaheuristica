@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby
 
 require 'minitest/autorun'
-require_relative '../class/ES/ES'
+require_relative '../lib/ES/ES'
 require 'bigdecimal'
 
 class TestES < MiniTest::Test
