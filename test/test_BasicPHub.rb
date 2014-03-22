@@ -6,7 +6,7 @@ require_relative '../class/PHUB/BasicPHub/BasicPHub'
 
 class TestBasicPHub < MiniTest::Test
 	def setup
-		@t = BasicPHub.new("instancias/CPH/phub_50_5_1.txt")
+		@t = BasicPHub.new("instancias/P1/CPH/phub_50_5_1.txt")
 	end
 	
 	def test_basic

@@ -6,12 +6,12 @@ require_relative '../class/PHUB/BasicPHub/BasicPHub'
 
 class BenchBasicPHub < MiniTest::Benchmark
 	def self.bench_range
-		paths = `find . | grep 'instancias/CPH/'`.split(/\n/)
+		paths = `find . | grep 'instancias/P1/CPH/'`.split(/\n/)
 		MiniTest::Benchmark.bench_linear(0, paths.length - 1, 1)
 	end
 	
 	def bench_generar_solucion
-		paths = `find . | grep 'instancias/CPH/'`.split(/\n/)
+		paths = `find . | grep 'instancias/P1/CPH/'`.split(/\n/)
 		
 		assert_performance_constant 0.99 do |index|
 			b = BasicPHub.new(paths[index])

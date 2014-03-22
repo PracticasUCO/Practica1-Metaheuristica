@@ -9,7 +9,7 @@ class TestBasicCWP < MiniTest::Test
 	# Agradeceria que alguien me ayudara a reemplazar esto con algo que no dependiera de mi
 	# maquina actual.
 	def setup
-		@c = BasicCWP.new("instancias/CWP/ejemplo.txt")
+		@c = BasicCWP.new("instancias/P1/CWP/ejemplo.txt")
 	end
 	
 	def test_total_nodes

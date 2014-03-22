@@ -6,7 +6,7 @@ require_relative '../class/MMDP/BasicMMDP/BasicMMDP'
 
 class TestBasicMMDP < MiniTest::Test
 	def setup
-		@t = BasicMMDP.new("instancias/MMDP/GKD-Ia_59_n30_m9.txt")
+		@t = BasicMMDP.new("instancias/P1/MMDP/GKD-Ia_59_n30_m9.txt")
 	end
 	
 	def test_basic_params

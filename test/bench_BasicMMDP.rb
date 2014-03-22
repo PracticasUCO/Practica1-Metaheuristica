@@ -7,12 +7,12 @@ require_relative '../class/MMDP/BasicMMDP/BasicMMDP'
 
 class BenchBasicMMDP < MiniTest::Benchmark
 	def self.bench_range
-		paths = `find . | grep 'instancias/MMDP/'`.split(/\n/)
+		paths = `find . | grep 'instancias/P1/MMDP/'`.split(/\n/)
 		MiniTest::Benchmark.bench_linear(0, paths.length - 1, 1)
 	end
 	
 	def bench_solucion_aleatoria
-		paths = `find . | grep 'instancias/MMDP/'`.split(/\n/)
+		paths = `find . | grep 'instancias/P1/MMDP/'`.split(/\n/)
 		
 		assert_performance_constant 0.9999 do |index|
 			b = BasicMMDP.new(paths[index])
