@@ -15,7 +15,7 @@ class BenchBasicMMDP < MiniTest::Benchmark
 		paths = `find . | grep 'instancias/P1/MMDP/'`.split(/\n/)
 		
 		assert_performance_constant 0.9999 do |index|
-			b = BasicMMDP.new(paths[index])
+			b = MMDP::BasicMMDP.new(paths[index])
 			b.generar_solucion_aleatoria
 		end
 	end
