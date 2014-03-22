@@ -66,6 +66,7 @@ VALUE method_funcion_objetivo(VALUE self, VALUE v_nodes) {
 	{	
 		//Cojo un nodo
 		VALUE nodo = rb_ary_shift(v_nodes);
+		
 		// Lo meto en procesados
 		rb_ary_push(procesados, nodo);
 		
