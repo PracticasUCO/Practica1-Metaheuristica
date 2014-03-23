@@ -73,7 +73,7 @@ end
 if opt["type"] == "MMDP"
 	
 	begin
-		problem = BasicMMDP.new(opt['instance'])
+		problem = MMDP::BasicMMDP.new(opt['instance'])
 	rescue Errno::ENOENT => e
 		mostrar_error_fichero_no_encontrado(opt['instance'])
 	rescue TypeError => e
@@ -85,7 +85,7 @@ if opt["type"] == "MMDP"
 	puts "Instancia Max Min Diversity Problem cargada correctamente"
 elsif opt["type"] == "CWP"
 	begin
-		problem = BasicCWP.new(opt['instance'])
+		problem = CWP::BasicCWP.new(opt['instance'])
 	rescue Errno::ENOENT => e
 		mostrar_error_fichero_no_encontrado(opt['instance'])
 	rescue TypeError => e
@@ -97,7 +97,7 @@ elsif opt["type"] == "CWP"
 	puts "Instancia CutWidth Problem cargada correctamente"
 elsif opt["type"] == "TSP"
 	begin
-		problem = BasicTSP.new(opt['instance'])
+		problem = TSP::BasicTSP.new(opt['instance'])
 	rescue Errno::ENOENT => e
 		mostrar_error_fichero_no_encontrado(opt['instance'])
 	rescue TypeError => e
@@ -109,7 +109,7 @@ elsif opt["type"] == "TSP"
 	puts "Instancia Travelling Salesman Problem cargada correctamente"
 elsif opt["type"] == "CPH"
 	begin
-		problem = BasicPHub.new(opt['instance'])
+		problem = PHUB::BasicPHub.new(opt['instance'])
 	rescue Errno::ENOENT => e
 		mostrar_error_fichero_no_encontrado(opt['instance'])
 	rescue TypeError => e
