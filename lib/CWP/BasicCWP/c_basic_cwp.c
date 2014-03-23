@@ -36,7 +36,10 @@ static VALUE diferencia_ary(VALUE ary1, VALUE ary2)
 	
 	return ary3;
 }
-
+/*
+La funcion objetivo devuelve el numero de cortes que se producen
+al ordenar el grafo de forma lineal.
+*/
 VALUE method_funcion_objetivo(VALUE self, VALUE v_nodes) {
 	VALUE procesados = rb_ary_new();
 	VALUE para_cerrar = rb_hash_new();

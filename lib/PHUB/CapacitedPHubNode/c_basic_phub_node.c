@@ -14,12 +14,6 @@ void Init_c_basic_capacited_phub_node() {
 	rb_define_method(CBasicPHubNode, "conectar_a=", method_conectar_a, 1);
 };
 
-// The initialization method for this module
-void Init_distancia() {
-	CBasicPHubNode = rb_define_module("CBasicPHubNode");
-	rb_define_method(CBasicPHubNode, "distancia", method_distancia, 0);
-}
-
 /*
 	Este metodo devuelve la distancia euclidea entre dos nodos CapacitedPHubNode
 */
