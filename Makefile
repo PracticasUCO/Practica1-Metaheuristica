@@ -14,19 +14,22 @@ gema_c_basic_cwp:
 	@cd $(DIR_BASIC_CWP) ; \
 	ruby extconf.rb;\
 	make; \
-	rm *.o \
+	rm *.o; \
+	rm Makefile
 	
 gema_c_capacited_phub:
 	@cd $(DIR_CAPACITED_PHUB);\
 	ruby extconf.rb;\
 	make;\
-	rm *.o
+	rm *.o; \
+	rm Makefile
 	
 gema_c_basic_phub:
 	@cd $(DIR_BASIC_PHUB);\
 	ruby extconf.rb;\
 	make;\
-	rm *.o;
+	rm *.o; \
+	rm Makefile
 	
 clean:
 	-cd $(DIR_BASIC_CWP); \
