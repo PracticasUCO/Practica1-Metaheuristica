@@ -1,11 +1,18 @@
 #include "c_es.h"
 
-
+/*
+Este metodo devuelve la temperatura actual del algoritmo
+*/
 VALUE method_temperatura(VALUE self)
 {
 	return rb_iv_get(self, "@temperatura");
 }
 
+/*
+Este metodo devuelve un valor booleano True o False de forma aleatoria.
+La probabilidad de que devuelva True sera mayor contra más alta sea
+la temperatura.
+*/
 VALUE method_probabilidad(VALUE self)
 {
 	ID method_rand = rb_intern("rand");
@@ -22,6 +29,13 @@ VALUE method_probabilidad(VALUE self)
 	}
 }
 
+/*
+Disminuye la temperatura interna de la clase de manera que haya menor
+probabilidad de conseguir un valor True.
+
+La funcion de disminución de la temperatura viene determinada por el
+tipo y por el coeficiente de cambio determinado en la clase
+*/
 VALUE method_enfriar(VALUE self)
 {
 	VALUE coeficiente;
@@ -46,21 +60,34 @@ VALUE method_enfriar(VALUE self)
 	return Qnil;
 }
 
+/*
+Devuelve el valor de inicio de la temperatura de la clase
+*/
 VALUE method_valor_inicio(VALUE self)
 {
 	return rb_iv_get(self, "@valor_inicio");
 }
 
+/*
+Devuelve el tipo de funcion de disminución de la temperatura,
+actualmente este valor solo puede ser :geometrica
+*/
 VALUE method_tipo(VALUE self)
 {
 	return rb_iv_get(self, "@tipo");
 }
 
+/*
+Devuelve el coeficiente de cambio usado en la funcion de temperatura
+*/
 VALUE method_coeficiente(VALUE self)
 {
 	return rb_iv_get(self, "@coeficiente");
 }
 
+/*
+Restaura la temperatura a su punto inicial
+*/
 VALUE method_reset(VALUE self)
 {
 	VALUE valorInicial = rb_iv_get(self, "@valor_inicio");

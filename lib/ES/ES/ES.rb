@@ -7,9 +7,8 @@ El modulo ES engloba a las clases que pertenecen
 al Enfriamiento Simulado
 =end
 module ES
-=begin rdoc
-	La clase ES trata de representar los conceptos de Enfriammiento Simulado
-=end
+
+	# La clase ES trata de representar los conceptos de Enfriammiento Simulado
 	class ES
 		# Constructor de la clase, recibe como parametros:
 		#	- valor_inicio: Indica el valor de inicio de la temperatura, debe de ser
