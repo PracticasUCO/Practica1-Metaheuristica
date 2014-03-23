@@ -74,39 +74,6 @@ module CWP
 			count/2
 		end
 		
-		# Comprueba el numero de cortes que se produce al tener los
-		# nodos ordenados como se le pasan a traves del vector :v_nodes
-		#
-		# El parametro :v_nodes es un vector con el tamaño total del
-		# numero de nodos que indica las posiciones de cada elemento
-	# 	def funcion_objetivo(v_nodes)
-	# 		raise TypeError, "v_nodes must be an Array" unless v_nodes.kind_of? Array
-	# 		
-	# 		# Nos aseguramos que no haya nodos repetidos
-	# 		v_nodes.uniq!
-	# 		
-	# 		raise TypeError, "v_nodes must have #{total_nodes} elements" unless v_nodes.length.eql? total_nodes
-	# 		
-	# 		# Declaracion de variables auxiliares
-	# 		procesados = Array.new # Elementos ya procesados
-	# 		para_cerrar = Hash.new(0) # Elementos abiertos que tiene que cerrarse
-	# 		opened = 0 # Elementos actualmente abiertos
-	# 		count = 0 # Cuenta del numero de enlaces cortados
-	# 		
-	# 		v_nodes.each do |nodo|
-	# 			procesados << nodo
-	# 			aberturas = @grafo[nodo] - procesados
-	# 			opened += aberturas.length - para_cerrar[nodo]
-	# 			para_cerrar.delete(nodo)
-	# 			count += opened
-	# 			
-	# 			aberturas.each do |abertura|
-	# 				para_cerrar[abertura] += 1
-	# 			end
-	# 		end
-	# 		return count
-	# 	end
-		
 		# Genera una solucion aleatoria y devuelve dicha solucion
 		# junto con el numero de cortes que se producen en dicha
 		# solucion.
