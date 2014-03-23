@@ -34,3 +34,27 @@ VALUE method_probabilidad(VALUE self)
 		return Qfalse;
 	}
 }
+
+VALUE method_enfriar(VALUE self)
+{
+	VALUE coeficiente;
+	VALUE temperaturaActual;
+	ID tipo;
+	ID tipo_geometrica;
+
+	coeficiente = rb_iv_get(self, "coeficiente");
+	temperaturaActual = rb_iv_get(self, "temperatura");
+	tipo = rb_iv_get(self, "tipo");
+	tipo_geometrica = rb_intern("geometrica");
+
+	if(tipo == tipo_geometrica)
+	{
+		temperaturaActual = DBL2NUM(NUM2DBL(temperaturaActual) * coeficiente);
+		rb_iv_set(self, "temperatura", temperaturaActual);
+	}
+	else
+	{
+		rb_raise(rb_eTypeError, "El tipo de la clase ES no es correcto");
+	}
+	return Qnil;
+}
