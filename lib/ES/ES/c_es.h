@@ -22,19 +22,19 @@ los siguientes atributos:
 - coeficiente: Indica el valor del coeficiente usado en la función de disminución
   de la temperatura
 */
-VALUE method_initialize;
+VALUE method_initialize(VALUE self, VALUE hash);
 
 /*
 Este metodo devuelve la temperatura actual del algoritmo
 */
-VALUE method_temperatura;
+VALUE method_temperatura(VALUE self);
 
 /*
 Este metodo devuelve un valor booleano True o False de forma aleatoria.
 La probabilidad de que devuelva True sera mayor contra más alta sea
 la temperatura.
 */
-VALUE method_probabilidad;
+VALUE method_probabilidad(VALUE self);
 
 /*
 Disminuye la temperatura interna de la clase de manera que haya menor
@@ -43,26 +43,26 @@ probabilidad de conseguir un valor True.
 La funcion de disminución de la temperatura viene determinada por el
 tipo y por el coeficiente de cambio determinado en la clase
 */
-VALUE method_enfriar;
+VALUE method_enfriar(VALUE self);
 
 /*
 Devuelve el valor de inicio de la temperatura de la clase
 */
-VALUE method_valor_inicio;
+VALUE method_valor_inicio(VALUE self);
 
 /*
 Devuelve el tipo de funcion de disminución de la temperatura,
 actualmente este valor solo puede ser :geometrica
 */
-VALUE method_tipo;
+VALUE method_tipo(VALUE self);
 
 /*
 Devuelve el coeficiente de cambio usado en la funcion de temperatura
 */
-VALUE method_coeficiente;
+VALUE method_coeficiente(VALUE self);
 
 /*
 Restaura la temperatura a su punto inicial
 */
-VALUE method_reset;
+VALUE method_reset(VALUE self);
 #endif
