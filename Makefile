@@ -8,7 +8,7 @@ DIR_CAPACITED_PHUB = "lib/PHUB/CapacitedPHubNode/"
 DIR_ES = "lib/ES/ES/"
 
 all: gemas
-gemas: gema_c_basic_cwp gema_c_capacited_phub gema_c_basic_phub
+gemas: gema_c_basic_cwp gema_c_capacited_phub gema_c_basic_phub gema_es
 	@echo "Gemas compiladas correctamente"
 	
 gema_c_basic_cwp:
