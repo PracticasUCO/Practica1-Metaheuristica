@@ -4,6 +4,10 @@
 require_relative '../CapacitedPHubNode/CapacitedPHubNode'
 require_relative 'c_basic_phub'
 
+=begin rdoc
+El modulo PHUB engloba a todas las clases pertenecientes al problema
+del PHUB
+=end
 module PHUB
 =begin rdoc
 	La clase BasicPHub es la responsable de leer el fichero de base de datos
@@ -64,25 +68,6 @@ module PHUB
 				end
 			end
 		end
-		
-		# La funcion objetivo devuelve la suma de las distancias de todos los nodos clientes a su concentrador
-	# 	def funcion_objetivo(solucion)
-	# 		raise TypeError, "La solucion debe de ser un Array de elementos" unless solucion.kind_of? Array
-	# 		
-	# 		suma = 0.0
-	# 		
-	# 		solucion.each do |nodo|
-	# 			raise RuntimeError, "Se ha pasado un elemento que no es un nodo a funcion objetivo.\n Elemento erroneo: #{nodo}" unless nodo.kind_of? CapacitedPHubNode
-	# 			solucion.each do |nodo_destino|
-	# 				next unless nodo_destino.tipo.eql? :cliente
-	# 				next if nodo_destino == nodo
-	# 			
-	# 				suma += nodo_destino.distancia(nodo)
-	# 			end
-	# 		end
-	# 		
-	# 		return suma/solucion.length
-	# 	end
 		
 		# Comprueba que se puede llegar a una solucion.
 		# Devuelve true si es posible o false en caso contrario
