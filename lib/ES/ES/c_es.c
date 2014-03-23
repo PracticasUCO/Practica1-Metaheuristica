@@ -73,3 +73,10 @@ VALUE method_coeficiente(VALUE self)
 {
 	return rb_iv_get(self, "coeficiente");
 }
+
+VALUE method_reset(VALUE self)
+{
+	VALUE valorInicial = rb_iv_get(self, "valor_inicio");
+	rb_iv_set(self, "temperatura", valorInicial);
+	return Qnil;
+}
