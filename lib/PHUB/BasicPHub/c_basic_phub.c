@@ -1,6 +1,10 @@
 #include "ruby.h"
 #include "c_basic_phub.h"
 
+/*
+funcion_objetivo devuelve la suma de las distancias de todos
+los nodos clientes al concentrador al que están conectados.
+*/
 VALUE rb_funcion_objetivo(VALUE self, VALUE solucion)
 {
 	VALUE tipoParametro = TYPE(solucion);
