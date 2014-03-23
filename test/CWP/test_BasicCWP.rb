@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 require 'minitest/autorun'
-require_relative '../lib/CWP/BasicCWP/BasicCWP'
+require_relative '../../lib/CWP/BasicCWP/BasicCWP'
 
 class TestBasicCWP < MiniTest::Test
 	

@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 require 'minitest/autorun'
-require_relative '../lib/PHUB/BasicPHub/BasicPHub'
+require_relative '../../lib/PHUB/BasicPHub/BasicPHub'
 
 class TestBasicPHub < MiniTest::Test
 	def setup

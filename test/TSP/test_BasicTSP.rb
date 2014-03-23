@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 require 'minitest/autorun'
-require_relative '../lib/TSP/BasicTSP/BasicTSP'
+require_relative '../../lib/TSP/BasicTSP/BasicTSP'
 
 class TestBasicTSP < MiniTest::Test
 	def setup

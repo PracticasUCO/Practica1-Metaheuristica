@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 require 'minitest/autorun'
-require_relative '../lib/MMDP/BasicMMDP/BasicMMDP'
+require_relative '../../lib/MMDP/BasicMMDP/BasicMMDP'
 
 class TestBasicMMDP < MiniTest::Test
 	def setup

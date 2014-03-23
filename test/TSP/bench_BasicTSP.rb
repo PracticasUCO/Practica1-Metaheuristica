@@ -3,7 +3,7 @@
 
 require 'minitest/autorun'
 require 'minitest/benchmark'
-require_relative '../lib/TSP/BasicTSP/BasicTSP'
+require_relative '../../lib/TSP/BasicTSP/BasicTSP'
 
 class BenchBasicTSP < MiniTest::Benchmark
 	def self.bench_range
