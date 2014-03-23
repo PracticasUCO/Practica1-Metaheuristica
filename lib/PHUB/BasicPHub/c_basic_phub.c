@@ -1,12 +1,5 @@
 #include "ruby.h"
-#include <stdio.h>
-#include "../CapacitedPHubNode/c_basic_phub_node.c"
-VALUE CBasicPHub = Qnil;
-
-/*
- * funcion_objetivo devuelve el coste de la solucion
- */
-VALUE rb_funcion_objetivo(VALUE self, VALUE solucion);
+#include "c_basic_phub.h"
 
 VALUE rb_funcion_objetivo(VALUE self, VALUE solucion)
 {

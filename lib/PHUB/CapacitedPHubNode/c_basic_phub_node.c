@@ -1,23 +1,8 @@
 // Include the Ruby headers and goodies
 #include "ruby.h"
 #include <math.h>
-#include <stdio.h>
-
-// Defining a space for information and references about the module to be stored internally
-VALUE CBasicPHubNode = Qnil;
-VALUE phub_module = Qnil;
-
-// Prototype for our method 'distancia' - methods are prefixed by 'method_' here
-VALUE method_distancia(VALUE self, VALUE vecino);
-
-// Prototipo para el metodo CapacitedPHubNode#se_puede_conectar?
-VALUE method_se_puede_conectar(VALUE self, VALUE otro);
-
-// Prototipo para el metodo CapacitedPHubNode#esta_conectado?
-VALUE method_esta_conectado(VALUE self);
-
-// Prototipo para el  metodo CapacitedPHubNode#conectar_a=
-VALUE method_conectar_a(VALUE self, VALUE otro);
+#include "../phub.h"
+#include "c_basic_phub_node.h"
 
 // Prototype for the initialization method - Ruby calls this, not you
 void Init_c_basic_capacited_phub_node() {
