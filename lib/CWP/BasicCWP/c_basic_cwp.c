@@ -1,17 +1,4 @@
-#include <ruby.h>
-#include <stdio.h>
-
-// Value to start
-VALUE c_basic_cwp = Qnil;
-
-// Modulo CWP
-VALUE module_cwp = Qnil;
-
-// Prototipo para la inicializacion de la clase
-void Init_c_basic_cwp();
-
-// Prototipo para el metodo
-VALUE method_funcion_objetivo(VALUE self, VALUE v_nodes);
+#include "c_basic_cwp.h"
 
 // Inicializacion de la clase
 void Init_c_basic_cwp() {
