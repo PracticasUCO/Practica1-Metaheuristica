@@ -51,9 +51,6 @@ static VALUE diferencia_ary(VALUE ary1, VALUE ary2)
 }
 
 VALUE method_funcion_objetivo(VALUE self, VALUE v_nodes) {
-	Check_Type(v_nodes, T_ARRAY);
-	v_nodes = rb_ary_dup(v_nodes);
-	
 	VALUE procesados = rb_ary_new();
 	VALUE para_cerrar = rb_hash_new();
 	int opened = 0;
@@ -64,12 +61,18 @@ VALUE method_funcion_objetivo(VALUE self, VALUE v_nodes) {
 	
 	//Leo la variable de instancia @grafo y compruebo que fue definida
 	VALUE grafo = rb_iv_get(self, "@grafo");
+
+	Check_Type(v_nodes, T_ARRAY);
+	v_nodes = rb_ary_dup(v_nodes);
+	
+	
 	Check_Type(grafo, T_HASH);
 	
 	while(RARRAY_LEN(v_nodes) > 0)
 	{	
 		//Cojo un nodo
 		VALUE nodo = rb_ary_shift(v_nodes);
+		VALUE cerrando;
 		
 		// Lo meto en procesados
 		rb_ary_push(procesados, nodo);
@@ -83,7 +86,7 @@ VALUE method_funcion_objetivo(VALUE self, VALUE v_nodes) {
 		opened += RARRAY_LEN(aberturas); 
 		
 		//Leo para_cerrar
-		VALUE cerrando = rb_hash_aref(para_cerrar, nodo);
+		cerrando = rb_hash_aref(para_cerrar, nodo);
 		
 		//Si habia nodos que cerraban en esta posicion, los resto de opened
 		if(TYPE(cerrando) != T_NIL)
