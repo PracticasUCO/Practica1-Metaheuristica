@@ -39,12 +39,14 @@ void Init_distancia() {
 VALUE method_distancia(VALUE self, VALUE vecino) {
 	VALUE coordenadasPropias = rb_iv_get(self, "@coordenadas");
 	VALUE coordenadasVecino = rb_iv_get(vecino, "@coordenadas");
-	
+	VALUE tipoP;
+	VALUE tipoV;
+
 	coordenadasPropias = rb_ary_dup(coordenadasPropias);
 	coordenadasVecino = rb_ary_dup(coordenadasVecino);
 	
-	VALUE tipoP = TYPE(coordenadasPropias);
-	VALUE tipoV = TYPE(coordenadasVecino);
+	tipoP = TYPE(coordenadasPropias);
+	tipoV = TYPE(coordenadasVecino);
 	
 	if((tipoP == T_ARRAY) && (tipoV == T_ARRAY))
 	{
@@ -71,20 +73,23 @@ VALUE method_distancia(VALUE self, VALUE vecino) {
 
 VALUE method_se_puede_conectar(VALUE self, VALUE otro)
 {
+	ID get_tipo = rb_intern("tipo");
+	ID get_reserva = rb_intern("reserva");
+	ID get_demanda = rb_intern("demanda");
+	VALUE tipo_concentrador = ID2SYM(rb_intern("concentrador")); 
+	VALUE mi_tipo;
+	VALUE otro_tipo;
+
+	double demanda;
+	double reserva;
+
 	if(!rb_obj_is_kind_of(otro, CBasicPHubNode))
 	{
 		rb_raise(rb_eTypeError, "otro debe de ser un CapacitedPHubNode");
 	}
 	
-	ID get_tipo = rb_intern("tipo");
-	ID get_reserva = rb_intern("reserva");
-	ID get_demanda = rb_intern("demanda");
-	
-	VALUE mi_tipo = rb_funcall(self, get_tipo, 0);
-	VALUE otro_tipo = rb_funcall(otro, get_tipo, 0);
-	VALUE tipo_concentrador = ID2SYM(rb_intern("concentrador")); 
-	double demanda;
-	double reserva;
+	mi_tipo = rb_funcall(self, get_tipo, 0);
+	otro_tipo = rb_funcall(otro, get_tipo, 0);
 	
 	if(mi_tipo == otro_tipo)
 	{
@@ -130,26 +135,32 @@ VALUE method_esta_conectado(VALUE self)
 
 VALUE method_conectar_a(VALUE self, VALUE otro)
 {
-	if(!rb_obj_is_kind_of(otro, CBasicPHubNode))
-	{
-		rb_raise(rb_eTypeError, "otro debe de ser un CapacitedPHubNode");
-	}
-	
 	//Metodos
 	VALUE get_tipo = rb_intern("tipo");
 	VALUE get_demanda = rb_intern("demanda");
 	VALUE get_id = rb_intern("id");
 	VALUE metodo_desconectar = rb_intern("desconectar");
 	VALUE conectado_a = rb_intern("conectado_a");
+	VALUE connected;
+	//VALUE id_concentrador;
+	double reserva;
+	VALUE mi_tipo;
+	VALUE tipo_otro;
+	VALUE tipo_cliente;
+
+	if(!rb_obj_is_kind_of(otro, CBasicPHubNode))
+	{
+		rb_raise(rb_eTypeError, "otro debe de ser un CapacitedPHubNode");
+	}
 	
 	//Variables
-	VALUE connected = rb_iv_get(self, "@connected");
-	VALUE id_concentrador = rb_iv_get(self, "@id_concentrador");
-	double reserva = NUM2DBL(rb_iv_get(self, "@reserva"));
+	connected = rb_iv_get(self, "@connected");
+	//id_concentrador = rb_iv_get(self, "@id_concentrador");
+	reserva = NUM2DBL(rb_iv_get(self, "@reserva"));
 	
-	VALUE mi_tipo = rb_funcall(self, get_tipo, 0);
-	VALUE tipo_otro = rb_funcall(otro, get_tipo, 0);
-	VALUE tipo_cliente = ID2SYM(rb_intern("cliente"));
+	mi_tipo = rb_funcall(self, get_tipo, 0);
+	tipo_otro = rb_funcall(otro, get_tipo, 0);
+	tipo_cliente = ID2SYM(rb_intern("cliente"));
 	
 	if(mi_tipo == tipo_otro)
 	{
@@ -176,4 +187,6 @@ VALUE method_conectar_a(VALUE self, VALUE otro)
 			rb_iv_set(self, "@reserva", DBL2NUM(reserva));
 		}
 	}
+
+	return Qnil;
 }
