@@ -4,7 +4,7 @@
 #include <ruby.h>
 
 // Constructor de la clase ES
-void Init_ES();
+void Init_c_es();
 
 // Modulo ES
 VALUE module_es = Qnil;
@@ -12,17 +12,6 @@ VALUE module_es = Qnil;
 // Clase ES
 VALUE class_es = Qnil;
 
-/*
-Constructor de la clase, recibe como parametros una tabla de hash con
-los siguientes atributos:
-- valor_inicio: Indica el valor de inicio de la temperatura, debe de ser
-  numerico y solo puede oscilar entre 0-1 (ambos inclusive)
-- tipo: Indica el tipo de función que se usara para disminuir la temperatura
-  Actualmente solo puede ser :geometrica
-- coeficiente: Indica el valor del coeficiente usado en la función de disminución
-  de la temperatura
-*/
-VALUE method_initialize(VALUE self, VALUE hash);
 
 /*
 Este metodo devuelve la temperatura actual del algoritmo

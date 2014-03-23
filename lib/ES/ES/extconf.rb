@@ -5,7 +5,7 @@
 require 'mkmf'
 
 # Give it a name
-extension_name = 'ES'
+extension_name = 'c_es'
 
 # The destination
 dir_config(extension_name)
