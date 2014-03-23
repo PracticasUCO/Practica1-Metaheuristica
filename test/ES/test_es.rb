@@ -26,8 +26,11 @@ class TestES < MiniTest::Test
 		fracasos = 0
 		repeticiones = 10000
 		repeticiones.times do
-			aciertos += 1 if @t_basic.probabilidad
-			fracasos += 1 unless @test_probabilidad
+			if @t_basic.probabilidad
+				aciertos += 1
+			else
+				fracasos += 1
+			end
 		end
 
 		assert_operator(aciertos, :>=, repeticiones * @t_basic.coeficiente)
