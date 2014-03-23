@@ -63,3 +63,8 @@ VALUE method_valor_inicio(VALUE self)
 {
 	return rb_iv_get(self, "valor_inicio");
 }
+
+VALUE method_tipo(VALUE self)
+{
+	return rb_iv_get(self, "tipo");
+}
