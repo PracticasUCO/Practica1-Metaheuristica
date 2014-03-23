@@ -13,3 +13,8 @@ void Init_ES()
 	rb_define_method(class_es, "coeficiente", method_coeficiente, 0);
 	rb_define_method(class_es, "reset", method_reset, 0);
 }
+
+VALUE method_temperatura(VALUE self)
+{
+	return rb_iv_get(self, "temperatura");
+}
