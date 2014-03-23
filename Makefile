@@ -48,3 +48,6 @@ clean:
 	
 	-cd $(DIR_BASIC_PHUB);\
 	rm *.so;
+
+	-cd $(DIR_ES); \
+	rm *.so;
