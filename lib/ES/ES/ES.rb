@@ -27,8 +27,8 @@ module ES
   				raise TypeError, "valor_inicio debe de estar entre 0 y 1 (ambos inclusive)"
   			end
 
-  			if coeficiente > 1
-  				raise TypeError, "coeficiente debe de ser menor o igual que 1"
+  			if coeficiente >= 1 or coeficiente <= 0
+  				raise TypeError, "coeficiente debe de ser menor o igual que 1 (ambos exclusive)"
   			end
 
   			@valor_inicio = valor_inicio
