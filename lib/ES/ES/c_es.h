@@ -6,6 +6,9 @@
 // Constructor de la clase ES
 void Init_ES();
 
+// Modulo ES
+VALUE module_es = Qnil;
+
 // Clase ES
 VALUE class_es = Qnil;
 
