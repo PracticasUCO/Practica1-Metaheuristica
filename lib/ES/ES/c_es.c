@@ -18,3 +18,19 @@ VALUE method_temperatura(VALUE self)
 {
 	return rb_iv_get(self, "temperatura");
 }
+
+VALUE method_probabilidad(VALUE self)
+{
+	ID method_rand = rb_intern("rand");
+	double valorTemperatura = NUM2DBL(rb_iv_get(self, "temperatura"));
+	double valorAleatorio = NUM2DBL(rb_funcall(rb_cObject, method_rand, 0));
+
+	if(valorTemperatura >= valorAleatorio)
+	{
+		return Qtrue;
+	}
+	else
+	{
+		return Qfalse;
+	}
+}
