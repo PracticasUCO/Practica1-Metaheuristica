@@ -58,3 +58,8 @@ VALUE method_enfriar(VALUE self)
 	}
 	return Qnil;
 }
+
+VALUE method_valor_inicio(VALUE self)
+{
+	return rb_iv_get(self, "valor_inicio");
+}
