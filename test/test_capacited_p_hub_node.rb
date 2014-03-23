@@ -14,49 +14,49 @@ class TestCapacitedPHubNode < MiniTest::Test
 			demanda = rand(15) + 5
 			capacidad = rand(40) + 5
 
-			client = CapacitedPHubNode.new(coordenadas: [coordenadaX, coordenadaY], demanda: demanda, capacidad_servicio: capacidad, tipo: :cliente)
+			client = PHUB::CapacitedPHubNode.new(coordenadas: [coordenadaX, coordenadaY], demanda: demanda, capacidad_servicio: capacidad, tipo: :cliente)
 			@clientes << client
 		end
 		
-		@clienteA = CapacitedPHubNode.new(coordenadas: [1, 3], demanda: 15.3, capacidad_servicio: 21, tipo: :cliente)
-		@clienteB = CapacitedPHubNode.new(coordenadas: [5, 3], demanda: 13, capacidad_servicio: 22.1, tipo: :cliente)
-		@clienteC = CapacitedPHubNode.new(coordenadas: [1,1], demanda: 1)
-		@clienteD = CapacitedPHubNode.new(coordenadas: [1,2], demanda: 0.9)
-		@clienteE = CapacitedPHubNode.new(demanda: 0.9)
-		@clienteF = CapacitedPHubNode.new(coordenadas: [0,2], demanda: 0.9)
-		@concentradorA = CapacitedPHubNode.new(coordenadas: [5, 1], capacidad_servicio: 100, tipo: :concentrador)
-		@concentradorB = CapacitedPHubNode.new(coordenadas: [4, 10], capacidad_servicio: 30, tipo: :concentrador)
-		@concentradorC = CapacitedPHubNode.new(capacidad_servicio: 14, tipo: :concentrador)
+		@clienteA = PHUB::CapacitedPHubNode.new(coordenadas: [1, 3], demanda: 15.3, capacidad_servicio: 21, tipo: :cliente)
+		@clienteB = PHUB::CapacitedPHubNode.new(coordenadas: [5, 3], demanda: 13, capacidad_servicio: 22.1, tipo: :cliente)
+		@clienteC = PHUB::CapacitedPHubNode.new(coordenadas: [1,1], demanda: 1)
+		@clienteD = PHUB::CapacitedPHubNode.new(coordenadas: [1,2], demanda: 0.9)
+		@clienteE = PHUB::CapacitedPHubNode.new(demanda: 0.9)
+		@clienteF = PHUB::CapacitedPHubNode.new(coordenadas: [0,2], demanda: 0.9)
+		@concentradorA = PHUB::CapacitedPHubNode.new(coordenadas: [5, 1], capacidad_servicio: 100, tipo: :concentrador)
+		@concentradorB = PHUB::CapacitedPHubNode.new(coordenadas: [4, 10], capacidad_servicio: 30, tipo: :concentrador)
+		@concentradorC = PHUB::CapacitedPHubNode.new(capacidad_servicio: 14, tipo: :concentrador)
 	end
 	
 	def test_errores_constructor
 		##  Comprobando el parametro coordenadas
-		assert_raises(TypeError, "El parametro coordenadas debe aceptar un array de dos numeros") {CapacitedPHubNode.new(coordenadas: 12)}
-		assert_raises(TypeError, "El parametro coordenadas debe aceptar un array de dos numeros") {CapacitedPHubNode.new(coordenadas: [1, 2, 3])}
-		assert_raises(TypeError, "El parametro coordenadas debe aceptar un array de dos numeros") {CapacitedPHubNode.new(coordenadas: ['a', 'b'])}
-		assert_raises(TypeError, "El parametro coordenadas debe aceptar un array de dos numeros") {CapacitedPHubNode.new(coordenadas: ['a', 1])}
-		assert_raises(TypeError, "El parametro coordenadas debe aceptar un array de dos numeros") {CapacitedPHubNode.new(coordenadas: [1, 'b'])}
+		assert_raises(TypeError, "El parametro coordenadas debe aceptar un array de dos numeros") {PHUB::CapacitedPHubNode.new(coordenadas: 12)}
+		assert_raises(TypeError, "El parametro coordenadas debe aceptar un array de dos numeros") {PHUB::CapacitedPHubNode.new(coordenadas: [1, 2, 3])}
+		assert_raises(TypeError, "El parametro coordenadas debe aceptar un array de dos numeros") {PHUB::CapacitedPHubNode.new(coordenadas: ['a', 'b'])}
+		assert_raises(TypeError, "El parametro coordenadas debe aceptar un array de dos numeros") {PHUB::CapacitedPHubNode.new(coordenadas: ['a', 1])}
+		assert_raises(TypeError, "El parametro coordenadas debe aceptar un array de dos numeros") {PHUB::CapacitedPHubNode.new(coordenadas: [1, 'b'])}
 		
 		## Comprobando el parametro demanda
-		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(demanda: 0)}
-		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(demanda: -5)}
-		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(demanda: "other")}
+		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {PHUB::CapacitedPHubNode.new(demanda: 0)}
+		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {PHUB::CapacitedPHubNode.new(demanda: -5)}
+		assert_raises(TypeError, "La demanda debe ser un numero positivo mayor que cero") {PHUB::CapacitedPHubNode.new(demanda: "other")}
 		
 		## Comprobando el parametro capacidad_servicio
-		assert_raises(TypeError, "El servicio debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(capacidad_servicio: 0)}
-		assert_raises(TypeError, "El servicio debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(capacidad_servicio: -5)}
-		assert_raises(TypeError, "El servicio debe ser un numero positivo mayor que cero") {CapacitedPHubNode.new(capacidad_servicio: "5")}
+		assert_raises(TypeError, "El servicio debe ser un numero positivo mayor que cero") {PHUB::CapacitedPHubNode.new(capacidad_servicio: 0)}
+		assert_raises(TypeError, "El servicio debe ser un numero positivo mayor que cero") {PHUB::CapacitedPHubNode.new(capacidad_servicio: -5)}
+		assert_raises(TypeError, "El servicio debe ser un numero positivo mayor que cero") {PHUB::CapacitedPHubNode.new(capacidad_servicio: "5")}
 		
 		## Comprobando el parametro tipo
-		assert_raises(TypeError, "El tipo solo puede ser :cliente o :concentrador") {CapacitedPHubNode.new(tipo: 1)}
-		assert_raises(TypeError, "El tipo solo puede ser :cliente o :concentrador") {CapacitedPHubNode.new(tipo: rand)}
-		assert_raises(TypeError, "El tipo solo puede ser :cliente o :concentrador") {CapacitedPHubNode.new(tipo: "cliente")}
-		assert_raises(TypeError, "El tipo solo puede ser :cliente o :concentrador") {CapacitedPHubNode.new(tipo: :otro)}
+		assert_raises(TypeError, "El tipo solo puede ser :cliente o :concentrador") {PHUB::CapacitedPHubNode.new(tipo: 1)}
+		assert_raises(TypeError, "El tipo solo puede ser :cliente o :concentrador") {PHUB::CapacitedPHubNode.new(tipo: rand)}
+		assert_raises(TypeError, "El tipo solo puede ser :cliente o :concentrador") {PHUB::CapacitedPHubNode.new(tipo: "cliente")}
+		assert_raises(TypeError, "El tipo solo puede ser :cliente o :concentrador") {PHUB::CapacitedPHubNode.new(tipo: :otro)}
 	end
 	
 	def test_constructor_defecto
-		default = CapacitedPHubNode.new
-		other_default = CapacitedPHubNode.new(tipo: :concentrador)
+		default = PHUB::CapacitedPHubNode.new
+		other_default = PHUB::CapacitedPHubNode.new(tipo: :concentrador)
 		
 		assert_equal([0,0], default.coordenadas)
 		assert_equal(1, default.demanda)

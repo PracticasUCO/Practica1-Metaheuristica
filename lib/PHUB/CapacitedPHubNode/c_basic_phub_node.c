@@ -5,6 +5,7 @@
 
 // Defining a space for information and references about the module to be stored internally
 VALUE CBasicPHubNode = Qnil;
+VALUE phub_module = Qnil;
 
 // Prototype for our method 'distancia' - methods are prefixed by 'method_' here
 VALUE method_distancia(VALUE self, VALUE vecino);
@@ -20,7 +21,8 @@ VALUE method_conectar_a(VALUE self, VALUE otro);
 
 // Prototype for the initialization method - Ruby calls this, not you
 void Init_c_basic_capacited_phub_node() {
-	CBasicPHubNode = rb_define_class("CapacitedPHubNode", rb_cObject);
+	phub_module = rb_define_module("PHUB");
+	CBasicPHubNode = rb_define_class_under(phub_module, "CapacitedPHubNode", rb_cObject);
 	rb_define_method(CBasicPHubNode, "distancia", method_distancia, 1);
 	rb_define_method(CBasicPHubNode, "se_puede_conectar?", method_se_puede_conectar, 1);
 	rb_define_method(CBasicPHubNode, "esta_conectado?", method_esta_conectado, 0);

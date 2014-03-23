@@ -6,7 +6,7 @@ require_relative '../lib/PHUB/BasicPHub/BasicPHub'
 
 class TestBasicPHub < MiniTest::Test
 	def setup
-		@t = BasicPHub.new("instancias/P1/CPH/phub_50_5_1.txt")
+		@t = PHUB::BasicPHub.new("instancias/P1/CPH/phub_50_5_1.txt")
 	end
 	
 	def test_basic
@@ -32,7 +32,7 @@ class TestBasicPHub < MiniTest::Test
 		paths = `find . | grep 'instancias/CPH/'`.split(/\n/)
 		
 		paths.each do |path|
-			t = BasicPHub.new(path)
+			t = PHUB::BasicPHub.new(path)
 			*, solucion = t.generar_solucion_aleatoria
 			concentradores = Array.new
 			clientes = Array.new

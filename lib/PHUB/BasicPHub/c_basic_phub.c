@@ -47,6 +47,6 @@ VALUE rb_funcion_objetivo(VALUE self, VALUE solucion)
 
 void Init_c_basic_phub()
 {
-	CBasicPHub = rb_define_class("BasicPHub", rb_cObject);
+	CBasicPHub = rb_define_class_under(phub_module, "BasicPHub", rb_cObject);
 	rb_define_method(CBasicPHub, "funcion_objetivo", rb_funcion_objetivo, 1);
 }
