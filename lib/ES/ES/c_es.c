@@ -68,3 +68,8 @@ VALUE method_tipo(VALUE self)
 {
 	return rb_iv_get(self, "tipo");
 }
+
+VALUE method_coeficiente(VALUE self)
+{
+	return rb_iv_get(self, "coeficiente");
+}
