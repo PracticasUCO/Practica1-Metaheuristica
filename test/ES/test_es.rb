@@ -37,14 +37,14 @@ class TestES < MiniTest::Test
 	end
 
 	def test_valores_constructor
-		assert_raises(TypeError, ES::ES.new(valor_inicio: ""), "El valor de inicio debe de ser numerico")
-		assert_raises(TypeError, ES::ES.new(valor_inicio: 3), "El valor de inicio debe estar entre 0-1")
-		assert_raises(TypeError, ES::ES.new(valor_inicio: -0.3), "El valor de inicio debe estar entre 0-1")
-		assert_raises(TypeError, ES::ES.new(tipo: 15), "Tipo solo admite simbolos")
-		assert_raises(TypeError, ES::ES.new(tipo: :geometricas), "Solo se admite el valor geometica")
-		assert_raises(TypeError, ES::ES.new(coeficiente: "sdf"), "El coeficiente debe ser de tipo numerico")
-		assert_raises(TypeError, ES::ES.new(coeficiente: 1), "El coeficiente debe estar entre 0-1 (exclusive)")
-		assert_raises(TypeError, ES::ES.new(coeficiente: 0), "El coeficiente debe de estar entre 0-1 (exclusive")
+		assert_raises(TypeError, "El valor de inicio debe de ser numerico") {ES::ES.new(valor_inicio: "")}
+		assert_raises(TypeError, "El valor de inicio debe estar entre 0-1") {ES::ES.new(valor_inicio: 2)}
+		assert_raises(TypeError, "El valor de inicio debe estar entre 0-1") {ES::ES.new(valor_inicio: -0.5)}
+		assert_raises(TypeError, "Tipo solo admite simbolos") {ES::ES.new(tipo: "asdf")}
+		assert_raises(TypeError, "Solo se admite el valor geometica") {ES::ES.new(tipo: :otra_cosa)}
+		assert_raises(TypeError, "El coeficiente debe ser de tipo numerico") {ES::ES.new(coeficiente: "ad")}
+		assert_raises(TypeError, "El coeficiente debe estar entre 0-1 (exclusive)") {ES::ES.new(coeficiente: 1)}
+		assert_raises(TypeError, "El coeficiente debe de estar entre 0-1 (exclusive") {ES::ES.new(coeficiente: 0)}
 	end
 
 	def test_enfriamiento
