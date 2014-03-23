@@ -11,7 +11,7 @@ class TestES < MiniTest::Test
 	def test_constructor
 		assert_equal(1, @t_basic.valor_inicio, "El valor de inicio se establecio a uno")
 		assert_equal(:geometrica, @t_basic.tipo, "Se establecio una regresion geometica")
-		assert_equal(0.99, @t.coeficiente, "El coeficiente de partida es 0.99")
+		assert_equal(0.99, @t_basic.coeficiente, "El coeficiente de partida es 0.99")
 
 		otro = ES::ES.new
 
