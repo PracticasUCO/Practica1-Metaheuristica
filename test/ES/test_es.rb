@@ -1,12 +1,11 @@
 #! /usr/bin/env ruby
 
 require 'minitest/autorun'
-require_relative '../../lib/ES/ES'
-require 'bigdecimal'
+require_relative '../../lib/ES/ES/ES'
 
 class TestES < MiniTest::Test
 	def setup
-		@t_basic = ES.new(valor_inicio: 1, tipo: :geometrica, coeficiente: 0.99)
+		@t_basic = ES::ES.new(valor_inicio: 1, tipo: :geometrica, coeficiente: 0.99)
 	end
 
 	def test_constructor
@@ -14,7 +13,7 @@ class TestES < MiniTest::Test
 		assert_equal(:geometrica, @t_basic.tipo, "Se establecio una regresion geometica")
 		assert_equal(0.99, @t.coeficiente, "El coeficiente de partida es 0.99")
 
-		otro = ES.new
+		otro = ES::ES.new
 
 		assert_equal(1, otro.valor_inicio, "El valor por defecto de inicio es 1")
 		assert_equal(:geometrica, otro.tipo, "La recta seguida por defecto es geometica")
@@ -38,21 +37,21 @@ class TestES < MiniTest::Test
 	end
 
 	def test_valores_constructor
-		assert_raises(TypeError, ES.new(valor_inicio: ""), "El valor de inicio debe de ser numerico")
-		assert_raises(TypeError, ES.new(valor_inicio: 3), "El valor de inicio debe estar entre 0-1")
-		assert_raises(TypeError, ES.new(valor_inicio: -0.3), "El valor de inicio debe estar entre 0-1")
-		assert_raises(TypeError, ES.new(tipo: 15), "Tipo solo admite simbolos")
-		assert_raises(TypeError, ES.new(tipo: :geometricas), "Solo se admite el valor geometica")
-		assert_raises(TypeError, ES.new(coeficiente: "sdf"), "El coeficiente debe ser de tipo numerico")
-		assert_raises(TypeError, ES.new(coeficiente: 1), "El coeficiente debe estar entre 0-1 (exclusive)")
-		assert_raises(TypeError, ES.new(coeficiente: 0), "El coeficiente debe de estar entre 0-1 (exclusive")
+		assert_raises(TypeError, ES::ES.new(valor_inicio: ""), "El valor de inicio debe de ser numerico")
+		assert_raises(TypeError, ES::ES.new(valor_inicio: 3), "El valor de inicio debe estar entre 0-1")
+		assert_raises(TypeError, ES::ES.new(valor_inicio: -0.3), "El valor de inicio debe estar entre 0-1")
+		assert_raises(TypeError, ES::ES.new(tipo: 15), "Tipo solo admite simbolos")
+		assert_raises(TypeError, ES::ES.new(tipo: :geometricas), "Solo se admite el valor geometica")
+		assert_raises(TypeError, ES::ES.new(coeficiente: "sdf"), "El coeficiente debe ser de tipo numerico")
+		assert_raises(TypeError, ES::ES.new(coeficiente: 1), "El coeficiente debe estar entre 0-1 (exclusive)")
+		assert_raises(TypeError, ES::ES.new(coeficiente: 0), "El coeficiente debe de estar entre 0-1 (exclusive")
 	end
 
 	def test_enfriamiento
 		repeticiones = 100
-		start = BigDecimal.new("1", 10)
+		start = 1
 		anterior = nil
-		coeficiente = BigDecimal.new("0.99", 10)
+		coeficiente = 0.99
 		repeticiones.times do
 			@t_basic.enfriar
 
