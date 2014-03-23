@@ -2,34 +2,38 @@
 # El siguiente makefile se asegura de que las gemas estan compiladas
 # de manera que haya problemas al tratar de ejecutar practica 1
 
+DIR_BASIC_CWP = "lib/CWP/BasicCWP/"
+DIR_BASIC_PHUB = "lib/PHUB/BasicPHub/"
+DIR_CAPACITED_PHUB = "lib/PHUB/CapacitedPHubNode/"
+
 all: gemas
 gemas: gema_c_basic_cwp gema_c_capacited_phub gema_c_basic_phub
 	@echo "Gemas compiladas correctamente"
 	
 gema_c_basic_cwp:
-	@cd lib/CWP/BasicCWP/ ; \
+	@cd $(DIR_BASIC_CWP) ; \
 	ruby extconf.rb;\
-	make;\
-	rm *.o
+	make; \
+	rm *.o \
 	
 gema_c_capacited_phub:
-	@cd lib/PHUB/CapacitedPHubNode/;\
+	@cd $(DIR_CAPACITED_PHUB);\
 	ruby extconf.rb;\
 	make;\
 	rm *.o
 	
 gema_c_basic_phub:
-	@cd lib/PHUB/BasicPHub/;\
+	@cd $(DIR_BASIC_PHUB);\
 	ruby extconf.rb;\
 	make;\
 	rm *.o;
 	
 clean:
-	-cd lib/CWP/BasicCWP/; \
+	-cd $(DIR_BASIC_CWP); \
 	rm *.so;
 	
-	-cd lib/PHUB/CapacitedPHubNode/; \
+	-cd $(DIR_CAPACITED_PHUB); \
 	rm *.so;
 	
-	-cd lib/PHUB/BasicPHub/;\
+	-cd $(DIR_BASIC_PHUB);\
 	rm *.so;
