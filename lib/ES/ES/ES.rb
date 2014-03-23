@@ -18,7 +18,7 @@ module ES
   		#		Actualmente solo puede ser :geometrica
 		#	- coeficiente: Indica el valor del coeficiente usado en la función de disminución
   		#		de la temperatura
-  		def initialize(valor_inicio: 1, tipo: :geometrica, coeficiente: 0.8)
+  		def initialize(valor_inicio: 1, tipo: :geometrica, coeficiente: 0.85)
   			raise TypeError, "valor_inicio debe de ser numerico" unless valor_inicio.kind_of? Numeric
   			raise TypeError, "tipo de valer :geometrica" unless tipo.eql? :geometrica
   			raise TypeError, "coeficiente debe de ser un valor numerico" unless coeficiente.kind_of? Numeric
