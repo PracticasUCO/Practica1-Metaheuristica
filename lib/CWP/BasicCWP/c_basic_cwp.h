@@ -10,7 +10,10 @@ VALUE module_cwp = Qnil;
 // Prototipo para la inicializacion de la clase
 void Init_c_basic_cwp();
 
-// Prototipo para el metodo
+/*
+La funcion objetivo devuelve el numero de cortes que se producen
+al ordenar el grafo de forma lineal.
+*/
 VALUE method_funcion_objetivo(VALUE self, VALUE v_nodes);
 
 // Realiza la diferencia entre dos arrays, ary1 - ary2
