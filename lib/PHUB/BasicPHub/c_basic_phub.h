@@ -9,7 +9,8 @@
 VALUE CBasicPHub = Qnil;
 
 /*
- * funcion_objetivo devuelve el coste de la solucion
+ * funcion_objetivo devuelve la suma de las distancias de todos
+ * los nodos clientes al concentrador al que están conectados.
  */
 VALUE rb_funcion_objetivo(VALUE self, VALUE solucion);
 
