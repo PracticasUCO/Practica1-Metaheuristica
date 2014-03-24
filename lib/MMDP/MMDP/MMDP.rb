@@ -22,7 +22,7 @@ module MMDP
 		# Inicializa la clase para que carge los valores de la base de datos
 		# Recibe como parametro un string indicando el lugar de donde
 		# leer la base de datos
-		def initialize(path_db, clasificador: :minima)
+		def initialize(path_db, clasificador = :minima)
 			super
 
 			if solution_nodes > 2
