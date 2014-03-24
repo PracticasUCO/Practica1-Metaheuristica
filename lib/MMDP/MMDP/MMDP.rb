@@ -12,11 +12,24 @@ module MMDP
 	para tratar de conseguir una solucion mejor a traves de la heuristica
 =end
 	class MMDP < BasicMMDP
+		# El punto de ruptura representa el valor maximo de busqueda
+		# dentro de la busqueda local. Si este valor es igual a 2
+		# significara que se buscara localmente a través de la mitad
+		# del vector solucion dado por la busqueda global. Si es
+		# tres, sera a través de la tercera parte, y asi sucesivamente
+		attr_reader :punto_ruptura
+
 		# Inicializa la clase para que carge los valores de la base de datos
 		# Recibe como parametro un string indicando el lugar de donde
 		# leer la base de datos
 		def initialize(path_db)
 			super
+
+			if solution_nodes > 2
+				@punto_ruptura = Math.log2(solution_nodes).to_i
+			else
+				@punto_ruptura = 1
+			end
 		end
 
 		# Realiza una busca local para tratar de mejorar lo maximo posible el

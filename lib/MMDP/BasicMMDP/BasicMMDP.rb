@@ -25,13 +25,6 @@ module MMDP
 		# El atributo lista_nodos indica la lista de nodos que se ha
 		# leido de la base de datos
 		attr_reader :lista_nodos
-
-		# El punto de ruptura representa el valor maximo de busqueda
-		# dentro de la busqueda local. Si este valor es igual a 2
-		# significara que se buscara localmente a través de la mitad
-		# del vector solucion dado por la busqueda global. Si es
-		# tres, sera a través de la tercera parte, y asi sucesivamente
-		attr_reader :punto_ruptura
 		
 		# Constructor de MMDP. Recibe como parametro un string
 		# con la direccion de la base de datos que se deseea leer
@@ -78,12 +71,6 @@ module MMDP
 
 					@nodes[signature] = coste.to_f if not @nodes.has_key? signature
 				end
-			end
-
-			if solution_nodes > 2
-				@punto_ruptura = Math.log2(solution_nodes).to_i
-			else
-				@punto_ruptura = 1
 			end
 		end
 
