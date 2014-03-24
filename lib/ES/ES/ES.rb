@@ -10,6 +10,11 @@ module ES
 
 	# La clase ES trata de representar los conceptos de Enfriammiento Simulado
 	class ES
+    # El atributo coste_solucion_actual almacena el coste de la solucion actual
+    # de manera que se puedan hacer los calculos de enfriamiento simulado 
+    # de manera rapida y eficiente
+    attr_accessor :coste_solucion_actual
+
 		# Constructor de la clase, recibe como parametros:
 		#	- valor_inicio: Indica el valor de inicio de la temperatura, debe de ser
   	#		numerico y solo puede oscilar entre 0-1 (ambos inclusive)
@@ -37,6 +42,7 @@ module ES
   			@coeficiente = coeficiente
   			@temperatura = valor_inicio
         @aceptacion = aceptacion
+        @coste_solucion_actual = 1
   		end
 	end
 end
