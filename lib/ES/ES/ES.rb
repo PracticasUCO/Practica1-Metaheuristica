@@ -15,6 +15,10 @@ module ES
     # de manera rapida y eficiente
     attr_accessor :coste_solucion_actual
 
+    # El atributo aceptacion devuelve la probabilidad en tanto por uno de
+    # aceptar una solucion diferente a la actual
+    attr_reader :aceptacion
+
 		# Constructor de la clase, recibe como parametros:
 		#	- valor_inicio: Indica el valor de inicio de la temperatura, debe de ser
   	#		numerico y solo puede oscilar entre 0-1 (ambos inclusive)
