@@ -1,4 +1,6 @@
 #include "c_es.h"
+#include <math.h>
+#include <stdio.h>
 
 /*
 Este metodo devuelve la temperatura actual del algoritmo
@@ -16,20 +18,25 @@ la temperatura.
 VALUE method_probabilidad(VALUE self, VALUE coste_solucion)
 {
 	ID method_rand = rb_intern("rand");
+	ID method_abs = rb_intern("abs");
 	VALUE coste_actual = rb_iv_get(self, "@coste_solucion_actual");
-	VALUE aceptacion = rb_iv_get(self, "@aceptacion");
 	VALUE tipoCosteSolucion = TYPE(coste_solucion);
 	double valorTemperatura = NUM2DBL(rb_iv_get(self, "@temperatura"));
 	double valorAleatorio = NUM2DBL(rb_funcall(rb_cObject, method_rand, 0));
+	double diferencia;
+	double umbral;
 
-	if(tipoCosteSolucion != T_FIXNUM)
+	if((tipoCosteSolucion != T_FIXNUM) && (tipoCosteSolucion != T_FLOAT))
 	{
 		rb_raise(rb_eTypeError, "coste_solucion debe de ser un valor numerico");
 	}
 
+	diferencia = NUM2DBL(coste_actual) - NUM2DBL(coste_solucion);
+	diferencia = NUM2DBL(rb_funcall(DBL2NUM(diferencia), method_abs, 0));
 
+	umbral = 1 / (exp(1/(diferencia * valorTemperatura)));
 
-	if(valorTemperatura >= valorAleatorio)
+	if(umbral > valorAleatorio)
 	{
 		return Qtrue;
 	}

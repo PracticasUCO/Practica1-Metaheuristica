@@ -33,10 +33,6 @@ module ES
   			raise TypeError, "coeficiente debe de ser un valor numerico" unless coeficiente.kind_of? Numeric
         raise TypeError, "aceptacion debe de ser un valor numerico" unless aceptacion.kind_of? Numeric
 
-  			if valor_inicio > 1 or valor_inicio < 0
-  				raise TypeError, "valor_inicio debe de estar entre 0 y 1 (ambos inclusive)"
-  			end
-
   			if coeficiente >= 1 or coeficiente <= 0
   				raise TypeError, "coeficiente debe de ser menor o igual que 1 (ambos exclusive)"
   			end
