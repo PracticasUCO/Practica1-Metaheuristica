@@ -41,6 +41,7 @@ module MMDP
 			raise TypeError, "clasificador debe de ser un simbolo" unless clasificador.kind_of? Symbol
 			raise TypeError, "clasificador solo admite los valores :minima y :media" unless clasificador.eql? :minima or clasificador.eql? :media
 			leer_instancia(path_db)
+			@clasificador = clasificador
 		end
 
 		# Lee una base de datos nueva y la carga dentro del fichero
