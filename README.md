@@ -60,6 +60,8 @@ Bueno, como ya he comentado arriba, no sabía nada de Ruby antes de comenzar. Lo
 es gracias a los siguintes libros:
 * Pragmatic Programming Ruby 1.9 and 2.0 4th Edition by Dave Thomas
 * Ruby best practices by Gregory T.Brown
+* http://git-scm.com/documentation
+
 Muchas gracias de antemano por tan excelentes libros, ya que explican de maravilla como adentrarse en profundidad
 con Ruby.
 
