@@ -19,13 +19,6 @@ module ES
     # aceptar una solucion diferente a la actual
     attr_reader :aceptacion
 
-    # El atributo objetivo indica si se esta tratando de maximizar la funcion
-    # objetivo o minimizar la funcion objetivo. Esto es importante ya que
-    # indica con que probabilidad aceptar una solucion que no es buena
-    #
-    # Puede tomar los valores :maximizar y :minimizar
-    attr_reader :objetivo
-
 		# Constructor de la clase, recibe como parametros:
 		#	- valor_inicio: Indica el valor de inicio de la temperatura, debe de ser
   	#		numerico y solo puede oscilar entre 0-1 (ambos inclusive)
@@ -34,8 +27,7 @@ module ES
 		#	- coeficiente: Indica el valor del coeficiente usado en la función de disminución
   	#		de la temperatura
     # - aceptacion: probabilidad de aceptacion en tanto por uno de una solucion distinta
-    # - objetivo: Indica si se quiere maximizar o minimizar la funcion objetivo, por defecto se trata de maximizar
-  		def initialize(valor_inicio: 1, tipo: :geometrica, coeficiente: 0.85, aceptacion: 1, objetivo: :maximizar)
+  		def initialize(valor_inicio: 1, tipo: :geometrica, coeficiente: 0.85, aceptacion: 1)
   			raise TypeError, "valor_inicio debe de ser numerico" unless valor_inicio.kind_of? Numeric
   			raise TypeError, "tipo de valer :geometrica" unless tipo.eql? :geometrica
   			raise TypeError, "coeficiente debe de ser un valor numerico" unless coeficiente.kind_of? Numeric
@@ -51,7 +43,6 @@ module ES
   			@temperatura = valor_inicio
         @aceptacion = aceptacion
         @coste_solucion_actual = 1
-        @objetivo = objetivo
   		end
 	end
 end

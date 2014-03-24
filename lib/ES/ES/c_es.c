@@ -19,10 +19,10 @@ VALUE method_probabilidad(VALUE self, VALUE coste_solucion)
 {
 	ID method_rand = rb_intern("rand");
 	ID method_abs = rb_intern("abs");
-	VALUE objetivo_max = ID2SYM(rb_intern("maximizar"));
 	VALUE coste_actual = rb_iv_get(self, "@coste_solucion_actual");
 	VALUE tipoCosteSolucion = TYPE(coste_solucion);
-	VALUE objetivo = rb_iv_get(self, "@objetivo");
+
+
 	double valorTemperatura = NUM2DBL(rb_iv_get(self, "@temperatura"));
 	double valorAleatorio = NUM2DBL(rb_funcall(rb_cObject, method_rand, 0));
 	double diferencia;
@@ -38,27 +38,13 @@ VALUE method_probabilidad(VALUE self, VALUE coste_solucion)
 
 	umbral = 1 / (exp((diferencia / valorTemperatura)));
 
-	if(objetivo == objetivo_max)
+	if(umbral > valorAleatorio)
 	{
-		if(umbral > valorAleatorio)
-		{
-			return Qtrue;
-		}
-		else
-		{
-			return Qfalse;
-		}
+		return Qtrue;
 	}
 	else
 	{
-		if(umbral < valorAleatorio)
-		{
-			return Qtrue;
-		}
-		else
-		{
-			return Qfalse;
-		}
+		return Qfalse;
 	}
 }
 
