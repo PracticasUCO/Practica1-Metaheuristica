@@ -37,9 +37,9 @@ module MMDP
 		#
 		# Tambien recibe como parametro el tipo de clasificador de
 		# la funcion objetivo, que por defecto sera :minima
-		def initialize(path_db, clasificador: :minima)
+		def initialize(path_db, clasificador = :minima)
 			raise TypeError, "clasificador debe de ser un simbolo" unless clasificador.kind_of? Symbol
-			raise TypeError, "clasificador solo admite los valores :minima y :media" unless clasificador.eql? :minima and clasificador.eql? :media
+			raise TypeError, "clasificador solo admite los valores :minima y :media" unless clasificador.eql? :minima or clasificador.eql? :media
 			leer_instancia(path_db)
 		end
 
