@@ -160,7 +160,44 @@ module MMDP
 			return coste
 		end
 
+		# Este metodo devuelve la diversidad minimia que existe en una solucion
+		# Puede recibir una serie de nodos, en cuyo caso devolveria la diversidad
+		# minima que habría despues de añadir dichos nodos
+		def diversidad_minima(solucion, *nuevo_nodo)
+			raise TypeError, "El parametro solucion debe de ser un array" unless solucion.kind_of? Array
+
+			if solucion.empty?
+				return 0.0
+			end
+
+			minimo = 0.0
+
+			solucion.each do |origen|
+				solucion.each do |destino|
+					next if origen == destino
+					valor = obtener_coste_entre(origen, destino)
+					minimo = valor if valor < minimo
+				end
+			end
+			
+			unless nuevo_nodo.empty?
+				solucion.each do |nodo|
+					nuevo_nodo.each do |nuevo|
+						valor = obtener_coste_entre(nodo, nuevo)
+						minimo = obtener_coste_entre(nodo, nuevo) if minimo > valor
+					end
+				end
+			end
+
+			return minimo
+		end
+
+		# funcion_objetivo es un sinonimo de diversidad minima
+		def funcion_objetivo(solucion, *nodo)
+			return diversidad_minima(solucion, nodo)
+		end
+
 		# Definicion de los metodos privados de la clase
-		private :obtener_coste_entre, :obtener_suma_costes
+		private :obtener_coste_entre, :obtener_suma_costes, :diversidad_minima, :funcion_objetivo
 	end
 end
