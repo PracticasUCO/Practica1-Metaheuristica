@@ -192,7 +192,11 @@ module MMDP
 
 		# funcion_objetivo es un sinonimo de diversidad minima
 		def funcion_objetivo(solucion, *nodo)
-			return diversidad_minima(solucion, nodo)
+			if clasificador == :minima
+				return diversidad_minima(solucion, nodo)
+			else
+				return obtener_suma_costes(solucion, nodo)
+			end
 		end
 
 		# Definicion de los metodos privados de la clase
