@@ -23,9 +23,17 @@ module MMDP
 		# vector solucion
 		# 
 		# Recibe como parametros el array con la soluciones escogidas y
-		#
 		# Devuelve un vector solucion optimizado
-		def busqueda_local(solucion)
+		# 
+		# Este metodo sigue un algoritmo de busqueda local mediante la tecnica
+		# de best improvement, optimizado mediante un parametro de corte para
+		# no llegar a explorar todas las soluciones vecinas.
+		#
+		# El metodo de parada es cuando se hayan explorado más soluciones que
+		# solution_nodes / @punto_ruptura
+		#
+		# @punto_ruptura usualmente se configura a log2(solution_nodes)
+		def busqueda_local_best_improvement(solucion)
 			raise TypeError, "El parametro solucion debe ser un Array" unless solucion.kind_of? Array
 
 			alternativa = solucion.dup
@@ -82,11 +90,31 @@ module MMDP
 		# 
 		# Devuelve un vector con los nodos
 		# seleccionados y un valor flotante con la suma de costes
+		#
+		# Este metodo se  mantiene por compatibilidad y es equivalente
+		# a generar_solucion_busqueda_local(:best_improvement)
 		def generar_solucion_aleatoria
 			solucion, coste_actual = busqueda_global
-			solucion, coste_actual = busqueda_local(solucion)
+			solucion, coste_actual = busqueda_local_best_improvement(solucion)
 
 			return solucion, coste_actual	
+		end
+
+		# Genera una solución de forma aleatoria y trata de mejorarla mediante
+		# las tecnicas de búsqueda local. 
+		#
+		# Puede recibir como parametro el tipo
+		# de busqueda local a recibir que puede ser :best_improvement para
+		# realizar una búsqueda local en la cual se seleccione al mejor de
+		# los vecinos o mediante :first_improvement para seleccionar a la
+		# primera mejora de los vecinos.
+		#
+		# Si no se especifica el tipo de busqueda se asume que se prefiere
+		# la técnica Best improvement
+		def generar_solucion_busqueda_local(tipo: :best_improvement)
+			solucion, coste_actual = super.generar_solucion_aleatoria
+			solucion , coste_actual = busqueda_local_best_improvement(tipo)
+			return solucion, coste_actual
 		end
 
 		protected :busqueda_global, :busqueda_local
