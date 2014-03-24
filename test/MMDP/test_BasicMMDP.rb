@@ -13,7 +13,6 @@ class TestBasicMMDP < MiniTest::Test
 		assert_equal(30, @t.total_nodes)
 		assert_equal(9, @t.solution_nodes)
 		assert_equal(29, @t.lista_nodos.length)
-		assert_operator(@t.punto_ruptura, :>=, 1)
 	end
 	
 	def test_solution
