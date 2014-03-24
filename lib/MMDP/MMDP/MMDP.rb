@@ -93,6 +93,6 @@ module MMDP
 			return solucion, coste_actual
 		end
 
-		protected :busqueda_global, :busqueda_local
+		protected :busqueda_global, :busqueda_local_best_improvement
 	end
 end
