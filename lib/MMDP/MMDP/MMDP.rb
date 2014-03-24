@@ -73,10 +73,7 @@ module MMDP
 		# Realiza una busqueda global para tratar de obtener un
 		# vector con la maxima distancia entre nodos posible
 		def busqueda_global
-			solucion = lista_nodos().dup.sample(solution_nodes)
-			coste_actual = obtener_suma_costes(solucion)
-
-			return solucion, coste_actual
+			return generar_solucion_aleatoria
 		end
 
 		# Genera una solución de forma aleatoria y trata de mejorarla mediante
@@ -91,7 +88,7 @@ module MMDP
 		# Si no se especifica el tipo de busqueda se asume que se prefiere
 		# la técnica Best improvement
 		def generar_solucion_busqueda_local(tipo: :best_improvement)
-			solucion, coste_actual = generar_solucion_aleatoria
+			solucion, coste_actual = busqueda_global
 			solucion , coste_actual = busqueda_local_best_improvement(tipo)
 			return solucion, coste_actual
 		end
