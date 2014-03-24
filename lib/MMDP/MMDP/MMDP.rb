@@ -79,27 +79,6 @@ module MMDP
 			return solucion, coste_actual
 		end
 
-		# Genera una solución aleatoriamente a partir de la base de datos
-		# que se ha leido previamente. La solucion generada trata que
-		# el coste sea el maximo posible. 
-		#
-		# Recibe como parametro el valor de seed, que indicara con que
-		# valor se inicializa una secuencia aleatoria, en caso de
-		# no introduccir ningún valor o de introduccir el valor cero
-		# se usara el valor de Random.new_seed
-		# 
-		# Devuelve un vector con los nodos
-		# seleccionados y un valor flotante con la suma de costes
-		#
-		# Este metodo se  mantiene por compatibilidad y es equivalente
-		# a generar_solucion_busqueda_local(:best_improvement)
-		def generar_solucion_aleatoria
-			solucion, coste_actual = busqueda_global
-			solucion, coste_actual = busqueda_local_best_improvement(solucion)
-
-			return solucion, coste_actual	
-		end
-
 		# Genera una solución de forma aleatoria y trata de mejorarla mediante
 		# las tecnicas de búsqueda local. 
 		#
@@ -112,7 +91,7 @@ module MMDP
 		# Si no se especifica el tipo de busqueda se asume que se prefiere
 		# la técnica Best improvement
 		def generar_solucion_busqueda_local(tipo: :best_improvement)
-			solucion, coste_actual = super.generar_solucion_aleatoria
+			solucion, coste_actual = generar_solucion_aleatoria
 			solucion , coste_actual = busqueda_local_best_improvement(tipo)
 			return solucion, coste_actual
 		end
