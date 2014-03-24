@@ -25,10 +25,21 @@ module MMDP
 		# El atributo lista_nodos indica la lista de nodos que se ha
 		# leido de la base de datos
 		attr_reader :lista_nodos
+
+		# El atributo clasificador indica que tipo de evaluación se
+		# usara para la funcion objetivo. Estos valores pueden ser
+		# :minima para realizar una evaluacion de la distancia minima
+		# :media para realizar una clasificacion media
+		attr_reader :clasificador
 		
 		# Constructor de MMDP. Recibe como parametro un string
 		# con la direccion de la base de datos que se deseea leer
-		def initialize(path_db)
+		#
+		# Tambien recibe como parametro el tipo de clasificador de
+		# la funcion objetivo, que por defecto sera :minima
+		def initialize(path_db, clasificador: :minima)
+			raise TypeError, "clasificador debe de ser un simbolo" unless clasificador.kind_of? Symbol
+			raise TypeError, "clasificador solo admite los valores :minima y :media" unless clasificador.eql? :minima and clasificador.eql? :media
 			leer_instancia(path_db)
 		end
 
