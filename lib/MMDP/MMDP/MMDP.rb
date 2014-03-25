@@ -59,18 +59,21 @@ module MMDP
 					next if origen == destino
 
 					nueva_alternativa = alternativa.dup
-					nueva_alternativa.delete(destino)
+					#nueva_alternativa.delete(destino)
 					
 					nodos_lista.each do |nodo_alternativo|
 						next if nodo_alternativo == origen
 						next if nodo_alternativo == destino
 						next if nueva_alternativa.include? nodo_alternativo
 
-						nueva_alternativa << nodo_alternativo
+						#nueva_alternativa << nodo_alternativo
 
-						coste_alternativa = obtener_suma_costes(nueva_alternativa)
+						coste_alternativa = obtener_diferencia_soluciones(nueva_alternativa, coste_actual, destino, nodo_alternativo)
 
 						if coste_alternativa > coste_actual
+							nueva_alternativa.delete(destino)
+							nueva_alternativa.push(nodo_alternativo)
+
 							coste_actual = coste_alternativa
 							alternativa = nueva_alternativa.dup
 						end
@@ -135,7 +138,7 @@ module MMDP
 			raise TypeError, "nodo_eliminar no se encuentra en la solucion_actual" unless solucion_actual.include? nodo_eliminar
 			raise TypeError, "new node no ha sido reconocido dentro de los nodos leidos" unless lista_nodos.include? new_node
 
-			particion_eliminar = Array
+			particion_eliminar = Array.new
 			particion_eliminar << nodo_eliminar
 			solucion_actual = solucion_actual - particion_eliminar
 
@@ -150,7 +153,7 @@ module MMDP
 			coste_final = coste_actual - coste_nodo_eliminado + coste_nuevo_nodo
 
 			# Se restaura solucion_actual ya que se ha cambiado en el proceso
-			solucion_actual << nodo_eliminar
+			solucion_actual.push(nodo_eliminar)
 
 			return coste_final
 		end
