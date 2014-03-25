@@ -146,7 +146,7 @@ module MMDP
 				coste_nodo_eliminado = obtener_suma_costes(solucion_actual, nodo_eliminar)
 				coste_nuevo_nodo = obtener_suma_costes(solucion_actual, new_node)
 			end
-			
+
 			coste_final = coste_actual - coste_nodo_eliminado + coste_nuevo_nodo
 
 			# Se restaura solucion_actual ya que se ha cambiado en el proceso
