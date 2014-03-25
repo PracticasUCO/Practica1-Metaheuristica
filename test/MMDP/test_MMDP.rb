@@ -41,9 +41,12 @@ describe MMDP do
 
 	describe "En las soluciones de busqueda local por Best Improvement" do
 		it "Ninguna solucion puede superar el coste de 300 ya que estamos tratando de diversidad minima" do
-			*, coste = @t.generar_solucion_busqueda_local
+			repeticiones = 30
+			repeticiones.times do
+				*, coste = @t.generar_solucion_busqueda_local
 
-			coste.must_be :<, 300
+				coste.must_be :<, 300
+			end
 		end
 	end
 end
