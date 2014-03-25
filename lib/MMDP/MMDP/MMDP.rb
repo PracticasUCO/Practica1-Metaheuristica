@@ -54,6 +54,22 @@ module MMDP
 			@condicion_parada = condicion_parada
 		end
 
+		# Este metodo cambia el atributo condicion de parada a otro valor que desee
+		# el usuario, los valores permitidos son:
+		#
+		# - :auto para que el sistema eliga su propio criterio de parada
+		# - :max_iteraciones para que el sistema determine el numero maximo de iteraciones
+		# - :temperatura para parar cuando se alcanze una temperatura minima
+		def condicion_parada=(otro_criterio)
+			raise TypeError, "otro_criterio debe de ser simbolo" unless otro_criterio.kind_of? Symbol
+
+			unless otro_criterio == :auto or otro_criterio == :max_iteraciones or otro_criterio == :temperatura
+				raise TypeError, "otro_criterio solo admite como valores :auto :max_iteraciones y :temperatura"
+			end
+
+			@condicion_parada = otro_criterio
+		end
+
 
 		# Realiza una busqueda local para tratar de mejorar lo maximo posible el
 		# vector solucion
