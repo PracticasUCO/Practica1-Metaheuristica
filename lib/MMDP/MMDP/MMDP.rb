@@ -102,7 +102,7 @@ module MMDP
 		# la técnica Best improvement
 		def generar_solucion_busqueda_local(tipo: :best_improvement)
 			solucion, coste_actual = busqueda_global
-			solucion , coste_actual = busqueda_local_best_improvement(tipo)
+			solucion , coste_actual = busqueda_local_best_improvement(solucion)
 			return solucion, coste_actual
 		end
 
