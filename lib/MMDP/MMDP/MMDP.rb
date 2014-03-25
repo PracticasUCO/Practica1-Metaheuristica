@@ -101,6 +101,12 @@ module MMDP
 				raise TypeError, "La condicion de parada :max_iteraciones require que el primer argumento sea el numero de iteraciones dadas y el segundo el maximo de iteraciones a dar"
 			end
 
+			raise TypeError, "tipo debe de ser un simbolo" unless tipo.kind_of? Symbol
+
+			unless tipo == :auto or tipo == :best_improvement or tipo == :first_improvement
+				raise TypeError, "tipo solo admite :auto :best_improvement o :first_improvement"
+			end
+
 			## No estan aún todos implementados, los que no estan implementados simplemente devuelven false
 			## para que termine el bucle
 			if condicion_parada == :auto
