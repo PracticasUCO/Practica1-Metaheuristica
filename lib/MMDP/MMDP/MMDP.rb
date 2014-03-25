@@ -46,12 +46,15 @@ module MMDP
 		# solution_nodes / @punto_ruptura
 		#
 		# @punto_ruptura usualmente se configura a log2(solution_nodes)
-		def busqueda_local_best_improvement(solucion)
+		#
+		# Como parametros recibe el vector solución a mejorar y el coste
+		# de dicho vector
+		def busqueda_local_best_improvement(solucion, coste_actual)
 			raise TypeError, "El parametro solucion debe ser un Array" unless solucion.kind_of? Array
+			raise TypeError, "El parametro coste_actual debe de ser numerico" unless coste_actual.kind_of? Numeric
 
 			alternativa = solucion.dup
 			nodos_lista = lista_nodos().dup
-			coste_actual = obtener_suma_costes(solucion)
 
 			alternativa.each_with_index do |origen, index|
 				break if index > solution_nodes / @punto_ruptura
@@ -114,7 +117,7 @@ module MMDP
 
 			if tipo == :best_improvement
 				solucion, coste_actual = busqueda_global
-				solucion , coste_actual = busqueda_local_best_improvement(solucion)
+				solucion , coste_actual = busqueda_local_best_improvement(solucion, coste_actual)
 			elsif tipo == :first_improvement
 				# Not implemented yet
 			else
