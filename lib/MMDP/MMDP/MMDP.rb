@@ -71,11 +71,11 @@ module MMDP
 						coste_alternativa = obtener_diferencia_soluciones(nueva_alternativa, coste_actual, destino, nodo_alternativo)
 
 						if coste_alternativa > coste_actual
-							nueva_alternativa.delete(destino)
-							nueva_alternativa.push(nodo_alternativo)
-
 							coste_actual = coste_alternativa
 							alternativa = nueva_alternativa.dup
+
+							alternativa.delete(destino)
+							alternativa.push(nodo_alternativo)
 						end
 
 						nueva_alternativa.delete(nodo_alternativo)
