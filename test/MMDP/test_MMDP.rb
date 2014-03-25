@@ -59,7 +59,7 @@ describe MMDP do
 			repeticiones.times do
 				*, coste = @t.generar_solucion_busqueda_local
 
-				coste.must_be :<, 300
+				coste.must_be :<, 400
 			end
 		end
 
