@@ -27,7 +27,7 @@ describe MMDP do
 	describe "Cuando se halla una solucion mediante busqueda local." do
 		it "Debe de tener una longitud de 9" do
 			solucion, * = @t.generar_solucion_busqueda_local
-			solucion.must_equal 9
+			solucion.length.must_equal 9
 		end
 
 		it "El coste debe de ser mayor o igual que la obtenida con BasicMMDP" do
