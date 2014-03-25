@@ -70,6 +70,58 @@ module MMDP
 			@condicion_parada = otro_criterio
 		end
 
+		# El siguiente metodo comprueba si se puede seguir buscando vecinos
+		# o se debe terminar el bucle. Para ello tiene en cuenta la
+		# condicion de parada almacenada en la clase. Puede recibir 0 - 2
+		# argumentos dependiendo del criterio de parada:
+		#
+		# - :max_iteraciones : recibe como parametro el numero de iteraciones
+		# actuales y el numero maximo de iteraciones a dar
+		#
+		# - :temperatura : recibe como parametro la temperatura minima a
+		# soportar
+		#
+		# - :auto : no recibe parametros ya que el propio sistema trata
+		# de determinarlos
+		#
+		# Si se introduce el numero de parametros incorrecto para
+		# el tipo de condicion de parada establecido se lanza una excepcion
+		# del tipo TypeError
+		def continuar_trabajo?(*parametros)
+			if condicion_parada == :auto and parametros.length != 0
+				raise TypeError, "La condicion de parada :auto no requiere argumentos"
+			end
+
+			if condicion_parada == :temperatura and parametros.length != 1
+				raise TypeError, "La condicion de parada :temperatura solo requiere como argumento la temperatura minima de parada"
+			end
+
+			if condicion_parada == :max_iteraciones and parametros.length != 2
+				raise TypeError, "La condicion de parada :max_iteraciones require que el primer argumento sea el numero de iteraciones dadas y el segundo el maximo de iteraciones a dar"
+			end
+
+			## No estan aún todos implementados, los que no estan implementados simplemente devuelven false
+			## para que termine el bucle
+			if condicion_parada == :auto
+				return false
+			end
+
+			if condicion_parada == :temperatura
+				raise TypeError, "La temperatura minima a soportar debe de ser un valor numerico" unless parametros[0].kind_of? Numeric
+				raise TypeError, "La temperatura minima a soportar debe de ser un valor positivo" unless parametros[0] > 0
+				return false
+			end
+
+			if condicion_parada == :max_iteraciones
+				raise TypeError, "El numero minimo de iteraciones debe de ser un valor numerico" unless parametros[0].kind_of? Numeric
+				raise TypeError, "El numero maximo de iteraciones debe de ser un valor numerico" unless parametros[1].kind_of? Numeric
+				raise TypeError, "El numero minimo de iteraciones debe de ser un valor positivo" unless parametros[0] > 0
+				raise TypeError, "El numero maximo de iteraciones debe de ser un valor positivo" unless parametros[1] > 0
+
+				return parametros[0] < parametros[1]
+			end
+		end
+
 
 		# Realiza una busqueda local para tratar de mejorar lo maximo posible el
 		# vector solucion
