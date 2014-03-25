@@ -96,13 +96,27 @@ module MMDP
 		# de busqueda local a recibir que puede ser :best_improvement para
 		# realizar una búsqueda local en la cual se seleccione al mejor de
 		# los vecinos o mediante :first_improvement para seleccionar a la
-		# primera mejora de los vecinos.
+		# primera mejora de los vecinos. Tambien puede usar como tipo
+		# el valor :enfriamiento_simulado para activar el algoritmo de
+		# enfriamiento simulado
 		#
 		# Si no se especifica el tipo de busqueda se asume que se prefiere
 		# la técnica Best improvement
 		def generar_solucion_busqueda_local(tipo: :best_improvement)
-			solucion, coste_actual = busqueda_global
-			solucion , coste_actual = busqueda_local_best_improvement(solucion)
+			raise TypeError, "Tipo debe de ser un simbolo" unless tipo.kind_of? Symbol
+
+			unless tipo == :best_improvement or tipo == :first_improvement or tipo == :enfriamiento_simulado
+				raise TypeError, "Los valores admitidos para tipo son: :best_improvement, :first_improvement y :enfriamiento_simulado"
+			end
+
+			if tipo == :best_improvement
+				solucion, coste_actual = busqueda_global
+				solucion , coste_actual = busqueda_local_best_improvement(solucion)
+			elsif tipo == :first_improvement
+				# Not implemented yet
+			else
+				# Not implemented yet
+			end
 			return solucion, coste_actual
 		end
 
