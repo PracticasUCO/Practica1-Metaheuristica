@@ -36,14 +36,22 @@ module MMDP
 		# Inicializa la clase para que carge los valores de la base de datos
 		# Recibe como parametro un string indicando el lugar de donde
 		# leer la base de datos
-		def initialize(path_db, clasificador = :minima)
-			super
+		def initialize(path_db, clasificador = :minima, condicion_parada: :max_iteraciones)
+			raise TypeError, "condicion_parada debe de ser un simbolo" unless condicion_parada.kind_of? Symbol
+
+			unless condicion_parada == :max_iteraciones or condicion_parada == :temperatura or condicion_parada == :auto
+				raise TypeError, "condicion_parada solo acepta los valores :auto :max_iteraciones y :temperatura"
+			end
+
+			super path_db, clasificador
 
 			if solution_nodes > 2
 				@punto_ruptura = Math.log2(solution_nodes).to_i
 			else
 				@punto_ruptura = 1
 			end
+
+			@condicion_parada = condicion_parada
 		end
 
 
