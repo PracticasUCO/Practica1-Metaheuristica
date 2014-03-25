@@ -36,7 +36,7 @@ module MMDP
 		# Inicializa la clase para que carge los valores de la base de datos
 		# Recibe como parametro un string indicando el lugar de donde
 		# leer la base de datos
-		def initialize(path_db, clasificador = :minima, condicion_parada: :max_iteraciones)
+		def initialize(path_db, clasificador = :minima, condicion_parada = :auto)
 			raise TypeError, "condicion_parada debe de ser un simbolo" unless condicion_parada.kind_of? Symbol
 
 			unless condicion_parada == :max_iteraciones or condicion_parada == :temperatura or condicion_parada == :auto
@@ -72,7 +72,7 @@ module MMDP
 
 		# El siguiente metodo comprueba si se puede seguir buscando vecinos
 		# o se debe terminar el bucle. Para ello tiene en cuenta la
-		# condicion de parada almacenada en la clase. Puede recibir 0 - 2
+		# condicion de parada almacenada en la clase. Puede recibir 1 - 2
 		# argumentos dependiendo del criterio de parada:
 		#
 		# - :max_iteraciones : recibe como parametro el numero de iteraciones
@@ -81,15 +81,14 @@ module MMDP
 		# - :temperatura : recibe como parametro la temperatura minima a
 		# soportar
 		#
-		# - :auto : no recibe parametros ya que el propio sistema trata
-		# de determinarlos
+		# - :auto : recibe el indice actual de busqueda
 		#
 		# Si se introduce el numero de parametros incorrecto para
 		# el tipo de condicion de parada establecido se lanza una excepcion
 		# del tipo TypeError
 		def continuar_trabajo?(*parametros)
-			if condicion_parada == :auto and parametros.length != 0
-				raise TypeError, "La condicion de parada :auto no requiere argumentos"
+			if condicion_parada == :auto and parametros.length != 1
+				raise TypeError, "La condicion de parada :auto solo require el indice actual de busqueda"
 			end
 
 			if condicion_parada == :temperatura and parametros.length != 1
@@ -103,6 +102,9 @@ module MMDP
 			## No estan aún todos implementados, los que no estan implementados simplemente devuelven false
 			## para que termine el bucle
 			if condicion_parada == :auto
+				if clasificador == :best_improvement
+					return parametros[0] < solution_nodes / @punto_ruptura
+				end
 				return false
 			end
 
@@ -148,7 +150,10 @@ module MMDP
 
 			alternativa.each_with_index do |origen, index|
 				# break if index > solution_nodes / @punto_ruptura
-				break unless continuar_trabajo?(index, total_nodes)
+				if continuar_trabajo?(index)
+					puts "it #{index}"
+				end
+				break unless continuar_trabajo?(index)
 				alternativa.each do |destino|
 					next if origen == destino
 

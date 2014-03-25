@@ -24,7 +24,7 @@ describe MMDP do
 		end
 
 		it "El criterio de parada por defecto es :max_iteraciones" do
-			@t.condicion_parada.must_equal :max_iteraciones
+			@t.condicion_parada.must_equal :auto
 		end
 	end
 
@@ -34,11 +34,21 @@ describe MMDP do
 			solucion.length.must_equal 9
 		end
 
-		it "El coste debe de ser mayor o igual que la obtenida con BasicMMDP" do
-			*, coste_best_improvement = @t.generar_solucion_busqueda_local
-			*, coste_aleatorio = @b.generar_solucion_aleatoria
+		it "El coste medio debe de ser mayor o igual que la obtenida con BasicMMDP" do
 
-			coste_best_improvement.must_be :>=, coste_aleatorio
+			repeticiones = 30
+			suma_best_improvement = 0
+			suma_aleatorio = 0
+
+			repeticiones.times do
+				*, coste_best_improvement = @t.generar_solucion_busqueda_local
+				*, coste_aleatorio = @b.generar_solucion_aleatoria
+
+				suma_best_improvement += coste_best_improvement
+				suma_aleatorio += coste_aleatorio
+			end
+
+			suma_best_improvement.must_be :>=, suma_aleatorio
 		end
 
 	end
@@ -51,6 +61,12 @@ describe MMDP do
 
 				coste.must_be :<, 300
 			end
+		end
+
+		it "El coste de la solucion debe de ser mayor que cero" do
+			*, coste = @t.generar_solucion_busqueda_local
+
+			coste.must_be :>, 0
 		end
 	end
 
