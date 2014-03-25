@@ -19,6 +19,20 @@ module MMDP
 		# tres, sera a través de la tercera parte, y asi sucesivamente
 		attr_reader :punto_ruptura
 
+		# El atributo condicion_parada almacena de que manera se va
+		# a parar los algoritmos generados. Esta tipo de parada puede
+		# se de dos maneras
+		#
+		# a) Se cumple un numero de iteraciones maximo, en ese caso
+		# se selecciona :max_iteraciones
+		# 
+		# b) Se ha enfriado la temperatura por debajo de un limite
+		# en ese caso se selecciona :temperatura
+		#
+		# c) Modo automatico, el programa elige cual cree que es
+		# la mejor opcion en cada caso, en ese caso se selecciona :auto
+		attr_reader :condicion_parada
+
 		# Inicializa la clase para que carge los valores de la base de datos
 		# Recibe como parametro un string indicando el lugar de donde
 		# leer la base de datos
@@ -32,7 +46,8 @@ module MMDP
 			end
 		end
 
-		# Realiza una busca local para tratar de mejorar lo maximo posible el
+
+		# Realiza una busqueda local para tratar de mejorar lo maximo posible el
 		# vector solucion
 		# 
 		# Recibe como parametros el array con la soluciones escogidas y
