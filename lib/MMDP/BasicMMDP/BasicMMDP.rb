@@ -169,7 +169,7 @@ module MMDP
 				return 0.0
 			end
 
-			minimo = 0.0
+			minimo = Float::INFINITY
 
 			solucion.each do |origen|
 				solucion.each do |destino|
@@ -183,7 +183,7 @@ module MMDP
 				solucion.each do |nodo|
 					nuevo_nodo.each do |nuevo|
 						valor = obtener_coste_entre(nodo, nuevo)
-						minimo = obtener_coste_entre(nodo, nuevo) if minimo > valor
+						minimo = obtener_coste_entre(nodo, nuevo) if valor < minimo
 					end
 				end
 			end
