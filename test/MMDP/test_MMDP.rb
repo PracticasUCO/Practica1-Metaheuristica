@@ -31,6 +31,10 @@ describe MMDP do
 		end
 
 		it "El coste debe de ser mayor o igual que la obtenida con BasicMMDP" do
+			*, coste_best_improvement = @t.generar_solucion_busqueda_local
+			*, coste_aleatorio = @b.generar_solucion_aleatoria
+
+			coste_best_improvement.must_be :>=, coste_aleatorio
 		end
 	end
 end
