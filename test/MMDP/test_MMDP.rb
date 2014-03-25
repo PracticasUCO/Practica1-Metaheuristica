@@ -36,5 +36,11 @@ describe MMDP do
 
 			coste_best_improvement.must_be :>=, coste_aleatorio
 		end
+
+		it "Ninguna solucion puede superar el coste de 300 ya que estamos tratando de diversidad minima" do
+			*, coste = @t.generar_solucion_busqueda_local
+
+			coste.must_be :<, 300
+		end
 	end
 end
