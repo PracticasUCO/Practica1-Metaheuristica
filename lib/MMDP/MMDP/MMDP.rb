@@ -115,13 +115,12 @@ module MMDP
 			if condicion_parada == :max_iteraciones
 				raise TypeError, "El numero minimo de iteraciones debe de ser un valor numerico" unless parametros[0].kind_of? Numeric
 				raise TypeError, "El numero maximo de iteraciones debe de ser un valor numerico" unless parametros[1].kind_of? Numeric
-				raise TypeError, "El numero minimo de iteraciones debe de ser un valor positivo" unless parametros[0] > 0
-				raise TypeError, "El numero maximo de iteraciones debe de ser un valor positivo" unless parametros[1] > 0
+				raise TypeError, "El numero minimo de iteraciones debe de ser un valor positivo" unless parametros[0].>= 0.0
+				raise TypeError, "El numero maximo de iteraciones debe de ser un valor positivo" unless parametros[1].>= 0.0
 
 				return parametros[0] < parametros[1]
 			end
 		end
-
 
 		# Realiza una busqueda local para tratar de mejorar lo maximo posible el
 		# vector solucion
@@ -148,7 +147,8 @@ module MMDP
 			nodos_lista = lista_nodos().dup
 
 			alternativa.each_with_index do |origen, index|
-				break if index > solution_nodes / @punto_ruptura
+				# break if index > solution_nodes / @punto_ruptura
+				break unless continuar_trabajo?(index, total_nodes)
 				alternativa.each do |destino|
 					next if origen == destino
 
