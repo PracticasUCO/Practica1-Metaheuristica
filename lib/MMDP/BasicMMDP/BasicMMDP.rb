@@ -99,7 +99,11 @@ module MMDP
 		# seleccionados y un valor flotante con la suma de costes
 		def generar_solucion_aleatoria
 			solucion = lista_nodos.sample(solution_nodes)
-			coste_actual = obtener_suma_costes(solucion)
+			if clasificador == :minima
+				coste_actual = diversidad_minima(solucion)
+			else
+				coste_actual = obtener_suma_costes(solucion)
+			end
 
 			return solucion, coste_actual	
 		end
