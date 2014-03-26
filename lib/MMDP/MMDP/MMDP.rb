@@ -100,6 +100,9 @@ module MMDP
 		# - coste_solucion generada de forma aleatoria
 		# - limite en las iteraciones a realizar (debe de ser superior al numero de nodos del problema)
 		def busqueda_local_first_improvement(solucion, coste_solucion, limite)
+			raise TypeError, "solucion debe de ser un Array" unless solucion.kind_of? Array
+			raise TypeError, "coste_solucion debe de ser un valor numerico" unless coste_solucion.kind_of? Numeric
+			raise TypeError, "limite debe de ser un valor entero" unless limite.kind_of? Fixnum
 			# not implemented yet
 		end
 
