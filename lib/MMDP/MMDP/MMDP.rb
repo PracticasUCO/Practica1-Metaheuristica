@@ -90,6 +90,19 @@ module MMDP
 			return alternativa, coste_actual
 		end
 
+		# Realiza una busqueda local a partir de una solucion aleatoria
+		# utilizando un algoritmo de escalada basado en 
+		# la tecnica de "first improvement", es decir, se acepta
+		# la primera mejora conseguida y se continua de tratar
+		# de mejorar a partir de ese punto. Se reciben tres
+		# parametros que son:
+		# - solucion generada de forma aleatoria
+		# - coste_solucion generada de forma aleatoria
+		# - limite en las iteraciones a realizar (debe de ser superior al numero de nodos del problema)
+		def busqueda_local_first_improvement(solucion, coste_solucion, limite)
+			# not implemented yet
+		end
+
 		# Realiza una busqueda global para tratar de obtener un
 		# vector con la maxima distancia entre nodos posible
 		def busqueda_global
