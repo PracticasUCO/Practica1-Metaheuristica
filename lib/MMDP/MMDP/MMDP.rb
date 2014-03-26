@@ -103,7 +103,7 @@ module MMDP
 			raise TypeError, "solucion debe de ser un Array" unless solucion.kind_of? Array
 			raise TypeError, "coste_solucion debe de ser un valor numerico" unless coste_solucion.kind_of? Numeric
 			raise TypeError, "limite debe de ser un valor entero" unless limite.kind_of? Fixnum
-			raise TypeError, "El limite elegido es muy bajo, deberia de ser superior a #{total_nodes}" unless
+			raise TypeError, "El limite elegido es muy bajo, deberia de ser superior a #{total_nodes}" unless limite.>= total_nodes
 
 			nodos_lista = lista_nodos.dup
 
@@ -156,11 +156,12 @@ module MMDP
 				raise TypeError, "Los valores admitidos para tipo son: :best_improvement, :first_improvement y :enfriamiento_simulado"
 			end
 
+			solucion, coste_actual = busqueda_global
+
 			if tipo == :best_improvement
-				solucion, coste_actual = busqueda_global
 				solucion , coste_actual = busqueda_local_best_improvement(solucion, coste_actual)
 			elsif tipo == :first_improvement
-				# Not implemented yet
+				solucion, coste_actual = busqueda_local_first_improvement(solucion, coste_actual, 125)
 			else
 				# Not implemented yet
 			end
