@@ -18,10 +18,6 @@ describe MMDP do
 		it "Debe de haber leido un total de 15 nodos" do
 			@t.total_nodes.must_equal 30
 		end
-
-		it "Debe de tener de tratar de obtener el minimo de la funcion objetivo" do
-			@t.clasificador.must_equal :minima
-		end
 	end
 
 	describe "Cuando se halla una solucion mediante busqueda local." do
@@ -59,17 +55,6 @@ describe MMDP do
 			end
 		end
 
-		it "Las soluciones deben de estar entre  1200-4300 al usar como funcion objetivo la mediana" do
-			repeticiones = 3
-			@t.clasificador = :media
-			repeticiones.times do
-				*, coste = @t.generar_solucion_busqueda_local
-
-				coste.must_be :>, 1200
-				coste.must_be :<, 4300
-			end
-		end
-
 		it "El coste de la solucion debe de ser mayor que cero" do
 			*, coste = @t.generar_solucion_busqueda_local
 
@@ -85,9 +70,6 @@ describe MMDP do
 		end
 
 		it "Las soluciones no pueden superar el coste de 200 tratando la diversidad minima" do
-		end
-
-		it "Las soluciones deben de estar entre 1200-4300 usando como coste la diversidad media" do
 		end
 	end
 end

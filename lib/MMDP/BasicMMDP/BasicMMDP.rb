@@ -25,23 +25,12 @@ module MMDP
 		# El atributo lista_nodos indica la lista de nodos que se ha
 		# leido de la base de datos
 		attr_reader :lista_nodos
-
-		# El atributo clasificador indica que tipo de evaluación se
-		# usara para la funcion objetivo. Estos valores pueden ser
-		# :minima para realizar una evaluacion de la distancia minima
-		# :media para realizar una clasificacion media
-		attr_reader :clasificador
 		
 		# Constructor de MMDP. Recibe como parametro un string
 		# con la direccion de la base de datos que se deseea leer
-		#
-		# Tambien recibe como parametro el tipo de clasificador de
-		# la funcion objetivo, que por defecto sera :minima
-		def initialize(path_db, clasificador = :minima)
-			raise TypeError, "clasificador debe de ser un simbolo" unless clasificador.kind_of? Symbol
-			raise TypeError, "clasificador solo admite los valores :minima y :media" unless clasificador.eql? :minima or clasificador.eql? :media
+
+		def initialize(path_db)
 			leer_instancia(path_db)
-			@clasificador = clasificador
 		end
 
 		# Lee una base de datos nueva y la carga dentro del fichero
@@ -86,21 +75,6 @@ module MMDP
 			end
 		end
 
-		# Permite cambiar el clasificador. Se admiten dos valores:
-		# - :minima significa que el coste de la solucion sera la diversidad minima
-		#   entre dos elementos
-		# - :media significa que el coste de la solucion sera la suma de todas las
-		#   diversidades entre 2
-		def clasificador=(nuevo_clasificador)
-			raise TypeError, "nuevo_clasificador debe de ser un simbolo" unless nuevo_clasificador.kind_of? Symbol
-
-			unless nuevo_clasificador == :minima or nuevo_clasificador == :media
-				raise TypeError, "nuevo_clasificador solo admite como valores :minima y :media"
-			end
-
-			@clasificador = nuevo_clasificador
-		end
-
 		# Genera una solución aleatoriamente a partir de la base de datos
 		# que se ha leido previamente. La solucion generada trata que
 		# el coste sea el maximo posible. 
@@ -114,11 +88,7 @@ module MMDP
 		# seleccionados y un valor flotante con la suma de costes
 		def generar_solucion_aleatoria
 			solucion = lista_nodos.sample(solution_nodes)
-			if clasificador == :minima
-				coste_actual = diversidad_minima(solucion)
-			else
-				coste_actual = obtener_suma_costes(solucion)
-			end
+			coste_actual = diversidad_minima(solucion)
 
 			return solucion, coste_actual	
 		end
@@ -155,17 +125,35 @@ module MMDP
 			end
 
 			coste = 0.0
+			etapas_internas = 0
+			etapas_externas = 0
 
 			if nuevo_nodo.empty?
 				solucion.each do |origen|
+					etapas_externas += 1
 					solucion.each do |destino|
 						next if origen == destino
+						etapas_internas += 1
+						g = obtener_coste_entre(origen, destino)
 						coste += obtener_coste_entre(origen, destino)
+						#puts "Coste cambian: #{coste - g} --> #{coste}"
+
+						if g > 180 or g < 50
+							puts "Se ha introduccido un coste no valido #{g}"
+						end
+
+						unless @nodes.values.include? g
+							puts "Este valor no existe #{g}"
+						end
 					end
 				end
 
 				# Se divide el coste entre dos ya que se ha sumado cada nodo dos veces
 				coste /= 2 
+
+				if coste < solucion.length * 53 or coste > solucion.length * 180
+					puts "1 --> El coste es erroneo en #{coste} : #{solucion.length * 53} - #{solucion.length * 180}"
+				end
 
 			else
 				solucion.each do |nodo|
@@ -173,6 +161,14 @@ module MMDP
 						coste += obtener_coste_entre(nodo, nuevo) unless solucion.include? nuevo
 					end
 				end
+				
+				if coste < (solucion.length + 1) * 53 or coste > (solucion.length + 1) * 180
+					puts "2 --> El coste es erroneo en #{coste} : #{(solucion.length  + 1) * 53} - #{(solucion.length + 1) * 180}"
+				end
+			end
+
+			if nuevo_nodo.empty?
+				puts "Etapas internas: #{etapas_internas} etapas_externas: #{etapas_externas}"
 			end
 
 			return coste
@@ -212,11 +208,7 @@ module MMDP
 
 		# funcion_objetivo es un sinonimo de diversidad minima
 		def funcion_objetivo(solucion, *nodo)
-			if clasificador == :minima
-				return diversidad_minima(solucion, nodo)
-			else
-				return obtener_suma_costes(solucion, nodo)
-			end
+			return diversidad_minima(solucion, nodo)
 		end
 
 		# Definicion de los metodos privados de la clase

@@ -22,7 +22,7 @@ module MMDP
 		# Inicializa la clase para que carge los valores de la base de datos
 		# Recibe como parametro un string indicando el lugar de donde
 		# leer la base de datos
-		def initialize(path_db, clasificador = :minima)
+		def initialize(path_db)
 			super
 
 			if solution_nodes > 2
@@ -146,13 +146,8 @@ module MMDP
 			particion_eliminar << nodo_eliminar
 			solucion_actual = solucion_actual - particion_eliminar
 
-			if clasificador == :minima
-				coste_nodo_eliminado = diversidad_minima(solucion_actual, nodo_eliminar)
-				coste_nuevo_nodo = diversidad_minima(solucion_actual, new_node)
-			else
-				coste_nodo_eliminado = obtener_suma_costes(solucion_actual, nodo_eliminar)
-				coste_nuevo_nodo = obtener_suma_costes(solucion_actual, new_node)
-			end
+			coste_nodo_eliminado = diversidad_minima(solucion_actual, nodo_eliminar)
+			coste_nuevo_nodo = diversidad_minima(solucion_actual, new_node)
 
 			coste_final = coste_actual - coste_nodo_eliminado + coste_nuevo_nodo
 
