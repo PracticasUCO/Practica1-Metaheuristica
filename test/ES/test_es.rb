@@ -5,11 +5,11 @@ require_relative '../../lib/ES/ES/ES'
 
 class TestES < MiniTest::Test
 	def setup
-		@t_basic = ES::ES.new(valor_inicio: 1, tipo: :geometrica, coeficiente: 0.99)
+		@t_basic = ES::ES.new(valor_inicio: 100, tipo: :geometrica, coeficiente: 0.99)
 	end
 
 	def test_constructor
-		assert_equal(1, @t_basic.valor_inicio, "El valor de inicio se establecio a uno")
+		assert_equal(100, @t_basic.valor_inicio, "El valor de inicio se establecio a uno")
 		assert_equal(:geometrica, @t_basic.tipo, "Se establecio una regresion geometica")
 		assert_equal(0.99, @t_basic.coeficiente, "El coeficiente de partida es 0.99")
 
@@ -25,21 +25,19 @@ class TestES < MiniTest::Test
 		fracasos = 0
 		repeticiones = 10000
 		repeticiones.times do
-			if @t_basic.probabilidad
+			if @t_basic.probabilidad 25
 				aciertos += 1
 			else
 				fracasos += 1
 			end
 		end
 
-		assert_operator(aciertos, :>=, repeticiones * @t_basic.coeficiente)
-		assert_operator(fracasos, :<, repeticiones - repeticiones * @t_basic.coeficiente)
+		assert_operator(aciertos, :>=, repeticiones * @t_basic.coeficiente * 0.76)
+		assert_operator(fracasos, :<, repeticiones - repeticiones * @t_basic.coeficiente * 0.76)
 	end
 
 	def test_valores_constructor
 		assert_raises(TypeError, "El valor de inicio debe de ser numerico") {ES::ES.new(valor_inicio: "")}
-		assert_raises(TypeError, "El valor de inicio debe estar entre 0-1") {ES::ES.new(valor_inicio: 2)}
-		assert_raises(TypeError, "El valor de inicio debe estar entre 0-1") {ES::ES.new(valor_inicio: -0.5)}
 		assert_raises(TypeError, "Tipo solo admite simbolos") {ES::ES.new(tipo: "asdf")}
 		assert_raises(TypeError, "Solo se admite el valor geometica") {ES::ES.new(tipo: :otra_cosa)}
 		assert_raises(TypeError, "El coeficiente debe ser de tipo numerico") {ES::ES.new(coeficiente: "ad")}
@@ -49,7 +47,7 @@ class TestES < MiniTest::Test
 
 	def test_enfriamiento
 		repeticiones = 100
-		start = 1
+		start = 100
 		anterior = nil
 		coeficiente = 0.99
 		repeticiones.times do

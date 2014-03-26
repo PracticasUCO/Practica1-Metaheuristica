@@ -1,4 +1,6 @@
 #include "c_es.h"
+#include <math.h>
+#include <stdio.h>
 
 /*
 Este metodo devuelve la temperatura actual del algoritmo
@@ -13,13 +15,30 @@ Este metodo devuelve un valor booleano True o False de forma aleatoria.
 La probabilidad de que devuelva True sera mayor contra más alta sea
 la temperatura.
 */
-VALUE method_probabilidad(VALUE self)
+VALUE method_probabilidad(VALUE self, VALUE coste_solucion)
 {
 	ID method_rand = rb_intern("rand");
+	ID method_abs = rb_intern("abs");
+	VALUE coste_actual = rb_iv_get(self, "@coste_solucion_actual");
+	VALUE tipoCosteSolucion = TYPE(coste_solucion);
+
+
 	double valorTemperatura = NUM2DBL(rb_iv_get(self, "@temperatura"));
 	double valorAleatorio = NUM2DBL(rb_funcall(rb_cObject, method_rand, 0));
+	double diferencia;
+	double umbral;
 
-	if(valorTemperatura >= valorAleatorio)
+	if((tipoCosteSolucion != T_FIXNUM) && (tipoCosteSolucion != T_FLOAT))
+	{
+		rb_raise(rb_eTypeError, "coste_solucion debe de ser un valor numerico");
+	}
+
+	diferencia = NUM2DBL(coste_actual) - NUM2DBL(coste_solucion);
+	diferencia = NUM2DBL(rb_funcall(DBL2NUM(diferencia), method_abs, 0));
+
+	umbral = 1 / (exp((diferencia / valorTemperatura)));
+
+	if(umbral > valorAleatorio)
 	{
 		return Qtrue;
 	}
@@ -100,7 +119,7 @@ void Init_c_es()
 	module_es = rb_define_module("ES");
 	class_es = rb_define_class_under(module_es, "ES", rb_cObject);
 	rb_define_method(class_es, "temperatura", method_temperatura, 0);
-	rb_define_method(class_es, "probabilidad", method_probabilidad, 0);
+	rb_define_method(class_es, "probabilidad", method_probabilidad, 1);
 	rb_define_method(class_es, "enfriar", method_enfriar, 0);
 	rb_define_method(class_es, "valor_inicio", method_valor_inicio, 0);
 	rb_define_method(class_es, "tipo", method_tipo, 0);

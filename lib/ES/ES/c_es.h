@@ -22,8 +22,11 @@ VALUE method_temperatura(VALUE self);
 Este metodo devuelve un valor booleano True o False de forma aleatoria.
 La probabilidad de que devuelva True sera mayor contra más alta sea
 la temperatura.
+
+Recibe como parametro coste_solucion que indica el coste de una
+solución dada.
 */
-VALUE method_probabilidad(VALUE self);
+VALUE method_probabilidad(VALUE self, VALUE coste_solucion);
 
 /*
 Disminuye la temperatura interna de la clase de manera que haya menor

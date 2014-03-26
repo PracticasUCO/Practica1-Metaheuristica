@@ -25,16 +25,10 @@ module MMDP
 		# El atributo lista_nodos indica la lista de nodos que se ha
 		# leido de la base de datos
 		attr_reader :lista_nodos
-
-		# El punto de ruptura representa el valor maximo de busqueda
-		# dentro de la busqueda local. Si este valor es igual a 2
-		# significara que se buscara localmente a través de la mitad
-		# del vector solucion dado por la busqueda global. Si es
-		# tres, sera a través de la tercera parte, y asi sucesivamente
-		attr_reader :punto_ruptura
 		
 		# Constructor de MMDP. Recibe como parametro un string
 		# con la direccion de la base de datos que se deseea leer
+
 		def initialize(path_db)
 			leer_instancia(path_db)
 		end
@@ -79,12 +73,6 @@ module MMDP
 					@nodes[signature] = coste.to_f if not @nodes.has_key? signature
 				end
 			end
-
-			if solution_nodes > 2
-				@punto_ruptura = Math.log2(solution_nodes).to_i
-			else
-				@punto_ruptura = 1
-			end
 		end
 
 		# Genera una solución aleatoriamente a partir de la base de datos
@@ -100,7 +88,7 @@ module MMDP
 		# seleccionados y un valor flotante con la suma de costes
 		def generar_solucion_aleatoria
 			solucion = lista_nodos.sample(solution_nodes)
-			coste_actual = obtener_suma_costes(solucion)
+			coste_actual = diversidad_minima(solucion)
 
 			return solucion, coste_actual	
 		end
@@ -137,17 +125,35 @@ module MMDP
 			end
 
 			coste = 0.0
+			etapas_internas = 0
+			etapas_externas = 0
 
 			if nuevo_nodo.empty?
 				solucion.each do |origen|
+					etapas_externas += 1
 					solucion.each do |destino|
 						next if origen == destino
+						etapas_internas += 1
+						g = obtener_coste_entre(origen, destino)
 						coste += obtener_coste_entre(origen, destino)
+						#puts "Coste cambian: #{coste - g} --> #{coste}"
+
+						if g > 180 or g < 50
+							puts "Se ha introduccido un coste no valido #{g}"
+						end
+
+						unless @nodes.values.include? g
+							puts "Este valor no existe #{g}"
+						end
 					end
 				end
 
 				# Se divide el coste entre dos ya que se ha sumado cada nodo dos veces
 				coste /= 2 
+
+				if coste < solucion.length * 53 or coste > solucion.length * 180
+					puts "1 --> El coste es erroneo en #{coste} : #{solucion.length * 53} - #{solucion.length * 180}"
+				end
 
 			else
 				solucion.each do |nodo|
@@ -155,12 +161,57 @@ module MMDP
 						coste += obtener_coste_entre(nodo, nuevo) unless solucion.include? nuevo
 					end
 				end
+				
+				if coste < (solucion.length + 1) * 53 or coste > (solucion.length + 1) * 180
+					puts "2 --> El coste es erroneo en #{coste} : #{(solucion.length  + 1) * 53} - #{(solucion.length + 1) * 180}"
+				end
+			end
+
+			if nuevo_nodo.empty?
+				puts "Etapas internas: #{etapas_internas} etapas_externas: #{etapas_externas}"
 			end
 
 			return coste
 		end
 
+		# Este metodo devuelve la diversidad minimia que existe en una solucion
+		# Puede recibir una serie de nodos, en cuyo caso devolveria la diversidad
+		# minima que habría despues de añadir dichos nodos
+		def diversidad_minima(solucion, *nuevo_nodo)
+			raise TypeError, "El parametro solucion debe de ser un array" unless solucion.kind_of? Array
+
+			if solucion.empty?
+				return 0.0
+			end
+
+			minimo = Float::INFINITY
+
+			solucion.each do |origen|
+				solucion.each do |destino|
+					next if origen == destino
+					valor = obtener_coste_entre(origen, destino)
+					minimo = valor if valor < minimo
+				end
+			end
+			
+			unless nuevo_nodo.empty?
+				solucion.each do |nodo|
+					nuevo_nodo.each do |nuevo|
+						valor = obtener_coste_entre(nodo, nuevo)
+						minimo = obtener_coste_entre(nodo, nuevo) if valor < minimo
+					end
+				end
+			end
+
+			return minimo
+		end
+
+		# funcion_objetivo es un sinonimo de diversidad minima
+		def funcion_objetivo(solucion, *nodo)
+			return diversidad_minima(solucion, nodo)
+		end
+
 		# Definicion de los metodos privados de la clase
-		private :obtener_coste_entre, :obtener_suma_costes
+		private :obtener_coste_entre, :obtener_suma_costes, :diversidad_minima
 	end
 end
