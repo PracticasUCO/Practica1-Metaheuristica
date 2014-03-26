@@ -22,10 +22,6 @@ describe MMDP do
 		it "Debe de tener de tratar de obtener el minimo de la funcion objetivo" do
 			@t.clasificador.must_equal :minima
 		end
-
-		it "El criterio de parada por defecto es :max_iteraciones" do
-			@t.condicion_parada.must_equal :auto
-		end
 	end
 
 	describe "Cuando se halla una solucion mediante busqueda local." do
@@ -70,29 +66,6 @@ describe MMDP do
 			*, coste = @t.generar_solucion_busqueda_local
 
 			coste.must_be :>, 0
-		end
-	end
-
-	describe "Cuando se cambie el criterio de parada." do
-		it "Debe de reflejarse en el interior de la clase" do
-			@t.condicion_parada = :auto
-			@t.condicion_parada.must_equal :auto
-
-			@t.condicion_parada = :max_iteraciones
-			@t.condicion_parada.must_equal :max_iteraciones
-
-			@t.condicion_parada = :temperatura
-			@t.condicion_parada.must_equal :temperatura
-		end
-	end
-
-	describe "Cuando se introduccen mal los parametros del criterio de parada" do
-		it "Debe de saltar una excepcion del tipo TypeError" do
-			proc {@t.condicion_parada = 15}.must_raise TypeError
-			proc {@t.condicion_parada = 1.3}.must_raise TypeError
-			proc {@t.condicion_parada = "adf"}.must_raise TypeError
-			proc {@t.condicion_parada = nil}.must_raise TypeError
-			proc {@t.condicion_parada = :other}.must_raise TypeError
 		end
 	end
 end

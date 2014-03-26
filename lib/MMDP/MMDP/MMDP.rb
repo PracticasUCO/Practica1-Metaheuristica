@@ -19,117 +19,16 @@ module MMDP
 		# tres, sera a través de la tercera parte, y asi sucesivamente
 		attr_reader :punto_ruptura
 
-		# El atributo condicion_parada almacena de que manera se va
-		# a parar los algoritmos generados. Esta tipo de parada puede
-		# se de dos maneras
-		#
-		# a) Se cumple un numero de iteraciones maximo, en ese caso
-		# se selecciona :max_iteraciones
-		# 
-		# b) Se ha enfriado la temperatura por debajo de un limite
-		# en ese caso se selecciona :temperatura
-		#
-		# c) Modo automatico, el programa elige cual cree que es
-		# la mejor opcion en cada caso, en ese caso se selecciona :auto
-		attr_reader :condicion_parada
-
 		# Inicializa la clase para que carge los valores de la base de datos
 		# Recibe como parametro un string indicando el lugar de donde
 		# leer la base de datos
-		def initialize(path_db, clasificador = :minima, condicion_parada = :auto)
-			raise TypeError, "condicion_parada debe de ser un simbolo" unless condicion_parada.kind_of? Symbol
-
-			unless condicion_parada == :max_iteraciones or condicion_parada == :temperatura or condicion_parada == :auto
-				raise TypeError, "condicion_parada solo acepta los valores :auto :max_iteraciones y :temperatura"
-			end
-
-			super path_db, clasificador
+		def initialize(path_db, clasificador = :minima)
+			super
 
 			if solution_nodes > 2
 				@punto_ruptura = Math.log2(solution_nodes).to_i
 			else
 				@punto_ruptura = 1
-			end
-
-			@condicion_parada = condicion_parada
-		end
-
-		# Este metodo cambia el atributo condicion de parada a otro valor que desee
-		# el usuario, los valores permitidos son:
-		#
-		# - :auto para que el sistema eliga su propio criterio de parada
-		# - :max_iteraciones para que el sistema determine el numero maximo de iteraciones
-		# - :temperatura para parar cuando se alcanze una temperatura minima
-		def condicion_parada=(otro_criterio)
-			raise TypeError, "otro_criterio debe de ser simbolo" unless otro_criterio.kind_of? Symbol
-
-			unless otro_criterio == :auto or otro_criterio == :max_iteraciones or otro_criterio == :temperatura
-				raise TypeError, "otro_criterio solo admite como valores :auto :max_iteraciones y :temperatura"
-			end
-
-			@condicion_parada = otro_criterio
-		end
-
-		# El siguiente metodo comprueba si se puede seguir buscando vecinos
-		# o se debe terminar el bucle. Para ello tiene en cuenta la
-		# condicion de parada almacenada en la clase. 
-		# El primer argumento indica el tipo de ejecucion a realizar
-		# Puede recibir 1 - 2
-		# argumentos opcionales dependiendo del criterio de parada:
-		#
-		# - :max_iteraciones : recibe como parametro el numero de iteraciones
-		# actuales y el numero maximo de iteraciones a dar
-		#
-		# - :temperatura : recibe como parametro la temperatura minima a
-		# soportar
-		#
-		# - :auto : recibe el indice actual de busqueda
-		#
-		# Si se introduce el numero de parametros incorrecto para
-		# el tipo de condicion de parada establecido se lanza una excepcion
-		# del tipo TypeError
-		def continuar_trabajo?(tipo, *parametros)
-			if condicion_parada == :auto and parametros.length != 1
-				raise TypeError, "La condicion de parada :auto solo require el indice actual de busqueda"
-			end
-
-			if condicion_parada == :temperatura and parametros.length != 1
-				raise TypeError, "La condicion de parada :temperatura solo requiere como argumento la temperatura minima de parada"
-			end
-
-			if condicion_parada == :max_iteraciones and parametros.length != 2
-				raise TypeError, "La condicion de parada :max_iteraciones require que el primer argumento sea el numero de iteraciones dadas y el segundo el maximo de iteraciones a dar"
-			end
-
-			raise TypeError, "tipo debe de ser un simbolo" unless tipo.kind_of? Symbol
-
-			unless tipo == :auto or tipo == :best_improvement or tipo == :first_improvement
-				raise TypeError, "tipo solo admite :auto :best_improvement o :first_improvement"
-			end
-
-			## No estan aún todos implementados, los que no estan implementados simplemente devuelven false
-			## para que termine el bucle
-			if condicion_parada == :auto
-				if tipo == :best_improvement
-					return parametros[0] < solution_nodes / @punto_ruptura
-				else
-					return false
-				end
-			end
-
-			if condicion_parada == :temperatura
-				raise TypeError, "La temperatura minima a soportar debe de ser un valor numerico" unless parametros[0].kind_of? Numeric
-				raise TypeError, "La temperatura minima a soportar debe de ser un valor positivo" unless parametros[0] > 0
-				return false
-			end
-
-			if condicion_parada == :max_iteraciones
-				raise TypeError, "El numero minimo de iteraciones debe de ser un valor numerico" unless parametros[0].kind_of? Numeric
-				raise TypeError, "El numero maximo de iteraciones debe de ser un valor numerico" unless parametros[1].kind_of? Numeric
-				raise TypeError, "El numero minimo de iteraciones debe de ser un valor positivo" unless parametros[0].>= 0.0
-				raise TypeError, "El numero maximo de iteraciones debe de ser un valor positivo" unless parametros[1].>= 0.0
-
-				return parametros[0] < parametros[1]
 			end
 		end
 
@@ -158,11 +57,8 @@ module MMDP
 			nodos_lista = lista_nodos().dup
 
 			alternativa.each_with_index do |origen, index|
-				# break if index > solution_nodes / @punto_ruptura
+				break if index > solution_nodes / @punto_ruptura
 
-				unless continuar_trabajo?(:best_improvement, index)
-					break
-				end
 				alternativa.each do |destino|
 					next if origen == destino
 
