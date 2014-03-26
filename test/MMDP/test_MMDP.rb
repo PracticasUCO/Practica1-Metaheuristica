@@ -70,6 +70,14 @@ describe MMDP do
 		end
 
 		it "El coste de la solucion debe de estar entre el coste de la funcion aleatoria y el coste por best improvement" do
+			5.times do
+				*, coste_fi = @t.generar_solucion_busqueda_local :first_improvement
+				*, coste_bi = @t.generar_solucion_busqueda_local :best_improvement
+				*, coste_al = @t.generar_solucion_aleatoria
+
+				coste_fi.must_be :>, coste_al
+				coste_fi.must_be :<, coste_bi
+			end
 		end
 
 		it "Las soluciones no pueden superar el coste de 200 tratando la diversidad minima" do
