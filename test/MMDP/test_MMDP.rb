@@ -64,6 +64,9 @@ describe MMDP do
 
 	describe "En las soluciones de busqueda local por first Improvement" do
 		it "La soluciones deben de tener una longitud de 24" do
+			solucion, * = @t.generar_solucion_busqueda_local :first_improvement
+
+			solucion.length.must_equal 24
 		end
 
 		it "El coste de la solucion debe de estar entre el coste de la funcion aleatoria y el coste por best improvement" do
