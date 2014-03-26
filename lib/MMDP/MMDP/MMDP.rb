@@ -103,7 +103,31 @@ module MMDP
 			raise TypeError, "solucion debe de ser un Array" unless solucion.kind_of? Array
 			raise TypeError, "coste_solucion debe de ser un valor numerico" unless coste_solucion.kind_of? Numeric
 			raise TypeError, "limite debe de ser un valor entero" unless limite.kind_of? Fixnum
-			# not implemented yet
+			raise TypeError, "El limite elegido es muy bajo, deberia de ser superior a #{total_nodes}" unless
+
+			nodos_lista = lista_nodos.dup
+
+			limite.times do
+				catch (:new_solution) do # Permite volver a buscar en la nueva solucion
+
+					solucion.each do |origen|
+						nodos_lista.each_with_index do |destino, index|
+							next if origen == destino
+
+							nuevo_coste = obtener_diferencia_soluciones(solucion, coste_solucion, origen, destino)
+
+							if nuevo_coste > coste_solucion
+								coste_solucion = nuevo_coste
+								solucion.delete(origen)
+								solucion.push(destino)
+								throw :new_solution
+							end
+						end						
+					end
+				end
+			end
+
+			return solucion, coste_solucion
 		end
 
 		# Realiza una busqueda global para tratar de obtener un
