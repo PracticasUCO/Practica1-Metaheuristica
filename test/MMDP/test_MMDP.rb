@@ -22,7 +22,7 @@ describe MMDP do
 
 	describe "Cuando se halla una solucion mediante busqueda local." do
 		it "Debe de tener una longitud de 24" do
-			solucion, * = @t.generar_solucion_busqueda_local
+			solucion, * = @t.generar_solucion_busqueda_local :best_improvement
 			solucion.length.must_equal 24
 		end
 
@@ -33,8 +33,8 @@ describe MMDP do
 			suma_aleatorio = 0
 
 			repeticiones.times do
-				*, coste_best_improvement = @t.generar_solucion_busqueda_local
-				*, coste_aleatorio = @b.generar_solucion_aleatoria
+				*, coste_best_improvement = @t.generar_solucion_busqueda_local :best_improvement
+				*, coste_aleatorio = @b.generar_solucion_aleatoria :best_improvement
 
 				suma_best_improvement += coste_best_improvement
 				suma_aleatorio += coste_aleatorio
@@ -49,14 +49,14 @@ describe MMDP do
 		it "Ninguna solucion puede superar el coste de 200 ya que estamos tratando de diversidad minima" do
 			repeticiones = 3
 			repeticiones.times do
-				*, coste = @t.generar_solucion_busqueda_local
+				*, coste = @t.generar_solucion_busqueda_local :best_improvement
 
 				coste.must_be :<, 200
 			end
 		end
 
 		it "El coste de la solucion debe de ser mayor que cero" do
-			*, coste = @t.generar_solucion_busqueda_local
+			*, coste = @t.generar_solucion_busqueda_local :best_improvement
 
 			coste.must_be :>, 0
 		end
