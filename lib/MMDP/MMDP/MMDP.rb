@@ -207,6 +207,6 @@ module MMDP
 			return coste_final
 		end
 
-		protected :busqueda_global, :busqueda_local_best_improvement
+		protected :busqueda_global, :busqueda_local_best_improvement, :obtener_diferencia_soluciones, :busqueda_local_first_improvement
 	end
 end
