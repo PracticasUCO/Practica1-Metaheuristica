@@ -86,6 +86,18 @@ module MMDP
 			end
 		end
 
+		# Permite cambiar el clasificador. Se admiten dos valores:
+		# - :minima significa que el coste de la solucion sera la diversidad minima
+		#   entre dos elementos
+		# - :media significa que el coste de la solucion sera la suma de todas las
+		#   diversidades entre 2
+		def clasificador=(nuevo_clasificador)
+			raise TypeError, "nuevo_clasificador debe de ser un simbolo" unless nuevo_clasificador.kind_of? Symbol
+			raise TypeError, "nuevo_clasificador solo admite como valores :minima y :media"
+
+			@clasificador = nuevo_clasificador
+		end
+
 		# Genera una solución aleatoriamente a partir de la base de datos
 		# que se ha leido previamente. La solucion generada trata que
 		# el coste sea el maximo posible. 
