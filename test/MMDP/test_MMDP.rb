@@ -32,7 +32,7 @@ describe MMDP do
 
 		it "El coste medio debe de ser mayor o igual que la obtenida con BasicMMDP" do
 
-			repeticiones = 5
+			repeticiones = 3
 			suma_best_improvement = 0
 			suma_aleatorio = 0
 
@@ -60,6 +60,14 @@ describe MMDP do
 		end
 
 		it "Las soluciones deben de estar entre  1200-4300 al usar como funcion objetivo la mediana" do
+			repeticiones = 3
+			@t.clasificador = :media
+			repeticiones.times do
+				*, coste = @t.generar_solucion_busqueda_local
+
+				coste.must_be :>, 1200
+				coste.must_be :<, 4300
+			end
 		end
 
 		it "El coste de la solucion debe de ser mayor que cero" do
@@ -81,4 +89,5 @@ describe MMDP do
 
 		it "Las soluciones deben de estar entre 1200-4300 usando como coste la diversidad media" do
 		end
+	end
 end
