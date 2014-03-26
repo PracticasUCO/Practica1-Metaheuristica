@@ -158,7 +158,7 @@ module MMDP
 		#
 		# Si no se especifica el tipo de busqueda se asume que se prefiere
 		# la técnica Best improvement
-		def generar_solucion_busqueda_local(tipo = :best_improvement)
+		def generar_solucion_busqueda_local(tipo = :first_improvement)
 			raise TypeError, "Tipo debe de ser un simbolo" unless tipo.kind_of? Symbol
 
 			unless tipo == :best_improvement or tipo == :first_improvement or tipo == :enfriamiento_simulado

@@ -34,7 +34,7 @@ describe MMDP do
 
 			repeticiones.times do
 				*, coste_best_improvement = @t.generar_solucion_busqueda_local :best_improvement
-				*, coste_aleatorio = @b.generar_solucion_aleatoria :best_improvement
+				*, coste_aleatorio = @b.generar_solucion_aleatoria
 
 				suma_best_improvement += coste_best_improvement
 				suma_aleatorio += coste_aleatorio
@@ -71,16 +71,21 @@ describe MMDP do
 
 		it "El coste de la solucion debe de estar entre el coste de la funcion aleatoria y el coste por best improvement" do
 			5.times do
-				*, coste_fi = @t.generar_solucion_busqueda_local :first_improvement
-				*, coste_bi = @t.generar_solucion_busqueda_local :best_improvement
-				*, coste_al = @t.generar_solucion_aleatoria
+				*, coste_first_improvement = @t.generar_solucion_busqueda_local :first_improvement
+				*, coste_best_improvement = @t.generar_solucion_busqueda_local :best_improvement
+				*, coste_aleatorio = @t.generar_solucion_aleatoria
 
-				coste_fi.must_be :>, coste_al
-				coste_fi.must_be :<, coste_bi
+				coste_first_improvement.must_be :>, coste_aleatorio
+				coste_first_improvement.must_be :<, coste_best_improvement
 			end
 		end
 
 		it "Las soluciones no pueden superar el coste de 200 tratando la diversidad minima" do
+			5.times do
+				*, coste_first_improvement = @t.generar_solucion_busqueda_local :first_improvement
+
+				coste_first_improvement.must_be :<=, 200
+			end
 		end
 	end
 end
