@@ -93,7 +93,10 @@ module MMDP
 		#   diversidades entre 2
 		def clasificador=(nuevo_clasificador)
 			raise TypeError, "nuevo_clasificador debe de ser un simbolo" unless nuevo_clasificador.kind_of? Symbol
-			raise TypeError, "nuevo_clasificador solo admite como valores :minima y :media"
+
+			unless nuevo_clasificador == :minima or nuevo_clasificador == :media
+				raise TypeError, "nuevo_clasificador solo admite como valores :minima y :media"
+			end
 
 			@clasificador = nuevo_clasificador
 		end
