@@ -51,12 +51,15 @@ describe MMDP do
 
 	describe "En las soluciones de busqueda local por Best Improvement" do
 		it "Ninguna solucion puede superar el coste de 200 ya que estamos tratando de diversidad minima" do
-			repeticiones = 5
+			repeticiones = 3
 			repeticiones.times do
 				*, coste = @t.generar_solucion_busqueda_local
 
 				coste.must_be :<, 200
 			end
+		end
+
+		it "Las soluciones deben de estar entre  1200-4300 al usar como funcion objetivo la mediana" do
 		end
 
 		it "El coste de la solucion debe de ser mayor que cero" do
@@ -65,4 +68,17 @@ describe MMDP do
 			coste.must_be :>, 0
 		end
 	end
+
+	describe "En las soluciones de busqueda local por first Improvement" do
+		it "La soluciones deben de tener una longitud de 24" do
+		end
+
+		it "El coste de la solucion debe de estar entre el coste de la funcion aleatoria y el coste por best improvement" do
+		end
+
+		it "Las soluciones no pueden superar el coste de 200 tratando la diversidad minima" do
+		end
+
+		it "Las soluciones deben de estar entre 1200-4300 usando como coste la diversidad media" do
+		end
 end
