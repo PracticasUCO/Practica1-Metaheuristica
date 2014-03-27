@@ -26,7 +26,8 @@ opt = Getopt::Long.getopts(
 	["--instance", "-f", Getopt::REQUIRED],
 	["--seed", "-s", Getopt::REQUIRED],
 	["--loops-internos", "-l", Getopt::REQUIRED],
-	["--search", , Getopt::REQUIRED]
+	["--search", , Getopt::REQUIRED],
+	["--loops-externos", , Getopt::REQUIRED]
 	)
 rescue Getopt::Long::Error => e
 	puts "Una o varias de las opciones introduccidas es incorrecta."
@@ -108,6 +109,12 @@ else
 	else
 		opt["loops-internos"] = problem.numero_ciudades * 10
 	end
+end
+
+if opt["loops-externos"]
+	opt["loops-externos"] = opt["loops-externos"].to_i
+else
+	opt["loops-externos"] = 300
 end
 
 opt["search"] = opt["search"].to_sym
