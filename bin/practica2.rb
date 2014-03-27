@@ -25,7 +25,7 @@ opt = Getopt::Long.getopts(
 	["--type", "-p", Getopt::REQUIRED],
 	["--instance", "-f", Getopt::REQUIRED],
 	["--seed", "-s", Getopt::REQUIRED],
-	["--loops", "-l", Getopt::REQUIRED],
+	["--loops-internos", "-l", Getopt::REQUIRED],
 	["--search", , Getopt::REQUIRED]
 	)
 rescue Getopt::Long::Error => e
@@ -100,14 +100,16 @@ else
 	exit
 end
 
-if opt["loops"]
-	opt["loops"] = opt["loops"].to_i
+if opt["loops-internos"]
+	opt["loops-internos"] = opt["loops-internos"].to_i
 else
 	if opt["type"] == "MMDP"
-		opt["loops"] = problem.total_nodes * 10
+		opt["loops-internos"] = problem.total_nodes * 10
 	else
-		opt["loops"] = problem.numero_ciudades * 10
+		opt["loops-internos"] = problem.numero_ciudades * 10
 	end
 end
 
 opt["search"] = opt["search"].to_sym
+
+puts "Carga completa..."
