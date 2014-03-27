@@ -96,3 +96,13 @@ elsif opt["type"] == "TSP"
 		mostrar_error_fichero_incorrecto(opt['instance'])
 	end
 end
+
+if opt["loops"]
+	opt["loops"] = opt["loops"].to_i
+else
+	if opt["type"] == "MMDP"
+		opt["loops"] = problem.total_nodes * 10
+	else
+		opt["loops"] = problem.numero_ciudades * 10
+	end
+end
