@@ -45,15 +45,16 @@ if opt["help"]
 	puts "\t \t first_improvement: Para una busqueda local usando el selector de primero el mejor"
 	puts "\t \t best_improvement: Para una busqueda local usando el selector de selección del mejor candidato"
 	puts "\t \t enfriamiento_simulado: Para una busqueda local usando el selector de enfriamiento simulado"
-	puts 
+	puts
+	puts "\t \t --search es un parametro obligatorio"
 	puts "\t \t Si no se especifica se usara por defecto first_improvement"
 	puts
 	puts "\t --help: Muestra esta ayuda."
 	exit
 end
 
-unless opt["type"] and opt["instance"]
-	puts "Los argumentos --type y --instance son obligatorios"
+unless opt["type"] and opt["instance"] and opt["search"]
+	puts "Los argumentos --type, --instance y --search son obligatorios"
 	exit
 end
 
