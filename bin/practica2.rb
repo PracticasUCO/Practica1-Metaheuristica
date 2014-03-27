@@ -51,3 +51,12 @@ if opt["help"]
 	puts "\t --help: Muestra esta ayuda."
 	exit
 end
+
+unless opt["type"] and opt["instance"]
+	puts "Los argumentos --type y --instance son obligatorios"
+	exit
+end
+
+if opt["seed"]
+	srand opt["seed"].to_i
+end
