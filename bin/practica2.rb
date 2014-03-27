@@ -5,6 +5,19 @@ require_relative '../lib/MMDP/BasicMMDP/BasicMMDP'
 require_relative '../lib/TSP/BasicTSP/BasicTSP'
 require 'getopt/long'
 
+def mostrar_error_fichero_no_encontrado(fichero)
+	puts "El fichero introduccido no pudo abrirse. Compruebe si es correcto"
+	puts "Fichero: #{fichero}"
+	exit
+end
+
+def mostrar_error_fichero_incorrecto(fichero)
+	puts "El fichero no parece ser correcto. Compruebe el fichero antes de ejecutar"
+	puts "el programa"
+	puts "Fichero: #{fichero}"
+	exit
+end
+
 begin
 
 opt = Getopt::Long.getopts(
@@ -60,4 +73,16 @@ end
 
 if opt["seed"]
 	srand opt["seed"].to_i
+end
+
+if opt["type"] == "MMDP"
+	begin
+		problem = MMDP::MMDP.new(opt["instance"])
+	rescue Errno::ENOENT => e
+		mostrar_error_fichero_no_encontrado(opt['instance'])
+	rescue TypeError => e
+		mostrar_error_fichero_incorrecto(opt['instance'])
+	rescue RuntimeError => e
+		mostrar_error_fichero_incorrecto(opt['instance'])
+	end
 end
