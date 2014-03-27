@@ -95,6 +95,9 @@ elsif opt["type"] == "TSP"
 	rescue RuntimeError => e
 		mostrar_error_fichero_incorrecto(opt['instance'])
 	end
+else
+	puts "Argumento no reconocido para --type #{opt["type"]}"
+	exit
 end
 
 if opt["loops"]
