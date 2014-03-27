@@ -109,3 +109,5 @@ else
 		opt["loops"] = problem.numero_ciudades * 10
 	end
 end
+
+opt["search"] = opt["search"].to_sym
