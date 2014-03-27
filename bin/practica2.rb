@@ -1,8 +1,8 @@
 #! /usr/bin/env ruby
 # encoding: utf-8
 
-require_relative '../lib/MMDP/BasicMMDP/BasicMMDP'
-require_relative '../lib/TSP/BasicTSP/BasicTSP'
+require_relative '../lib/MMDP/MMDP/MMDP'
+#require_relative '../lib/TSP/TSP'
 require 'getopt/long'
 
 def mostrar_error_fichero_no_encontrado(fichero)
@@ -26,8 +26,8 @@ opt = Getopt::Long.getopts(
 	["--instance", "-f", Getopt::REQUIRED],
 	["--seed", "-s", Getopt::REQUIRED],
 	["--loops-internos", "-l", Getopt::REQUIRED],
-	["--search", , Getopt::REQUIRED],
-	["--loops-externos", , Getopt::REQUIRED]
+	["--search", nil, Getopt::REQUIRED],
+	["--loops-externos", nil, Getopt::REQUIRED]
 	)
 rescue Getopt::Long::Error => e
 	puts "Una o varias de las opciones introduccidas es incorrecta."
@@ -86,16 +86,16 @@ if opt["type"] == "MMDP"
 	rescue RuntimeError => e
 		mostrar_error_fichero_incorrecto(opt['instance'])
 	end
-elsif opt["type"] == "TSP"
-	begin
-		problem = TSP::TSP.new(opt["instance"])
-	rescue Errno::ENOENT => e
-		mostrar_error_fichero_no_encontrado(opt['instance'])
-	rescue TypeError => e
-		mostrar_error_fichero_incorrecto(opt['instance'])
-	rescue RuntimeError => e
-		mostrar_error_fichero_incorrecto(opt['instance'])
-	end
+#elsif opt["type"] == "TSP"
+#	begin
+#		problem = TSP::TSP.new(opt["instance"])
+#	rescue Errno::ENOENT => e
+#		mostrar_error_fichero_no_encontrado(opt['instance'])
+#	rescue TypeError => e
+#		mostrar_error_fichero_incorrecto(opt['instance'])
+#	rescue RuntimeError => e
+#		mostrar_error_fichero_incorrecto(opt['instance'])
+#	end
 else
 	puts "Argumento no reconocido para --type #{opt["type"]}"
 	exit
@@ -120,3 +120,12 @@ end
 opt["search"] = opt["search"].to_sym
 
 puts "Carga completa..."
+
+opt["loops-externos"].times.with_index do |index|
+	solucion, coste = problem.generar_solucion_busqueda_local(opt["search"])
+	
+	puts "Solucion #{index}: "
+	puts "#{solucion}"
+	puts "Coste: #{coste}"
+	puts
+end
