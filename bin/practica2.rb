@@ -85,4 +85,14 @@ if opt["type"] == "MMDP"
 	rescue RuntimeError => e
 		mostrar_error_fichero_incorrecto(opt['instance'])
 	end
+elsif opt["type"] == "TSP"
+	begin
+		problem = TSP::TSP.new(opt["instance"])
+	rescue Errno::ENOENT => e
+		mostrar_error_fichero_no_encontrado(opt['instance'])
+	rescue TypeError => e
+		mostrar_error_fichero_incorrecto(opt['instance'])
+	rescue RuntimeError => e
+		mostrar_error_fichero_incorrecto(opt['instance'])
+	end
 end
