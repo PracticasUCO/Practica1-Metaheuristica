@@ -98,17 +98,17 @@ module MMDP
 		# parametros que son:
 		# - solucion generada de forma aleatoria
 		# - coste_solucion generada de forma aleatoria
-		def busqueda_local_first_improvement(solucion, coste_solucion)
+		def busqueda_local_first_improvement(solucion, coste_solucion, limite)
 			raise TypeError, "solucion debe de ser un Array" unless solucion.kind_of? Array
 			raise TypeError, "coste_solucion debe de ser un valor numerico" unless coste_solucion.kind_of? Numeric
-			#raise TypeError, "limite debe de ser un valor entero" unless limite.kind_of? Fixnum
+			raise TypeError, "limite debe de ser un valor entero" unless limite.kind_of? Fixnum
 			#raise TypeError, "El limite elegido es muy bajo, deberia de ser superior a #{total_nodes}" unless limite.>= total_nodes
 
 			nodos_lista = lista_nodos.dup
 
 			catch (:fin_busqueda) do
-				loop do # Hasta el infinito y más alla
-				#limite.times do
+				#loop do # Hasta el infinito y más alla
+				limite.times do
 					catch (:new_solution) do # Permite volver a buscar en la nueva solucion
 						solucion.each_with_index do |origen, index|
 							nodos_lista.each do |destino|
@@ -170,7 +170,7 @@ module MMDP
 			if tipo == :best_improvement
 				solucion , coste_actual = busqueda_local_best_improvement(solucion, coste_actual)
 			elsif tipo == :first_improvement
-				solucion, coste_actual = busqueda_local_first_improvement(solucion, coste_actual)
+				solucion, coste_actual = busqueda_local_first_improvement(solucion, coste_actual, 30)
 			else
 				# Not implemented yet
 			end
