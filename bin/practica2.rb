@@ -31,7 +31,11 @@ if opt["help"]
 	puts "\t \t MMDP: Resuelve el problema de hallar un conjunto de individuos maximizando su diversidad minima"
 	puts "\t \t TSP: Resuelve el problema del viajante de comercio"
 	puts
+	puts "\t --type es un argumento de uso obligatorio."
+	puts
 	puts "\t --instance o -f: Indica donde se encuentra la instancia a leer"
+	puts
+	puts "\t --instance es un argumento de uso obligatorio."
 	puts
 	puts "\t --seed: Inicializa una semilla. Si se omite se tomara un valor aleatorio"
 	puts
