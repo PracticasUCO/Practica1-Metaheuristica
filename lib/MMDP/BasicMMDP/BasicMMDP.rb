@@ -147,6 +147,6 @@ module MMDP
 		end
 
 		# Definicion de los metodos privados de la clase
-		private :obtener_coste_entre, :obtener_suma_costes, :diversidad_minima
+		private :obtener_coste_entre, :diversidad_minima
 	end
 end
