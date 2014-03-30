@@ -60,13 +60,9 @@ VALUE method_obtener_diferencia_soluciones(VALUE self, VALUE solucion_actual, VA
 }
 
 
-void Init_mmdp()
+void Init_c_mmdp()
 {
-	if(module_mmdp == Qnil)
-	{
-		module_mmdp = rb_define_module("MMDP");
-	}
-
+	module_mmdp = rb_define_module("MMDP");
 	class_mmdp = rb_define_class_under(module_mmdp, "MMDP", class_basic_mmdp);
 	rb_define_method(class_mmdp, "obtener_diferencia_soluciones", method_obtener_diferencia_soluciones, 4);
 }

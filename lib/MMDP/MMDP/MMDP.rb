@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 require_relative("../BasicMMDP/BasicMMDP")
+require_relative("c_mmdp")
 
 # El modulo MMDP engloba a todas las clases relacionadas con el problema
 # MaxMinDiversityProblem
