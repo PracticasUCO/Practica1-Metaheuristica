@@ -21,4 +21,9 @@ destino
 */
 VALUE method_obtener_coste_entre(VALUE self, VALUE origen, VALUE destino);
 
+/*
+Este metodo devuelve la diversidad minimia que existe en una solucion
+*/
+VALUE method_diversidad_minima(VALUE self, VALUE solucion);
+
 #endif

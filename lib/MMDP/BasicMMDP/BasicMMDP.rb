@@ -110,36 +110,25 @@ module MMDP
 		# end
 
 		# Este metodo devuelve la diversidad minimia que existe en una solucion
-		# Puede recibir una serie de nodos, en cuyo caso devolveria la diversidad
-		# minima que habría despues de añadir dichos nodos
-		def diversidad_minima(solucion, *nuevo_nodo)
-			raise TypeError, "El parametro solucion debe de ser un array" unless solucion.kind_of? Array
+		# def diversidad_minima(solucion)
+		# 	raise TypeError, "El parametro solucion debe de ser un array" unless solucion.kind_of? Array
 
-			if solucion.empty?
-				return 0.0
-			end
+		# 	if solucion.empty?
+		# 		return 0.0
+		# 	end
 
-			minimo = Float::INFINITY
+		# 	minimo = Float::INFINITY
 
-			solucion.each do |origen|
-				solucion.each do |destino|
-					next if origen == destino
-					valor = obtener_coste_entre(origen, destino)
-					minimo = valor if valor < minimo
-				end
-			end
-			
-			unless nuevo_nodo.empty?
-				solucion.each do |nodo|
-					nuevo_nodo.each do |nuevo|
-						valor = obtener_coste_entre(nodo, nuevo)
-						minimo = obtener_coste_entre(nodo, nuevo) if valor < minimo
-					end
-				end
-			end
+		# 	solucion.each do |origen|
+		# 		solucion.each do |destino|
+		# 			next if origen == destino
+		# 			valor = obtener_coste_entre(origen, destino)
+		# 			minimo = valor if valor < minimo
+		# 		end
+		# 	end
 
-			return minimo
-		end
+		# 	return minimo
+		# end
 
 		# funcion_objetivo es un sinonimo de diversidad minima
 		def funcion_objetivo(solucion, *nodo)
