@@ -10,5 +10,4 @@ void Init_c_mmdp();
 // Espacio para la clase MMDP
 VALUE class_mmdp;
 
-
 #endif
