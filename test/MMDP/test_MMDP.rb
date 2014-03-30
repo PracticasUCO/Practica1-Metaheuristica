@@ -75,8 +75,8 @@ describe MMDP do
 				*, coste_best_improvement = @t.generar_solucion_busqueda_local :best_improvement
 				*, coste_aleatorio = @t.generar_solucion_aleatoria
 
-				coste_first_improvement.must_be :>, coste_aleatorio
-				coste_first_improvement.must_be :<, coste_best_improvement
+				coste_first_improvement.must_be :>=, coste_aleatorio
+				coste_first_improvement.must_be :<=, coste_best_improvement
 			end
 		end
 
