@@ -186,26 +186,26 @@ module MMDP
 		# - nodo_eliminar: pasa como argumento el nodo que se borrara de la solucion,
 		#   si el nodo no pertenece a la solucion se lanzara una excepcion TypeError
 		# - new_node: el nodo nuevo que va a entrar en la solucion
-		def obtener_diferencia_soluciones(solucion_actual, coste_actual, nodo_eliminar, new_node)
-			raise TypeError, "solucion_actual debe de ser un Array" unless solucion_actual.kind_of? Array
-			raise TypeError, "coste_actual debe de ser un valor numerico" unless coste_actual.kind_of? Numeric
-			raise TypeError, "nodo_eliminar no se encuentra en la solucion_actual" unless solucion_actual.include? nodo_eliminar
-			raise TypeError, "new node no ha sido reconocido dentro de los nodos leidos" unless lista_nodos.include? new_node
+		# def obtener_diferencia_soluciones(solucion_actual, coste_actual, nodo_eliminar, new_node)
+		# 	raise TypeError, "solucion_actual debe de ser un Array" unless solucion_actual.kind_of? Array
+		# 	raise TypeError, "coste_actual debe de ser un valor numerico" unless coste_actual.kind_of? Numeric
+		# 	raise TypeError, "nodo_eliminar no se encuentra en la solucion_actual" unless solucion_actual.include? nodo_eliminar
+		# 	raise TypeError, "new node no ha sido reconocido dentro de los nodos leidos" unless lista_nodos.include? new_node
 
-			particion_eliminar = Array.new
-			particion_eliminar << nodo_eliminar
-			solucion_actual = solucion_actual - particion_eliminar
+		# 	particion_eliminar = Array.new
+		# 	particion_eliminar << nodo_eliminar
+		# 	solucion_actual = solucion_actual - particion_eliminar
 
-			coste_nodo_eliminado = diversidad_minima(solucion_actual, nodo_eliminar)
-			coste_nuevo_nodo = diversidad_minima(solucion_actual, new_node)
+		# 	coste_nodo_eliminado = diversidad_minima(solucion_actual, nodo_eliminar)
+		# 	coste_nuevo_nodo = diversidad_minima(solucion_actual, new_node)
 
-			coste_final = coste_actual - coste_nodo_eliminado + coste_nuevo_nodo
+		# 	coste_final = coste_actual - coste_nodo_eliminado + coste_nuevo_nodo
 
-			# Se restaura solucion_actual ya que se ha cambiado en el proceso
-			solucion_actual.push(nodo_eliminar)
+		# 	# Se restaura solucion_actual ya que se ha cambiado en el proceso
+		# 	solucion_actual.push(nodo_eliminar)
 
-			return coste_final
-		end
+		# 	return coste_final
+		# end
 
 		protected :busqueda_global, :busqueda_local_best_improvement, :obtener_diferencia_soluciones, :busqueda_local_first_improvement
 	end
