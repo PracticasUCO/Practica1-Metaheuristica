@@ -123,7 +123,11 @@ VALUE method_funcion_objetivo(VALUE self, VALUE solucion)
 
 void Init_c_basic_mmdp()
 {
-	module_mmdp = rb_define_module("MMDP");
+	if(module_mmdp == Qnil)
+	{
+		module_mmdp = rb_define_module("MMDP");
+	}
+	
 	class_mmdp = rb_define_class_under(module_mmdp, "BasicMMDP", rb_cObject);
 	rb_define_method(class_mmdp, "obtener_coste_entre", method_obtener_coste_entre, 2);
 	rb_define_method(class_mmdp, "diversidad_minima", method_diversidad_minima, 1);
