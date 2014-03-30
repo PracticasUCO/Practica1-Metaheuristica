@@ -28,3 +28,10 @@ VALUE method_obtener_coste_entre(VALUE self, VALUE origen, VALUE destino)
 		return 0;
 	}
 }
+
+void Init_c_basic_mmdp()
+{
+	module_mmdp = rb_define_module("MMDP");
+	class_mmdp = rb_define_class_under(module_mmdp, "BasicMMDP", rb_cObject);
+	rb_define_method(class_mmdp, "obtener_coste_entre", method_obtener_coste_entre, 2);
+}

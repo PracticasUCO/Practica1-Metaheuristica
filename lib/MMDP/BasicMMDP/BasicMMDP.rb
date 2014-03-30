@@ -2,6 +2,8 @@
 #! /usr/bin/env ruby
 # encoding: utf-8
 
+require_relative 'c_basic_mmdp'
+
 ## El modulo MMDP engloba a todas las clases pertenecientes a MMDP
 module MMDP
 	# La clase BasicMMDP proporciona la funcionalidad basica para la
@@ -95,17 +97,17 @@ module MMDP
 
 		# Devuelve la distancia o coste entre dos nodos.
 		# Si no encuentra los nodos, devolvera cero
-		def obtener_coste_entre(nodo_a, nodo_b)
-			raise TypeError, "nodo_a must be a String" unless nodo_a.kind_of? String
-			raise TypeError, "nodo_b must be a String" unless nodo_b.kind_of? String
+		# def obtener_coste_entre(nodo_a, nodo_b)
+		# 	raise TypeError, "nodo_a must be a String" unless nodo_a.kind_of? String
+		# 	raise TypeError, "nodo_b must be a String" unless nodo_b.kind_of? String
 			
-			signature = Array.new
-			signature << nodo_a << nodo_b
-			signature.sort!
+		# 	signature = Array.new
+		# 	signature << nodo_a << nodo_b
+		# 	signature.sort!
 
-			return @nodes[signature] if @nodes.has_key? signature
-			return 0 unless @nodes.has_key? signature
-		end
+		# 	return @nodes[signature] if @nodes.has_key? signature
+		# 	return 0 unless @nodes.has_key? signature
+		# end
 
 		# Este metodo devuelve la diversidad minimia que existe en una solucion
 		# Puede recibir una serie de nodos, en cuyo caso devolveria la diversidad
