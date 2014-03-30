@@ -25,6 +25,19 @@ VALUE method_obtener_diferencia_soluciones(VALUE self, VALUE solucion_actual, VA
 														VALUE nodo_eliminar, VALUE new_node);
 
 /*
+Realiza una busqueda local a partir de una solucion aleatoria
+utilizando un algoritmo de escalada basado en 
+la tecnica de "first improvement", es decir, se acepta
+la primera mejora conseguida y se continua de tratar
+de mejorar a partir de ese punto. Se reciben tres
+parametros que son:
+	- solucion generada de forma aleatoria
+	- coste_solucion generada de forma aleatoria
+*/
+VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE limite);
+
+
+/*
 Devuelve la diferencia entre dos arrays
 */
 VALUE method_ary_diff(VALUE ary1, VALUE ary2);

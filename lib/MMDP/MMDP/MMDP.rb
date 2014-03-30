@@ -99,46 +99,46 @@ module MMDP
 		# parametros que son:
 		# - solucion generada de forma aleatoria
 		# - coste_solucion generada de forma aleatoria
-		def busqueda_local_first_improvement(solucion, coste_solucion, limite)
-			raise TypeError, "solucion debe de ser un Array" unless solucion.kind_of? Array
-			raise TypeError, "coste_solucion debe de ser un valor numerico" unless coste_solucion.kind_of? Numeric
-			raise TypeError, "limite debe de ser un valor entero" unless limite.kind_of? Fixnum
-			#raise TypeError, "El limite elegido es muy bajo, deberia de ser superior a #{total_nodes}" unless limite.>= total_nodes
+		# def busqueda_local_first_improvement(solucion, coste_solucion, limite)
+		# 	raise TypeError, "solucion debe de ser un Array" unless solucion.kind_of? Array
+		# 	raise TypeError, "coste_solucion debe de ser un valor numerico" unless coste_solucion.kind_of? Numeric
+		# 	raise TypeError, "limite debe de ser un valor entero" unless limite.kind_of? Fixnum
+		# 	#raise TypeError, "El limite elegido es muy bajo, deberia de ser superior a #{total_nodes}" unless limite.>= total_nodes
 
-			nodos_lista = lista_nodos.dup
+		# 	nodos_lista = lista_nodos.dup
 
-			catch (:fin_busqueda) do
-				#loop do # Hasta el infinito y más alla
-				limite.times do
-					catch (:new_solution) do # Permite volver a buscar en la nueva solucion
-						solucion.each_with_index do |origen, index|
-							nodos_lista.each do |destino|
-								next if origen == destino
+		# 	catch (:fin_busqueda) do
+		# 		#loop do # Hasta el infinito y más alla
+		# 		limite.times do
+		# 			catch (:new_solution) do # Permite volver a buscar en la nueva solucion
+		# 				solucion.each_with_index do |origen, index|
+		# 					nodos_lista.each do |destino|
+		# 						next if origen == destino
 
-								nuevo_coste = obtener_diferencia_soluciones(solucion, coste_solucion, origen, destino)
+		# 						nuevo_coste = obtener_diferencia_soluciones(solucion, coste_solucion, origen, destino)
 
-								if nuevo_coste > coste_solucion
-									coste_solucion = nuevo_coste
-									solucion.delete(origen)
-									solucion.push(destino)
-									throw :new_solution
-								end
-							end
+		# 						if nuevo_coste > coste_solucion
+		# 							coste_solucion = nuevo_coste
+		# 							solucion.delete(origen)
+		# 							solucion.push(destino)
+		# 							throw :new_solution
+		# 						end
+		# 					end
 
-							# Si se llega a comprobar el ultimo nodo y no se ha lanzado
-							# la excepcion :new_solution significa que no hay mejores
-							# soluciones a las cuales acceder por lo que se termina el
-							# ciclo de busqueda lanzando la excepcion :fin_busqueda
-							if index == solucion.length - 1
-								throw :fin_busqueda
-							end
-						end
-					end
-				end
-			end
+		# 					# Si se llega a comprobar el ultimo nodo y no se ha lanzado
+		# 					# la excepcion :new_solution significa que no hay mejores
+		# 					# soluciones a las cuales acceder por lo que se termina el
+		# 					# ciclo de busqueda lanzando la excepcion :fin_busqueda
+		# 					if index == solucion.length - 1
+		# 						throw :fin_busqueda
+		# 					end
+		# 				end
+		# 			end
+		# 		end
+		# 	end
 
-			return solucion, coste_solucion
-		end
+		# 	return solucion, coste_solucion
+		# end
 
 		# Realiza una busqueda global para tratar de obtener un
 		# vector con la maxima distancia entre nodos posible
@@ -171,7 +171,7 @@ module MMDP
 			if tipo == :best_improvement
 				solucion , coste_actual = busqueda_local_best_improvement(solucion, coste_actual)
 			elsif tipo == :first_improvement
-				solucion, coste_actual = busqueda_local_first_improvement(solucion, coste_actual, 30)
+				busqueda_local_first_improvement(solucion, coste_actual, 30)
 			else
 				# Not implemented yet
 			end

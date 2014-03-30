@@ -6,7 +6,10 @@ Devuelve la distancia o coste entre dos nodos.
 Si no encuentra los nodos, devolvera cero.
 
 Recibe como parametros el nodo origen y el nodo
-destino
+destino.
+
+Si no encuentra el coste entre los dos nodos
+indicados devuelve false
 */
 VALUE method_obtener_coste_entre(VALUE self, VALUE origen, VALUE destino)
 {
@@ -26,7 +29,7 @@ VALUE method_obtener_coste_entre(VALUE self, VALUE origen, VALUE destino)
 	}
 	else
 	{
-		return 0;
+		return Qfalse;
 	}
 }
 
@@ -87,15 +90,33 @@ VALUE method_merge_diversidad_minima(VALUE self, VALUE solucion, VALUE nuevo_nod
 	long int i, j; //Auxiliares
 	int count_minimo = 0;
 
+	if(TYPE(nuevo_nodo) == T_NIL)
+	{
+		rb_raise(rb_eTypeError, "nuevo_nodo debe de ser un nodo, no nil\n");
+	}
+
 	for(i = 0; i < RARRAY_LEN(solucion); i++)
 	{
 		origen = rb_ary_entry(solucion, i);
 
 		valor_nuevo_nodo = method_obtener_coste_entre(self, origen, nuevo_nodo);
+		
+		if(valor_nuevo_nodo == Qfalse)
+		{
+			continue;
+		}
 
-		if((count_minimo != 0) && (NUM2DBL(valor_nuevo_nodo) < NUM2DBL(minimo)))
+		if(count_minimo != 0)
+		{
+			if(NUM2DBL(valor_nuevo_nodo) < NUM2DBL(minimo))
+			{
+				minimo = valor_nuevo_nodo;
+			}
+		}
+		else
 		{
 			minimo = valor_nuevo_nodo;
+			count_minimo = 1;
 		}
 
 		for(j = 0; j < RARRAY_LEN(solucion); j++)

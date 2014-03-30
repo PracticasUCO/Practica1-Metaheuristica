@@ -40,6 +40,7 @@ VALUE method_obtener_diferencia_soluciones(VALUE self, VALUE solucion_actual, VA
 	VALUE coste_nodo_eliminado;
 	VALUE coste_nuevo_nodo;
 	VALUE vector_auxiliar;
+	VALUE coste_final;
 	
 	// Aquí van a ir todas las comprobaciones
 		// solucion_actual debe ser un array --> Ok
@@ -56,7 +57,75 @@ VALUE method_obtener_diferencia_soluciones(VALUE self, VALUE solucion_actual, VA
 	coste_nuevo_nodo = method_merge_diversidad_minima(self, vector_auxiliar, new_node);
 	coste_nodo_eliminado = method_merge_diversidad_minima(self, vector_auxiliar, nodo_eliminar);
 
-	return DBL2NUM(NUM2DBL(coste_actual) - NUM2DBL(coste_nodo_eliminado) + NUM2DBL(coste_nuevo_nodo));
+	coste_final = DBL2NUM(NUM2DBL(coste_actual) - NUM2DBL(coste_nodo_eliminado) + NUM2DBL(coste_nuevo_nodo));
+
+	return coste_final;
+}
+
+/*
+Realiza una busqueda local a partir de una solucion aleatoria
+utilizando un algoritmo de escalada basado en 
+la tecnica de "first improvement", es decir, se acepta
+la primera mejora conseguida y se continua de tratar
+de mejorar a partir de ese punto. Se reciben tres
+parametros que son:
+	- solucion generada de forma aleatoria
+	- coste_solucion generada de forma aleatoria
+*/
+VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE limite)
+{
+	VALUE nodos_lista; //Copia de lista_nodos
+	VALUE nuevo_coste;
+	VALUE origen;
+	VALUE destino;
+   int i, j; //Auxiliares
+	int limite_inicio = 0;
+	int salir_interno = 0; //Si se termina la ejecucion del bucle se pone a uno
+	int salir_externo = 0;
+
+	//Aquí va la comprobacion de variables
+		//Solucion debe de ser un array --> Ok
+		//Coste_solucion debe de ser un valor numerico --> Not yet
+		//limite debe de ser un entero --> Not yet
+	solucion = rb_check_array_type(solucion);
+
+	nodos_lista = rb_iv_get(self, "@lista_nodos");
+	nodos_lista = rb_ary_dup(nodos_lista);
+
+	while((salir_externo == 0) && (limite_inicio < NUM2INT(limite)))
+	{
+		limite_inicio++;
+
+		for(i = 0; ((i < RARRAY_LEN(solucion)) && (salir_interno == 0)); i++)
+		{
+			origen = rb_ary_entry(solucion, i);
+
+			for(j = 0; ((j < RARRAY_LEN(nodos_lista)) && (salir_interno == 0)); j++)
+			{
+				destino = rb_ary_entry(nodos_lista, j);
+
+				nuevo_coste = method_obtener_diferencia_soluciones(self, solucion, coste_solucion, origen, destino);
+
+				if(NUM2DBL(nuevo_coste) > NUM2DBL(coste_solucion))
+				{
+					coste_solucion = nuevo_coste;
+					rb_ary_delete(solucion, origen);
+					rb_ary_push(solucion, destino);
+					salir_interno = 1;
+					break;
+				}
+				
+
+				if(j == RARRAY_LEN(nodos_lista) - 1)
+				{
+					salir_externo = 1;
+					break;
+				}
+			}
+		}
+	}
+
+	return solucion;
 }
 
 
@@ -65,4 +134,5 @@ void Init_c_mmdp()
 	module_mmdp = rb_define_module("MMDP");
 	class_mmdp = rb_define_class_under(module_mmdp, "MMDP", class_basic_mmdp);
 	rb_define_method(class_mmdp, "obtener_diferencia_soluciones", method_obtener_diferencia_soluciones, 4);
+	rb_define_method(class_mmdp, "busqueda_local_first_improvement", method_busqueda_local_first_improvement, 3);
 }
