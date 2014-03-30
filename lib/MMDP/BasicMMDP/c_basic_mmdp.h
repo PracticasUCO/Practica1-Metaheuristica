@@ -31,4 +31,9 @@ Este metodo devuelve la diversidad minima que existiria en una solucion
 si se añadiese un nuevo nodo */
 VALUE method_merge_diversidad_minima(VALUE self, VALUE solucion, VALUE nuevo_nodo);
 
+/*
+funcion_objetivo es un sinonimo de diversidad minima
+*/
+VALUE method_funcion_objetivo(VALUE self, VALUE solucion);
+
 #endif

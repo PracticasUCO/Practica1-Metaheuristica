@@ -113,6 +113,14 @@ VALUE method_merge_diversidad_minima(VALUE self, VALUE solucion, VALUE nuevo_nod
 	return minimo;
 }
 
+/*
+funcion_objetivo es un sinonimo de diversidad minima
+*/
+VALUE method_funcion_objetivo(VALUE self, VALUE solucion)
+{
+	return method_diversidad_minima(self, solucion);
+}
+
 void Init_c_basic_mmdp()
 {
 	module_mmdp = rb_define_module("MMDP");
@@ -120,4 +128,5 @@ void Init_c_basic_mmdp()
 	rb_define_method(class_mmdp, "obtener_coste_entre", method_obtener_coste_entre, 2);
 	rb_define_method(class_mmdp, "diversidad_minima", method_diversidad_minima, 1);
 	rb_define_method(class_mmdp, "merge_diversidad_minima", method_merge_diversidad_minima, 2);
+	rb_define_method(class_mmdp, "funcion_objetivo", method_funcion_objetivo, 1);
 }
