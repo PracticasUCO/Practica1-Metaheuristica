@@ -7,7 +7,7 @@
 VALUE module_mmdp = Qnil;
 
 // Espacio para la clase BasicMMDP
-VALUE class_mmdp = Qnil;
+VALUE class_basic_mmdp = Qnil;
 
 // Inicializa la clase
 void Init_c_basic_mmdp();

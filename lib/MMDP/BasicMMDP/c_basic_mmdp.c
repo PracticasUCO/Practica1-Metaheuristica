@@ -129,8 +129,8 @@ void Init_c_basic_mmdp()
 	}
 	
 	class_mmdp = rb_define_class_under(module_mmdp, "BasicMMDP", rb_cObject);
-	rb_define_method(class_mmdp, "obtener_coste_entre", method_obtener_coste_entre, 2);
-	rb_define_method(class_mmdp, "diversidad_minima", method_diversidad_minima, 1);
-	rb_define_method(class_mmdp, "merge_diversidad_minima", method_merge_diversidad_minima, 2);
-	rb_define_method(class_mmdp, "funcion_objetivo", method_funcion_objetivo, 1);
+	rb_define_method(class_basic_mmdp, "obtener_coste_entre", method_obtener_coste_entre, 2);
+	rb_define_method(class_basic_mmdp, "diversidad_minima", method_diversidad_minima, 1);
+	rb_define_method(class_basic_mmdp, "merge_diversidad_minima", method_merge_diversidad_minima, 2);
+	rb_define_method(class_basic_mmdp, "funcion_objetivo", method_funcion_objetivo, 1);
 }

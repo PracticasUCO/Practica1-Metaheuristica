@@ -7,5 +7,5 @@ void Init_mmdp()
 		module_mmdp = rb_define_module("MMDP");
 	}
 
-	class_mmdp = rb_define_class_under(module_mmdp, "MMDP", rb_cObject);
+	class_mmdp = rb_define_class_under(module_mmdp, "MMDP", class_basic_mmdp);
 }
