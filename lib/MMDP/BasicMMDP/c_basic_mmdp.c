@@ -47,6 +47,8 @@ VALUE method_diversidad_minima(VALUE self, VALUE solucion)
 
 	for(i = 0; i < RARRAY_LEN(solucion); i++)
 	{
+		origen = rb_ary_entry(solucion, i);
+
 		for(j = 0; j < RARRAY_LEN(solucion); j++)
 		{
 			if(i == j)
@@ -54,7 +56,6 @@ VALUE method_diversidad_minima(VALUE self, VALUE solucion)
 				continue;
 			}
 
-			origen = rb_ary_entry(solucion, i);
 			destino = rb_ary_entry(solucion, j);
 
 			valor_actual = method_obtener_coste_entre(self, origen, destino);
@@ -68,6 +69,48 @@ VALUE method_diversidad_minima(VALUE self, VALUE solucion)
 
 	return minimo;
 
+}
+
+VALUE method_merge_diversidad_minima(VALUE self, VALUE solucion, VALUE nuevo_nodo)
+{
+	VALUE minimo = DBL2NUM(0);
+	VALUE origen;
+	VALUE destino;
+	VALUE valor_actual;
+	VALUE valor_nuevo_nodo;
+	long int i, j; //Auxiliares
+	int count_minimo = 0;
+
+	for(i = 0; i < RARRAY_LEN(solucion); i++)
+	{
+		origen = rb_ary_entry(solucion, i);
+
+		valor_nuevo_nodo = method_obtener_coste_entre(self, origen, nuevo_nodo);
+
+		if((count_minimo != 0) && (NUM2DBL(valor_nuevo_nodo) < NUM2DBL(minimo)))
+		{
+			minimo = valor_nuevo_nodo;
+		}
+
+		for(j = 0; j < RARRAY_LEN(solucion); j++)
+		{
+			if(i == j)
+			{
+				continue;
+			}
+
+			destino = rb_ary_entry(solucion, j);
+
+			valor_actual = method_obtener_coste_entre(self, origen, destino);
+
+			if((count_minimo != 0) && (NUM2DBL(valor_actual) < NUM2DBL(minimo)))
+			{
+				minimo = valor_actual;
+			}
+		}
+	}
+
+	return minimo;
 }
 
 void Init_c_basic_mmdp()

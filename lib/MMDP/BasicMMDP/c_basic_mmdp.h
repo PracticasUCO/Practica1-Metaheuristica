@@ -22,8 +22,13 @@ destino
 VALUE method_obtener_coste_entre(VALUE self, VALUE origen, VALUE destino);
 
 /*
-Este metodo devuelve la diversidad minimia que existe en una solucion
+Este metodo devuelve la diversidad minima que existe en una solucion
 */
 VALUE method_diversidad_minima(VALUE self, VALUE solucion);
+
+/*
+Este metodo devuelve la diversidad minima que existiria en una solucion
+si se añadiese un nuevo nodo */
+VALUE method_merge_diversidad_minima(VALUE self, VALUE solucion, VALUE nuevo_nodo);
 
 #endif
