@@ -152,14 +152,12 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 {
 	VALUE alternativa;
 	VALUE nodos_lista;
-	VALUE origen;
-	VALUE destino;
-	VALUE nodo_alternativo;
-	VALUE nueva_alternativa;
-	VALUE coste_alternativa;
 	VALUE solution_nodes;
 	VALUE punto_ruptura;
-	long int i, j, h;
+	VALUE seleccionado;
+	VALUE index_hash;
+	VALUE nueva_alternativa;
+	long int i, j;
 	//Comprobación de tipos
 		//Solucion debe de ser un Array --> Ok
 		//Coste_actual debe de ser un tipo numerico --> Not yet
@@ -170,48 +168,62 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 	nodos_lista = rb_ary_dup(nodos_lista);
 	solution_nodes = rb_iv_get(self, "@solution_nodes");
 	punto_ruptura = rb_iv_get(self, "@punto_ruptura");
+
+	index_hash = rb_hash_new();
+	nueva_alternativa = rb_ary_dup(alternativa);
+
+	//rb_ary_sort_bang(nodos_lista);
+	//rb_ary_sort_bang(alternativa);
+	seleccionado = rb_ary_new();
 	
+	for(i = 0; i < RARRAY_LEN(nodos_lista); i++)
+	{
+		VALUE item = rb_ary_entry(nodos_lista, i);
+		rb_hash_aset(index_hash, item, INT2NUM(i));
+
+		if(rb_ary_includes(alternativa, item))
+		{
+			rb_ary_push(seleccionado, Qtrue);
+		}
+		else
+		{
+			rb_ary_push(seleccionado, Qfalse);
+		}
+	}
+
 	for(i = 0; i < RARRAY_LEN(alternativa); i++)
 	{
-		if(i > NUM2DBL(solution_nodes) / NUM2DBL(punto_ruptura))
+		for(j = 0; j < RARRAY_LEN(nodos_lista); j++)
 		{
-			break;
-		}
+			VALUE item = rb_ary_entry(alternativa, i);
+			VALUE indice_item = rb_hash_aref(index_hash, item);
+			VALUE remplazo = rb_ary_entry(nodos_lista, j);
+			VALUE indice_remplazo = rb_hash_aref(index_hash, remplazo);
+			VALUE nuevo_coste;
 
-		origen = rb_ary_entry(alternativa, i);
+			if(i > NUM2DBL(solution_nodes) / NUM2DBL(punto_ruptura))
+			{
+				break;
+			}
 
-		for(j = 0; j < RARRAY_LEN(alternativa); j++)
-		{
-			if(j == i)
+			if(rb_ary_entry(seleccionado, indice_remplazo) == Qtrue)
 			{
 				continue;
 			}
 
-			destino = rb_ary_entry(alternativa, j);
-			nueva_alternativa = rb_ary_dup(alternativa);
+			nuevo_coste = method_obtener_diferencia_soluciones(self, alternativa, coste_actual, item, remplazo);
 
-			for(h = 0; h < RARRAY_LEN(nodos_lista); h++)
+			if(NUM2DBL(nuevo_coste) > NUM2DBL(coste_actual))
 			{
-				nodo_alternativo = rb_ary_entry(nodos_lista, h);
-
-				if(rb_ary_includes(alternativa, nodo_alternativo))
-				{
-					continue;
-				}
-
-				coste_alternativa = method_obtener_diferencia_soluciones(self, nueva_alternativa, coste_actual, destino, nodo_alternativo);
-
-				if(NUM2DBL(coste_alternativa) > NUM2DBL(coste_actual))
-				{
-					coste_actual = coste_alternativa;
-					rb_ary_delete(alternativa, destino);
-					rb_ary_push(alternativa, nodo_alternativo);
-				}
+				coste_actual = nuevo_coste;
+				nueva_alternativa = rb_ary_dup(alternativa);
+				rb_ary_delete(nueva_alternativa, item);
+				rb_ary_push(nueva_alternativa, remplazo);
 			}
 		}
 	}
 
-	solucion = rb_ary_dup(alternativa);
+	solucion = rb_ary_dup(nueva_alternativa);
 
 	return Qnil;
 }
