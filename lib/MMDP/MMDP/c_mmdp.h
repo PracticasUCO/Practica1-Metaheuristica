@@ -55,7 +55,7 @@ solution_nodes / @punto_ruptura
 Como parametros recibe el vector solución a mejorar y el coste
 de dicho vector
 */
-VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE coste_actual);
+VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE coste_actual, VALUE limite);
 
 /*
 Devuelve la diferencia entre dos arrays

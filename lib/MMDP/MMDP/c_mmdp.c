@@ -148,16 +148,15 @@ solution_nodes / @punto_ruptura
 Como parametros recibe el vector solución a mejorar y el coste
 de dicho vector
 */
-VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE coste_actual)
+VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE coste_actual, VALUE limite)
 {
 	VALUE alternativa;
 	VALUE nodos_lista;
-	VALUE solution_nodes;
-	VALUE punto_ruptura;
-	VALUE seleccionado;
-	VALUE index_hash;
+	//VALUE solution_nodes;
+	//VALUE punto_ruptura;
 	VALUE nueva_alternativa;
-	long int i, j;
+	VALUE used_hash;
+	long int i, j, limite_actual;
 	//Comprobación de tipos
 		//Solucion debe de ser un Array --> Ok
 		//Coste_actual debe de ser un tipo numerico --> Not yet
@@ -166,49 +165,54 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 	alternativa = rb_ary_dup(solucion);
 	nodos_lista = rb_iv_get(self, "@lista_nodos");
 	nodos_lista = rb_ary_dup(nodos_lista);
-	solution_nodes = rb_iv_get(self, "@solution_nodes");
-	punto_ruptura = rb_iv_get(self, "@punto_ruptura");
+	//solution_nodes = rb_iv_get(self, "@solution_nodes");
+	//punto_ruptura = rb_iv_get(self, "@punto_ruptura");
 
-	index_hash = rb_hash_new();
+	used_hash = rb_hash_new();
 	nueva_alternativa = rb_ary_dup(alternativa);
 
 	//rb_ary_sort_bang(nodos_lista);
 	//rb_ary_sort_bang(alternativa);
-	seleccionado = rb_ary_new();
+
+	limite_actual = 0;
+
+	fprintf(stderr, "1 - adsfasdfasdfasdfasfd\n");
 	
 	for(i = 0; i < RARRAY_LEN(nodos_lista); i++)
 	{
 		VALUE item = rb_ary_entry(nodos_lista, i);
-		rb_hash_aset(index_hash, item, INT2NUM(i));
 
 		if(rb_ary_includes(alternativa, item))
 		{
-			rb_ary_push(seleccionado, Qtrue);
+			rb_hash_aset(used_hash, item, Qtrue);
 		}
 		else
 		{
-			rb_ary_push(seleccionado, Qfalse);
+			rb_hash_aset(used_hash, item, Qfalse);
 		}
 	}
 
-	for(i = 0; i < RARRAY_LEN(alternativa); i++)
+	fprintf(stderr, "2 - adsfasdfasdfasdfasfd\n");
+	for(i = 0; i < ((RARRAY_LEN(alternativa)) && (limite_actual < NUM2INT(limite))); i++)
 	{
-		for(j = 0; j < RARRAY_LEN(nodos_lista); j++)
+		for(j = 0; ((j < RARRAY_LEN(nodos_lista)) && (limite_actual < NUM2INT(limite))); j++)
 		{
 			VALUE item = rb_ary_entry(alternativa, i);
-			VALUE indice_item = rb_hash_aref(index_hash, item);
 			VALUE remplazo = rb_ary_entry(nodos_lista, j);
-			VALUE indice_remplazo = rb_hash_aref(index_hash, remplazo);
 			VALUE nuevo_coste;
 
-			if(i > NUM2DBL(solution_nodes) / NUM2DBL(punto_ruptura))
+			/*if(i > NUM2DBL(solution_nodes) / NUM2DBL(punto_ruptura))
 			{
 				break;
-			}
+			}*/
 
-			if(rb_ary_entry(seleccionado, indice_remplazo) == Qtrue)
+			if(rb_hash_aref(used_hash, remplazo) == Qtrue)
 			{
 				continue;
+			}
+			else
+			{
+				limite_actual++;
 			}
 
 			nuevo_coste = method_obtener_diferencia_soluciones(self, alternativa, coste_actual, item, remplazo);
@@ -219,11 +223,15 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 				nueva_alternativa = rb_ary_dup(alternativa);
 				rb_ary_delete(nueva_alternativa, item);
 				rb_ary_push(nueva_alternativa, remplazo);
+				rb_hash_aset(used_hash, item, Qfalse);
+				rb_hash_aset(used_hash, item, Qtrue);
 			}
 		}
 	}
 
+	fprintf(stderr, "3 - adsfasdfasdfasdfasfd\n");
 	solucion = rb_ary_dup(nueva_alternativa);
+	fprintf(stderr, "4 - adsfasdfasdfasdfasfd\n");
 
 	return Qnil;
 }
@@ -236,5 +244,5 @@ void Init_c_mmdp()
 	class_mmdp = rb_define_class_under(module_mmdp, "MMDP", class_basic_mmdp);
 	rb_define_method(class_mmdp, "obtener_diferencia_soluciones", method_obtener_diferencia_soluciones, 4);
 	rb_define_method(class_mmdp, "busqueda_local_first_improvement", method_busqueda_local_first_improvement, 3);
-	rb_define_method(class_mmdp, "busqueda_local_best_improvement", method_busqueda_local_best_improvement, 2);
+	rb_define_method(class_mmdp, "busqueda_local_best_improvement", method_busqueda_local_best_improvement, 3);
 }
