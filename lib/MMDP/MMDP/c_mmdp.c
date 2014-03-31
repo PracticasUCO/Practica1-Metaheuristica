@@ -95,6 +95,7 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 	while((salir_externo == 0) && (limite_inicio < NUM2INT(limite)))
 	{
 		limite_inicio++;
+		salir_interno = 0;
 
 		for(i = 0; ((i < RARRAY_LEN(solucion)) && (salir_interno == 0)); i++)
 		{
