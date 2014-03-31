@@ -50,46 +50,46 @@ module MMDP
 		#
 		# Como parametros recibe el vector solución a mejorar y el coste
 		# de dicho vector
-		def busqueda_local_best_improvement(solucion, coste_actual)
-			raise TypeError, "El parametro solucion debe ser un Array" unless solucion.kind_of? Array
-			raise TypeError, "El parametro coste_actual debe de ser numerico" unless coste_actual.kind_of? Numeric
+		# def busqueda_local_best_improvement(solucion, coste_actual)
+		# 	raise TypeError, "El parametro solucion debe ser un Array" unless solucion.kind_of? Array
+		# 	raise TypeError, "El parametro coste_actual debe de ser numerico" unless coste_actual.kind_of? Numeric
 
-			alternativa = solucion.dup
-			nodos_lista = lista_nodos().dup
+		# 	alternativa = solucion.dup
+		# 	nodos_lista = lista_nodos().dup
 
-			alternativa.each_with_index do |origen, index|
-				break if index > solution_nodes / @punto_ruptura
+		# 	alternativa.each_with_index do |origen, index|
+		# 		break if index > solution_nodes / @punto_ruptura
 
-				alternativa.each do |destino|
-					next if origen == destino
+		# 		alternativa.each do |destino|
+		# 			next if origen == destino
 
-					nueva_alternativa = alternativa.dup
-					#nueva_alternativa.delete(destino)
+		# 			nueva_alternativa = alternativa.dup
+		# 			#nueva_alternativa.delete(destino)
 					
-					nodos_lista.each do |nodo_alternativo|
-						next if nodo_alternativo == origen
-						next if nodo_alternativo == destino
-						next if nueva_alternativa.include? nodo_alternativo
+		# 			nodos_lista.each do |nodo_alternativo|
+		# 				next if nodo_alternativo == origen
+		# 				next if nodo_alternativo == destino
+		# 				next if nueva_alternativa.include? nodo_alternativo
 
-						#nueva_alternativa << nodo_alternativo
+		# 				#nueva_alternativa << nodo_alternativo
 
-						coste_alternativa = obtener_diferencia_soluciones(nueva_alternativa, coste_actual, destino, nodo_alternativo)
+		# 				coste_alternativa = obtener_diferencia_soluciones(nueva_alternativa, coste_actual, destino, nodo_alternativo)
 
-						if coste_alternativa > coste_actual
-							coste_actual = coste_alternativa
-							alternativa = nueva_alternativa.dup
+		# 				if coste_alternativa > coste_actual
+		# 					coste_actual = coste_alternativa
+		# 					alternativa = nueva_alternativa.dup
 
-							alternativa.delete(destino)
-							alternativa.push(nodo_alternativo)
-						end
+		# 					alternativa.delete(destino)
+		# 					alternativa.push(nodo_alternativo)
+		# 				end
 
-						nueva_alternativa.delete(nodo_alternativo)
-					end
-				end
-			end
+		# 				#nueva_alternativa.delete(nodo_alternativo)
+		# 			end
+		# 		end
+		# 	end
 
-			return alternativa, coste_actual
-		end
+		# 	return alternativa, coste_actual
+		# end
 
 		# Realiza una busqueda local a partir de una solucion aleatoria
 		# utilizando un algoritmo de escalada basado en 
@@ -169,7 +169,7 @@ module MMDP
 			solucion, coste_actual = busqueda_global
 
 			if tipo == :best_improvement
-				solucion , coste_actual = busqueda_local_best_improvement(solucion, coste_actual)
+				busqueda_local_best_improvement(solucion, coste_actual)
 			elsif tipo == :first_improvement
 				busqueda_local_first_improvement(solucion, coste_actual, 30)
 			else

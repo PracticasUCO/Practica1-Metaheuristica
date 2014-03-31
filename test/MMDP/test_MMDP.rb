@@ -70,7 +70,7 @@ describe MMDP do
 		end
 
 		it "El coste de la solucion debe de estar entre el coste de la funcion aleatoria y el coste por best improvement" do
-			5.times do
+			50.times do
 				*, coste_first_improvement = @t.generar_solucion_busqueda_local :first_improvement
 				*, coste_best_improvement = @t.generar_solucion_busqueda_local :best_improvement
 				*, coste_aleatorio = @t.generar_solucion_aleatoria

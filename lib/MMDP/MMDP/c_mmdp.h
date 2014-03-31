@@ -36,6 +36,26 @@ parametros que son:
 */
 VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE limite);
 
+/*
+Realiza una busqueda local para tratar de mejorar lo maximo posible el
+vector solucion
+
+Recibe como parametros el array con la soluciones escogidas y
+Devuelve un vector solucion optimizado
+ 
+Este metodo sigue un algoritmo de busqueda local mediante la tecnica
+de best improvement, optimizado mediante un parametro de corte para
+no llegar a explorar todas las soluciones vecinas.
+
+El metodo de parada es cuando se hayan explorado más soluciones que
+solution_nodes / @punto_ruptura
+
+@punto_ruptura usualmente se configura a log2(solution_nodes)
+
+Como parametros recibe el vector solución a mejorar y el coste
+de dicho vector
+*/
+VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE coste_actual);
 
 /*
 Devuelve la diferencia entre dos arrays

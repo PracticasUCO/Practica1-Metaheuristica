@@ -129,6 +129,94 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 	return solucion;
 }
 
+/*
+Realiza una busqueda local para tratar de mejorar lo maximo posible el
+vector solucion
+
+Recibe como parametros el array con la soluciones escogidas y
+Devuelve un vector solucion optimizado
+ 
+Este metodo sigue un algoritmo de busqueda local mediante la tecnica
+de best improvement, optimizado mediante un parametro de corte para
+no llegar a explorar todas las soluciones vecinas.
+
+El metodo de parada es cuando se hayan explorado más soluciones que
+solution_nodes / @punto_ruptura
+
+@punto_ruptura usualmente se configura a log2(solution_nodes)
+
+Como parametros recibe el vector solución a mejorar y el coste
+de dicho vector
+*/
+VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE coste_actual)
+{
+	VALUE alternativa;
+	VALUE nodos_lista;
+	VALUE origen;
+	VALUE destino;
+	VALUE nodo_alternativo;
+	VALUE nueva_alternativa;
+	VALUE coste_alternativa;
+	VALUE solution_nodes;
+	VALUE punto_ruptura;
+	long int i, j, h;
+	//Comprobación de tipos
+		//Solucion debe de ser un Array --> Ok
+		//Coste_actual debe de ser un tipo numerico --> Not yet
+	solucion = rb_check_array_type(solucion);
+	
+	alternativa = rb_ary_dup(solucion);
+	nodos_lista = rb_iv_get(self, "@lista_nodos");
+	nodos_lista = rb_ary_dup(nodos_lista);
+	solution_nodes = rb_iv_get(self, "@solution_nodes");
+	punto_ruptura = rb_iv_get(self, "@punto_ruptura");
+	
+	for(i = 0; i < RARRAY_LEN(alternativa); i++)
+	{
+		if(i > NUM2DBL(solution_nodes) / NUM2DBL(punto_ruptura))
+		{
+			break;
+		}
+
+		origen = rb_ary_entry(alternativa, i);
+
+		for(j = 0; j < RARRAY_LEN(alternativa); j++)
+		{
+			if(j == i)
+			{
+				continue;
+			}
+
+			destino = rb_ary_entry(alternativa, j);
+			nueva_alternativa = rb_ary_dup(alternativa);
+
+			for(h = 0; h < RARRAY_LEN(nodos_lista); h++)
+			{
+				nodo_alternativo = rb_ary_entry(nodos_lista, h);
+
+				if(rb_ary_includes(alternativa, nodo_alternativo))
+				{
+					continue;
+				}
+
+				coste_alternativa = method_obtener_diferencia_soluciones(self, nueva_alternativa, coste_actual, destino, nodo_alternativo);
+
+				if(NUM2DBL(coste_alternativa) > NUM2DBL(coste_actual))
+				{
+					coste_actual = coste_alternativa;
+					rb_ary_delete(alternativa, destino);
+					rb_ary_push(alternativa, nodo_alternativo);
+				}
+			}
+		}
+	}
+
+	solucion = rb_ary_dup(alternativa);
+
+	return Qnil;
+}
+
+
 
 void Init_c_mmdp()
 {
@@ -136,4 +224,5 @@ void Init_c_mmdp()
 	class_mmdp = rb_define_class_under(module_mmdp, "MMDP", class_basic_mmdp);
 	rb_define_method(class_mmdp, "obtener_diferencia_soluciones", method_obtener_diferencia_soluciones, 4);
 	rb_define_method(class_mmdp, "busqueda_local_first_improvement", method_busqueda_local_first_improvement, 3);
+	rb_define_method(class_mmdp, "busqueda_local_best_improvement", method_busqueda_local_best_improvement, 2);
 }
