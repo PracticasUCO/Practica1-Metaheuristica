@@ -8,6 +8,7 @@ describe MMDP do
 	before do
 		@t = MMDP::MMDP.new("instancias/P2/MMDP/GKD-Ia_71_n30_m24.txt")
 		@b = MMDP::BasicMMDP.new("instancias/P2/MMDP/GKD-Ia_71_n30_m24.txt")
+		@repeticiones = 25
 	end
 
 	describe "Cuando se crea la clase con la instancia GKD-Ia_71_n30_m24" do
@@ -27,12 +28,10 @@ describe MMDP do
 		end
 
 		it "El coste medio debe de ser mayor o igual que la obtenida con BasicMMDP" do
-
-			repeticiones = 25
 			suma_best_improvement = 0
 			suma_aleatorio = 0
 
-			repeticiones.times do
+			@repeticiones.times do
 				*, coste_best_improvement = @t.generar_solucion_busqueda_local :best_improvement
 				*, coste_aleatorio = @b.generar_solucion_aleatoria
 
@@ -44,9 +43,7 @@ describe MMDP do
 		end
 
 		it "La solucion no puede tener valores repetidos" do
-			repeticiones = 25
-
-			repeticiones.times do
+			@repeticiones.times do
 				solucion, * = @t.generar_solucion_busqueda_local :best_improvement
 
 				solucion.uniq!
@@ -59,8 +56,7 @@ describe MMDP do
 
 	describe "En las soluciones de busqueda local por Best Improvement" do
 		it "Ninguna solucion puede superar el coste de 200 ya que estamos tratando de diversidad minima" do
-			repeticiones = 25
-			repeticiones.times do
+			@repeticiones.times do
 				*, coste = @t.generar_solucion_busqueda_local :best_improvement
 
 				coste.must_be :<, 200
@@ -85,7 +81,7 @@ describe MMDP do
 			solucion_aleatoria_total = 0
 			solucion_first_total = 0
 
-			25.times do
+			@repeticiones.times do
 				*, coste_first_improvement = @t.generar_solucion_busqueda_local :first_improvement
 				*, coste_aleatorio = @t.generar_solucion_aleatoria
 
@@ -97,7 +93,7 @@ describe MMDP do
 		end
 
 		it "Las soluciones no pueden superar el coste de 200 tratando la diversidad minima" do
-			25.times do
+			@repeticiones.times do
 				*, coste_first_improvement = @t.generar_solucion_busqueda_local :first_improvement
 
 				coste_first_improvement.must_be :<=, 200
@@ -105,9 +101,7 @@ describe MMDP do
 		end
 
 		it "La solucion no puede tener valores repetidos" do
-			repeticiones = 25
-
-			repeticiones.times do
+			@repeticiones.times do
 				solucion, * = @t.generar_solucion_busqueda_local :first_improvement
 
 				solucion.uniq!
