@@ -82,10 +82,10 @@ VALUE method_diversidad_minima(VALUE self, VALUE solucion)
 
 VALUE method_merge_diversidad_minima(VALUE self, VALUE solucion, VALUE nuevo_nodo)
 {
-	VALUE minimo = DBL2NUM(0);
+	VALUE minimo = DBL2NUM(10);
 	VALUE origen;
 	VALUE destino;
-	VALUE valor_actual;
+	VALUE valor_actual = DBL2NUM(15);
 	VALUE valor_nuevo_nodo;
 	long int i, j; //Auxiliares
 	int count_minimo = 0;
@@ -129,6 +129,11 @@ VALUE method_merge_diversidad_minima(VALUE self, VALUE solucion, VALUE nuevo_nod
 			destino = rb_ary_entry(solucion, j);
 
 			valor_actual = method_obtener_coste_entre(self, origen, destino);
+
+			if(valor_actual == Qfalse)
+			{
+				continue;
+			}
 
 			if(count_minimo == 0)
 			{

@@ -48,7 +48,6 @@ VALUE method_obtener_diferencia_soluciones(VALUE self, VALUE solucion_actual, VA
 		// nodo_eliminar debe de estar en la solucion --> Not yet
 		// new_ndde debe de estar en la lista de nodos de la solucion --> Not yet
 	solucion_actual = rb_check_array_type(solucion_actual);
-
 	// Algoritmo
 	particion_eliminar = rb_ary_new();
 	rb_ary_push(particion_eliminar, nodo_eliminar);
@@ -115,7 +114,6 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 					salir_interno = 1;
 					break;
 				}
-				
 
 				if(j == RARRAY_LEN(nodos_lista) - 1)
 				{
@@ -125,7 +123,6 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 			}
 		}
 	}
-
 	return solucion;
 }
 
@@ -175,8 +172,6 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 	//rb_ary_sort_bang(alternativa);
 
 	limite_actual = 0;
-
-	fprintf(stderr, "1 - adsfasdfasdfasdfasfd\n");
 	
 	for(i = 0; i < RARRAY_LEN(nodos_lista); i++)
 	{
@@ -192,7 +187,6 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 		}
 	}
 
-	fprintf(stderr, "2 - adsfasdfasdfasdfasfd\n");
 	for(i = 0; i < ((RARRAY_LEN(alternativa)) && (limite_actual < NUM2INT(limite))); i++)
 	{
 		for(j = 0; ((j < RARRAY_LEN(nodos_lista)) && (limite_actual < NUM2INT(limite))); j++)
@@ -229,9 +223,7 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 		}
 	}
 
-	fprintf(stderr, "3 - adsfasdfasdfasdfasfd\n");
 	solucion = rb_ary_dup(nueva_alternativa);
-	fprintf(stderr, "4 - adsfasdfasdfasdfasfd\n");
 
 	return Qnil;
 }
