@@ -75,6 +75,7 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 {
 	VALUE nodos_lista; //Copia de lista_nodos
 	VALUE hash_inclusion; //Indica que valores estan en la solucion y cuales no
+	VALUE nuevo_coste;
    int i, j; //Auxiliares
 	int limite_inicio = 0;
 	int salir_externo = 0;
@@ -114,7 +115,6 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 			for(j = 0; ((j < RARRAY_LEN(nodos_lista)) && (NUM2INT(limite) > limite_inicio)); j++)
 			{
 				VALUE nodo_alternativo = rb_ary_entry(nodos_lista, j);
-				VALUE nuevo_coste;
 
 				if((rb_hash_aref(hash_inclusion, nodo_alternativo) == Qtrue) || (rb_hash_aref(hash_inclusion, item) == Qfalse))
 				{
@@ -140,7 +140,7 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 		}
 	}
 
-	return solucion;
+	return Qnil;
 }
 
 /*
@@ -167,6 +167,7 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 	VALUE alternativa;
 	VALUE nodos_lista;
 	VALUE hash_inclusion;
+	VALUE nuevo_coste;
 	int i, j;
 	int limite_inicio = 0;
 
@@ -198,7 +199,6 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 
 		for(j = 0; ((j < RARRAY_LEN(nodos_lista)) && (NUM2INT(limite) > limite_inicio)); j++)
 		{
-			VALUE nuevo_coste;
 			VALUE nodo_alternativo = rb_ary_entry(nodos_lista, j);
 
 			if((rb_hash_aref(hash_inclusion, item) == Qfalse) || (rb_hash_aref(hash_inclusion, nodo_alternativo) == Qtrue))
