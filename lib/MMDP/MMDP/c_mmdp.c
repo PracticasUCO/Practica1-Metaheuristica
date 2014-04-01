@@ -74,13 +74,11 @@ parametros que son:
 VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE limite)
 {
 	VALUE nodos_lista; //Copia de lista_nodos
-	VALUE nuevo_coste;
-	VALUE origen;
-	VALUE destino;
+	VALUE hash_inclusion; //Indica que valores estan en la solucion y cuales no
    int i, j; //Auxiliares
 	int limite_inicio = 0;
-	int salir_interno = 0; //Si se termina la ejecucion del bucle se pone a uno
 	int salir_externo = 0;
+	int limite_busqueda; // Indica cuando se ha terminado de observar la solucion actual
 
 	//Aquí va la comprobacion de variables
 		//Solucion debe de ser un array --> Ok
@@ -90,39 +88,57 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 
 	nodos_lista = rb_iv_get(self, "@lista_nodos");
 	nodos_lista = rb_ary_dup(nodos_lista);
+	hash_inclusion = rb_hash_new();
+	limite_busqueda = RARRAY_LEN(solucion);
 
-	while((salir_externo == 0) && (limite_inicio < NUM2INT(limite)))
+	for(i = 0; i < RARRAY_LEN(nodos_lista); i++)
 	{
-		limite_inicio++;
-		salir_interno = 0;
+		VALUE item = rb_ary_entry(nodos_lista, i);
 
-		for(i = 0; ((i < RARRAY_LEN(solucion)) && (salir_interno == 0)); i++)
+		if(rb_ary_includes(solucion, item))
 		{
-			origen = rb_ary_entry(solucion, i);
+			rb_hash_aset(hash_inclusion, item, Qtrue);
+		}
+		else
+		{
+			rb_hash_aset(hash_inclusion, item, Qfalse);
+		}
+	}
 
-			for(j = 0; ((j < RARRAY_LEN(nodos_lista)) && (salir_interno == 0)); j++)
+	while((NUM2INT(limite) > limite_inicio) && (salir_externo = 1) && (limite_busqueda > 0))
+	{
+		for(i = 0; ((i < RARRAY_LEN(solucion)) && (NUM2INT(limite) > limite_inicio) && (limite_busqueda > 0)); i++, limite_busqueda--)
+		{
+			VALUE item = rb_ary_entry(solucion, i);
+
+			for(j = 0; ((j < RARRAY_LEN(nodos_lista)) && (NUM2INT(limite) > limite_inicio)); j++)
 			{
-				destino = rb_ary_entry(nodos_lista, j);
+				VALUE nodo_alternativo = rb_ary_entry(nodos_lista, j);
+				VALUE nuevo_coste;
 
-				nuevo_coste = method_obtener_diferencia_soluciones(self, solucion, coste_solucion, origen, destino);
+				if((rb_hash_aref(hash_inclusion, nodo_alternativo) == Qtrue) || (rb_hash_aref(hash_inclusion, item) == Qfalse))
+				{
+					continue;
+				}
+				limite_inicio++;
+
+				nuevo_coste = method_obtener_diferencia_soluciones(self, solucion, coste_solucion, item, 
+																					nodo_alternativo);
 
 				if(NUM2DBL(nuevo_coste) > NUM2DBL(coste_solucion))
 				{
+					i--; //Necesario para tener en cuenta otras soluciones
+					rb_ary_delete(solucion, item);
+					rb_ary_push(solucion, nodo_alternativo);
 					coste_solucion = nuevo_coste;
-					rb_ary_delete(solucion, origen);
-					rb_ary_push(solucion, destino);
-					salir_interno = 1;
-					break;
+					rb_hash_aset(hash_inclusion, item, Qfalse);
+					rb_hash_aset(hash_inclusion, nodo_alternativo, Qtrue);
 				}
 
-				if(j == RARRAY_LEN(nodos_lista) - 1)
-				{
-					salir_externo = 1;
-					break;
-				}
 			}
 		}
 	}
+
 	return solucion;
 }
 
