@@ -63,12 +63,13 @@ module MMDP
 			solucion, coste_actual = busqueda_global
 
 			if tipo == :best_improvement
-				busqueda_local_best_improvement(solucion, coste_actual, 30)
+				busqueda_local_best_improvement(solucion, coste_actual, 300)
 			elsif tipo == :first_improvement
-				busqueda_local_first_improvement(solucion, coste_actual, 30)
+				busqueda_local_first_improvement(solucion, coste_actual, 300)
 			else
 				# Not implemented yet
 			end
+
 			return solucion, coste_actual
 		end
 
