@@ -43,6 +43,18 @@ describe MMDP do
 			suma_best_improvement.must_be :>=, suma_aleatorio
 		end
 
+		it "La solucion no puede tener valores repetidos" do
+			repeticiones = 25
+
+			repeticiones.times do
+				solucion, * = @t.generar_solucion_busqueda_local :best_improvement
+
+				solucion.uniq!
+
+				solucion.length.must_be :==, @t.solution_nodes
+			end
+		end
+
 	end
 
 	describe "En las soluciones de busqueda local por Best Improvement" do
@@ -89,6 +101,18 @@ describe MMDP do
 				*, coste_first_improvement = @t.generar_solucion_busqueda_local :first_improvement
 
 				coste_first_improvement.must_be :<=, 200
+			end
+		end
+
+		it "La solucion no puede tener valores repetidos" do
+			repeticiones = 25
+
+			repeticiones.times do
+				solucion, * = @t.generar_solucion_busqueda_local :first_improvement
+
+				solucion.uniq!
+
+				solucion.length.must_be :==, @t.solution_nodes
 			end
 		end
 	end

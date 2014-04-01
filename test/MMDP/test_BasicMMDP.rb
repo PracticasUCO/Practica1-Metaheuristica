@@ -32,4 +32,16 @@ class TestBasicMMDP < MiniTest::Test
 		sol.uniq!
 		assert_operator(sol.length, :>=, repeticiones*8/10)
 	end
+
+	def test_unicidad
+		repeticiones = 1000
+
+		repeticiones.times do
+			solucion, * = @t.generar_solucion_aleatoria
+
+			solucion.uniq!
+
+			assert_operator(solucion.length, :==, @t.solution_nodes)
+		end
+	end
 end
