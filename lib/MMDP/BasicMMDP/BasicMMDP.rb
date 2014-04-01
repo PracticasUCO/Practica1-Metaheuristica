@@ -95,46 +95,6 @@ module MMDP
 			return solucion, coste_actual	
 		end
 
-		# Devuelve la distancia o coste entre dos nodos.
-		# Si no encuentra los nodos, devolvera cero
-		# def obtener_coste_entre(nodo_a, nodo_b)
-		# 	raise TypeError, "nodo_a must be a String" unless nodo_a.kind_of? String
-		# 	raise TypeError, "nodo_b must be a String" unless nodo_b.kind_of? String
-			
-		# 	signature = Array.new
-		# 	signature << nodo_a << nodo_b
-		# 	signature.sort!
-
-		# 	return @nodes[signature] if @nodes.has_key? signature
-		# 	return 0 unless @nodes.has_key? signature
-		# end
-
-		# Este metodo devuelve la diversidad minimia que existe en una solucion
-		# def diversidad_minima(solucion)
-		# 	raise TypeError, "El parametro solucion debe de ser un array" unless solucion.kind_of? Array
-
-		# 	if solucion.empty?
-		# 		return 0.0
-		# 	end
-
-		# 	minimo = Float::INFINITY
-
-		# 	solucion.each do |origen|
-		# 		solucion.each do |destino|
-		# 			next if origen == destino
-		# 			valor = obtener_coste_entre(origen, destino)
-		# 			minimo = valor if valor < minimo
-		# 		end
-		# 	end
-
-		# 	return minimo
-		# end
-
-		# funcion_objetivo es un sinonimo de diversidad minima
-		# def funcion_objetivo(solucion, *nodo)
-		# 	return diversidad_minima(solucion, nodo)
-		# end
-
 		# Definicion de los metodos privados de la clase
 		private :obtener_coste_entre, :diversidad_minima
 	end
