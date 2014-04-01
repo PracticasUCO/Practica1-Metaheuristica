@@ -64,6 +64,11 @@ VALUE method_diversidad_minima(VALUE self, VALUE solucion)
 
 			valor_actual = method_obtener_coste_entre(self, origen, destino);
 
+			if(valor_actual == Qfalse)
+			{
+				continue;
+			}
+
 			if(count_minimo == 0)
 			{
 				minimo = valor_actual;
