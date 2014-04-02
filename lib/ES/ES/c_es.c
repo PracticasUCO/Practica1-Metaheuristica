@@ -86,7 +86,7 @@ Restaura la temperatura a su punto inicial
 */
 VALUE method_reset(VALUE self)
 {
-	VALUE valorInicial = rb_iv_get(self, "@valor_inicio");
+	VALUE valorInicial = INT2NUM(1);
 	rb_iv_set(self, "@temperatura", valorInicial);
 	return Qnil;
 }
