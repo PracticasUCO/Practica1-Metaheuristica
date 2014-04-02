@@ -202,7 +202,7 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 				continue;
 			}
 
-			limite_inicio++;
+			//limite_inicio++;
 			if(method_mejorara_solucion(self, solucion, coste_actual, item, nodo_alternativo) == Qtrue)
 			{
 				if(rb_hash_aref(hash_inclusion, item) == Qtrue)
