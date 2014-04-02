@@ -77,7 +77,6 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 {
 	VALUE nodos_lista; //Copia de lista_nodos
 	VALUE hash_inclusion; //Indica que valores estan en la solucion y cuales no
-	VALUE nuevo_coste;
    int i, j; //Auxiliares
 	int limite_inicio = 0;
 	int salir_externo = 0;
@@ -133,11 +132,10 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 					rb_hash_aset(hash_inclusion, nodo_alternativo, Qtrue);
 					break;
 				}
+
 			}
 		}
 	}
-
-	coste_solucion = method_diversidad_minima(self, solucion);
 
 	return Qnil;
 }
@@ -166,7 +164,6 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 	VALUE alternativa;
 	VALUE nodos_lista;
 	VALUE hash_inclusion;
-	VALUE nuevo_coste;
 	int i, j;
 	int limite_inicio = 0;
 
@@ -227,7 +224,6 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 	}
 
 	solucion = rb_ary_dup(alternativa);
-	coste_actual = method_diversidad_minima(self, solucion);
 
 	return Qnil;
 }
