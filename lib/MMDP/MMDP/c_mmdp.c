@@ -76,6 +76,7 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 {
 	VALUE nodos_lista; //Copia de lista_nodos
 	VALUE hash_inclusion; //Indica que valores estan en la solucion y cuales no
+	VALUE empaquetado; //Se trata de un Array con la solucion final y su coste
    int i, j; //Auxiliares
 	int limite_inicio = 0;
 	int salir_externo = 0;
@@ -91,6 +92,7 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 	nodos_lista = rb_ary_dup(nodos_lista);
 	hash_inclusion = rb_hash_new();
 	limite_busqueda = 3 * RARRAY_LEN(solucion);
+	empaquetado = rb_ary_new();
 
 	for(i = 0; i < RARRAY_LEN(nodos_lista); i++)
 	{
@@ -106,7 +108,7 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 		}
 	}
 
-	while((NUM2INT(limite) > limite_inicio) && (salir_externo = 1) && (limite_busqueda > 0))
+	while((NUM2INT(limite) > limite_inicio) && (salir_externo == 0) && (limite_busqueda > 0))
 	{
 		for(i = 0; ((i < RARRAY_LEN(solucion)) && (NUM2INT(limite) > limite_inicio) && (limite_busqueda > 0)); i++, limite_busqueda--)
 		{
@@ -136,7 +138,10 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 		}
 	}
 
-	return Qnil;
+	rb_ary_push(empaquetado, solucion);
+	rb_ary_push(empaquetado, method_diversidad_minima(self, solucion));
+
+	return empaquetado;
 }
 
 /*
@@ -163,13 +168,19 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 	VALUE alternativa;
 	VALUE nodos_lista;
 	VALUE hash_inclusion;
+	VALUE mejor_solucion;
+	VALUE hash_mejor_solucion;
+	VALUE coste_mejor_solucion;
 	int i, j;
 	int limite_inicio = 0;
+	int bandera_mejor_solucion = 0;
+	VALUE empaquetado; // Array que contendra la solucion y el coste para devolverlo
 
 	solucion = rb_check_array_type(solucion);
 
 	alternativa = rb_ary_dup(solucion);
 	hash_inclusion = rb_hash_new();
+	empaquetado = rb_ary_new();
 
 	nodos_lista = rb_iv_get(self, "@lista_nodos");
 	nodos_lista = rb_ary_dup(nodos_lista);
@@ -201,30 +212,51 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 				continue;
 			}
 
-			//limite_inicio++;
-			if(method_mejorara_solucion(self, solucion, item, nodo_alternativo) == Qtrue)
+			if(method_mejorara_solucion(self, alternativa, item, nodo_alternativo) == Qtrue)
 			{
-				if(rb_hash_aref(hash_inclusion, item) == Qtrue)
+				VALUE hash_alternativa;
+				alternativa = rb_ary_dup(solucion);
+				hash_alternativa = rb_hash_dup(hash_inclusion);
+
+				rb_ary_delete(alternativa, item);
+				rb_ary_push(alternativa, nodo_alternativo);
+				rb_hash_aset(hash_alternativa, item, Qfalse);
+				rb_hash_aset(hash_alternativa, nodo_alternativo, Qtrue);
+
+
+				if(bandera_mejor_solucion == 0)
 				{
-					rb_ary_delete(alternativa, item);
-					rb_hash_aset(hash_inclusion, item, Qfalse);
+					bandera_mejor_solucion = 1;
+					hash_mejor_solucion = hash_alternativa;
+					mejor_solucion = alternativa;
+					coste_mejor_solucion = method_diversidad_minima(self, mejor_solucion);
 				}
 				else
 				{
-					VALUE nodo_extra = rb_ary_entry(alternativa, RARRAY_LEN(alternativa) - 1);
-					rb_ary_delete(alternativa, nodo_extra);
-					rb_hash_aset(hash_inclusion, nodo_extra, Qfalse);
+					VALUE coste_alternativa = method_diversidad_minima(self, alternativa);
+					
+					if(NUM2DBL(coste_alternativa) > NUM2DBL(coste_mejor_solucion))
+					{
+						hash_mejor_solucion = hash_alternativa;
+						mejor_solucion = alternativa;
+						coste_mejor_solucion = coste_alternativa;
+					}
 				}
-
-				rb_ary_push(alternativa, nodo_alternativo);
-				rb_hash_aset(hash_inclusion, nodo_alternativo, Qtrue);
 			}
+		}
+
+		if(bandera_mejor_solucion == 1)
+		{
+			solucion = rb_ary_dup(mejor_solucion);
+			hash_inclusion = rb_hash_dup(hash_mejor_solucion);
+			bandera_mejor_solucion = 0;
 		}
 	}
 
-	solucion = rb_ary_dup(alternativa);
+	rb_ary_push(empaquetado, solucion);
+	rb_ary_push(empaquetado, method_diversidad_minima(self, solucion));
 
-	return Qnil;
+	return empaquetado;
 }
 
 
