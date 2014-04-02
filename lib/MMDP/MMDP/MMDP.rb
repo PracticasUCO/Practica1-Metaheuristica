@@ -63,14 +63,12 @@ module MMDP
 			solucion, coste_actual = busqueda_global
 
 			if tipo == :best_improvement
-				busqueda_local_best_improvement(solucion, coste_actual, solution_nodes * total_nodes)
+				solucion, coste_actual = busqueda_local_best_improvement(solucion, coste_actual, solution_nodes * total_nodes)
 			elsif tipo == :first_improvement
-				busqueda_local_first_improvement(solucion, coste_actual, solution_nodes * total_nodes)
+				solucion, coste_actual = busqueda_local_first_improvement(solucion, coste_actual, solution_nodes * total_nodes)
 			else
 				# Not implemented yet
 			end
-
-			coste_actual = diversidad_minima(solucion);
 
 			return solucion, coste_actual
 		end
