@@ -33,12 +33,12 @@ Los parametros de esta funcion son:
  	  si el nodo no pertenece a la solucion se lanzara una excepcion TypeError
 	- new_node: el nodo nuevo que va a entrar en la solucion
 */
-VALUE method_obtener_diferencia_soluciones(VALUE self, VALUE solucion_actual, VALUE coste_actual, 
+VALUE method_mejorara_solucion(VALUE self, VALUE solucion_actual, VALUE coste_actual, 
 														VALUE nodo_eliminar, VALUE new_node)
 {
 	VALUE coste_nuevo_nodo;
 	VALUE vector_auxiliar;
-	VALUE coste_final;
+	VALUE coste_nodo_eliminar;
 	
 	// Aquí van a ir todas las comprobaciones
 		// solucion_actual debe ser un array --> Ok
@@ -51,17 +51,16 @@ VALUE method_obtener_diferencia_soluciones(VALUE self, VALUE solucion_actual, VA
 	vector_auxiliar = rb_ary_dup(solucion_actual);
 	rb_ary_delete(vector_auxiliar, nodo_eliminar);
 	coste_nuevo_nodo = method_diversidad_minima_parcial(self, vector_auxiliar, new_node);
+	coste_nodo_eliminar = method_diversidad_minima_parcial(self, vector_auxiliar, nodo_eliminar);
 
-	if(NUM2DBL(coste_nuevo_nodo) < NUM2DBL(coste_actual))
+	if(NUM2DBL(coste_nuevo_nodo) > NUM2DBL(coste_nodo_eliminar))
 	{
-		coste_final = coste_nuevo_nodo;
+		return Qtrue;
 	}
 	else
 	{
-		coste_final = coste_actual;
+		return Qfalse;
 	}
-
-	return coste_final;
 }
 
 /*
@@ -93,7 +92,7 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 	nodos_lista = rb_iv_get(self, "@lista_nodos");
 	nodos_lista = rb_ary_dup(nodos_lista);
 	hash_inclusion = rb_hash_new();
-	limite_busqueda = RARRAY_LEN(solucion);
+	limite_busqueda = 3 * RARRAY_LEN(solucion);
 
 	for(i = 0; i < RARRAY_LEN(nodos_lista); i++)
 	{
@@ -123,25 +122,22 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 				{
 					continue;
 				}
-				limite_inicio++;
+				//limite_inicio++;
 
-				nuevo_coste = method_obtener_diferencia_soluciones(self, solucion, coste_solucion, item, 
-																					nodo_alternativo);
-
-				if(NUM2DBL(nuevo_coste) > NUM2DBL(coste_solucion))
+				if(method_mejorara_solucion(self, solucion, coste_solucion, item, nodo_alternativo) == Qtrue)
 				{
 					i--; //Necesario para tener en cuenta otras soluciones
 					rb_ary_delete(solucion, item);
 					rb_ary_push(solucion, nodo_alternativo);
-					coste_solucion = nuevo_coste;
 					rb_hash_aset(hash_inclusion, item, Qfalse);
 					rb_hash_aset(hash_inclusion, nodo_alternativo, Qtrue);
 					break;
 				}
-
 			}
 		}
 	}
+
+	coste_solucion = method_diversidad_minima(self, solucion);
 
 	return Qnil;
 }
@@ -210,9 +206,7 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 			}
 
 			limite_inicio++;
-			nuevo_coste = method_obtener_diferencia_soluciones(self, solucion, coste_actual, item, nodo_alternativo);
-
-			if(NUM2DBL(nuevo_coste) > NUM2DBL(coste_actual))
+			if(method_mejorara_solucion(self, solucion, coste_actual, item, nodo_alternativo) == Qtrue)
 			{
 				if(rb_hash_aref(hash_inclusion, item) == Qtrue)
 				{
@@ -228,12 +222,12 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 
 				rb_ary_push(alternativa, nodo_alternativo);
 				rb_hash_aset(hash_inclusion, nodo_alternativo, Qtrue);
-				coste_actual = nuevo_coste;
 			}
 		}
 	}
 
 	solucion = rb_ary_dup(alternativa);
+	coste_actual = method_diversidad_minima(self, solucion);
 
 	return Qnil;
 }
@@ -244,7 +238,7 @@ void Init_c_mmdp()
 {
 	module_mmdp = rb_define_module("MMDP");
 	class_mmdp = rb_define_class_under(module_mmdp, "MMDP", class_basic_mmdp);
-	rb_define_method(class_mmdp, "obtener_diferencia_soluciones", method_obtener_diferencia_soluciones, 4);
+	rb_define_method(class_mmdp, "mejora_solucion", method_mejorara_solucion, 4);
 	rb_define_method(class_mmdp, "busqueda_local_first_improvement", method_busqueda_local_first_improvement, 3);
 	rb_define_method(class_mmdp, "busqueda_local_best_improvement", method_busqueda_local_best_improvement, 3);
 }
