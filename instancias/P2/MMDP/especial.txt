@@ -1,0 +1,22 @@
+7 3
+A B 1
+A C 2
+A D 3
+A E 4
+A F 5
+A G 16
+B C 6
+B D 7
+B E 8
+B F 9
+B G 17
+C D 10
+C E 11
+C F 12
+C G 18
+D E 13
+D F 14
+D G 19
+E F 15
+E G 20
+F G 21
