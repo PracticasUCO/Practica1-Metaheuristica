@@ -33,8 +33,7 @@ Los parametros de esta funcion son:
  	  si el nodo no pertenece a la solucion se lanzara una excepcion TypeError
 	- new_node: el nodo nuevo que va a entrar en la solucion
 */
-VALUE method_mejorara_solucion(VALUE self, VALUE solucion_actual, VALUE coste_actual, 
-														VALUE nodo_eliminar, VALUE new_node)
+VALUE method_mejorara_solucion(VALUE self, VALUE solucion_actual, VALUE nodo_eliminar, VALUE new_node)
 {
 	VALUE coste_nuevo_nodo;
 	VALUE vector_auxiliar;
@@ -123,7 +122,7 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 				}
 				//limite_inicio++;
 
-				if(method_mejorara_solucion(self, solucion, coste_solucion, item, nodo_alternativo) == Qtrue)
+				if(method_mejorara_solucion(self, solucion, item, nodo_alternativo) == Qtrue)
 				{
 					i--; //Necesario para tener en cuenta otras soluciones
 					rb_ary_delete(solucion, item);
@@ -203,7 +202,7 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 			}
 
 			//limite_inicio++;
-			if(method_mejorara_solucion(self, solucion, coste_actual, item, nodo_alternativo) == Qtrue)
+			if(method_mejorara_solucion(self, solucion, item, nodo_alternativo) == Qtrue)
 			{
 				if(rb_hash_aref(hash_inclusion, item) == Qtrue)
 				{
@@ -234,7 +233,7 @@ void Init_c_mmdp()
 {
 	module_mmdp = rb_define_module("MMDP");
 	class_mmdp = rb_define_class_under(module_mmdp, "MMDP", class_basic_mmdp);
-	rb_define_method(class_mmdp, "mejora_solucion", method_mejorara_solucion, 4);
+	rb_define_method(class_mmdp, "mejora_solucion", method_mejorara_solucion, 3);
 	rb_define_method(class_mmdp, "busqueda_local_first_improvement", method_busqueda_local_first_improvement, 3);
 	rb_define_method(class_mmdp, "busqueda_local_best_improvement", method_busqueda_local_best_improvement, 3);
 }

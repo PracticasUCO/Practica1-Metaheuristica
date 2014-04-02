@@ -21,8 +21,7 @@ Los parametros de esta funcion son:
  	  si el nodo no pertenece a la solucion se lanzara una excepcion TypeError
 	- new_node: el nodo nuevo que va a entrar en la solucion
 */
-VALUE method_mejora_solucion(VALUE self, VALUE solucion_actual, VALUE coste_actual, 
-														VALUE nodo_eliminar, VALUE new_node);
+VALUE method_mejora_solucion(VALUE self, VALUE solucion_actual, VALUE nodo_eliminar, VALUE new_node);
 
 /*
 Realiza una busqueda local a partir de una solucion aleatoria
