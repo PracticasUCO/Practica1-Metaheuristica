@@ -26,7 +26,7 @@ la temperatura.
 Recibe como parametro coste_solucion que indica el coste de una
 solución dada.
 */
-VALUE method_probabilidad(VALUE self, VALUE coste_solucion);
+VALUE method_probabilidad(VALUE self);
 
 /*
 Disminuye la temperatura interna de la clase de manera que haya menor
