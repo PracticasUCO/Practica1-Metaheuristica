@@ -18,7 +18,7 @@ module ES
     #   simulado.
     #     - Para un enfriamiento de tipo geometrico debe oscila entre 0 y 1
     #       exclusive.
-  		def initialize(tipo: :geometrica, coeficiente: 0.85)
+  		def initialize(tipo: :geometrica, coeficiente: 0.80)
   			raise TypeError, "tipo de valer :geometrica" unless tipo.eql? :geometrica
   			raise TypeError, "coeficiente debe de ser un valor numerico" unless coeficiente.kind_of? Numeric
 
