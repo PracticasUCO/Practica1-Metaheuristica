@@ -38,11 +38,6 @@ tipo y por el coeficiente de cambio determinado en la clase
 VALUE method_enfriar(VALUE self);
 
 /*
-Devuelve el valor de inicio de la temperatura de la clase
-*/
-VALUE method_valor_inicio(VALUE self);
-
-/*
 Devuelve el tipo de funcion de disminución de la temperatura,
 actualmente este valor solo puede ser :geometrica
 */
