@@ -33,7 +33,7 @@ Los parametros de esta funcion son:
  	  si el nodo no pertenece a la solucion se lanzara una excepcion TypeError
 	- new_node: el nodo nuevo que va a entrar en la solucion
 */
-VALUE method_mejorara_solucion(VALUE self, VALUE solucion_actual, VALUE nodo_eliminar, VALUE new_node)
+VALUE method_mejora_solucion(VALUE self, VALUE solucion_actual, VALUE nodo_eliminar, VALUE new_node)
 {
 	VALUE coste_nuevo_nodo;
 	VALUE vector_auxiliar;
@@ -60,6 +60,34 @@ VALUE method_mejorara_solucion(VALUE self, VALUE solucion_actual, VALUE nodo_eli
 	{
 		return Qfalse;
 	}
+}
+
+/*
+Devuelve cuanto de más prometedora es un cambio en una solucion
+*/
+VALUE method_mejora_solucion_2(VALUE self, VALUE solucion_actual, VALUE nodo_eliminar, VALUE new_node)
+{
+	VALUE coste_nuevo_nodo;
+	VALUE vector_auxiliar;
+	VALUE coste_nodo_eliminar;
+	VALUE resultado;
+	
+	// Aquí van a ir todas las comprobaciones
+		// solucion_actual debe ser un array --> Ok
+		// coste_actual debe ser un numero --> Not yet
+		// nodo_eliminar debe de estar en la solucion --> Not yet
+		// new_node debe de estar en la lista de nodos de la solucion --> Not yet
+	solucion_actual = rb_check_array_type(solucion_actual);
+	// Algoritmo
+	
+	vector_auxiliar = rb_ary_dup(solucion_actual);
+	rb_ary_delete(vector_auxiliar, nodo_eliminar);
+	coste_nuevo_nodo = method_diversidad_minima_parcial(self, vector_auxiliar, new_node);
+	coste_nodo_eliminar = method_diversidad_minima_parcial(self, vector_auxiliar, nodo_eliminar);
+
+	resultado = DBL2NUM(NUM2DBL(coste_nuevo_nodo) - NUM2DBL(coste_nodo_eliminar));
+
+	return resultado;
 }
 
 /*
@@ -124,7 +152,7 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 				}
 				//limite_inicio++;
 
-				if(method_mejorara_solucion(self, solucion, item, nodo_alternativo) == Qtrue)
+				if(method_mejora_solucion(self, solucion, item, nodo_alternativo) == Qtrue)
 				{
 					i--; //Necesario para tener en cuenta otras soluciones
 					rb_ary_delete(solucion, item);
@@ -212,7 +240,9 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 				continue;
 			}
 
-			if(method_mejorara_solucion(self, alternativa, item, nodo_alternativo) == Qtrue)
+			limite_inicio++;
+
+			if(method_mejora_solucion(self, alternativa, item, nodo_alternativo) == Qtrue)
 			{
 				VALUE hash_alternativa;
 				alternativa = rb_ary_dup(solucion);
@@ -229,11 +259,11 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 					bandera_mejor_solucion = 1;
 					hash_mejor_solucion = hash_alternativa;
 					mejor_solucion = alternativa;
-					coste_mejor_solucion = method_diversidad_minima(self, mejor_solucion);
+					coste_mejor_solucion = method_mejora_solucion_2(self, solucion, item, nodo_alternativo);
 				}
 				else
 				{
-					VALUE coste_alternativa = method_diversidad_minima(self, alternativa);
+					VALUE coste_alternativa = method_mejora_solucion_2(self, solucion, item, nodo_alternativo);
 					
 					if(NUM2DBL(coste_alternativa) > NUM2DBL(coste_mejor_solucion))
 					{
@@ -265,7 +295,8 @@ void Init_c_mmdp()
 {
 	module_mmdp = rb_define_module("MMDP");
 	class_mmdp = rb_define_class_under(module_mmdp, "MMDP", class_basic_mmdp);
-	rb_define_method(class_mmdp, "mejora_solucion", method_mejorara_solucion, 3);
+	rb_define_method(class_mmdp, "mejora_solucion", method_mejora_solucion, 3);
+	rb_define_method(class_mmdp, "grado_mejora_solucion", method_mejora_solucion_2, 3);
 	rb_define_method(class_mmdp, "busqueda_local_first_improvement", method_busqueda_local_first_improvement, 3);
 	rb_define_method(class_mmdp, "busqueda_local_best_improvement", method_busqueda_local_best_improvement, 3);
 }
