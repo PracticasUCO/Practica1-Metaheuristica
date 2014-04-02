@@ -22,7 +22,7 @@ Los parametros de esta funcion son:
 	- new_node: el nodo nuevo que va a entrar en la solucion
 */
 VALUE method_mejora_solucion(VALUE self, VALUE solucion_actual, VALUE nodo_eliminar, VALUE new_node);
-VALUE method_mejora_solucion2(VALUE self, VALUE solucion_actual, VALUE nodo_eliminar, VALUE new_node);
+VALUE method_grado_mejora_solucion(VALUE self, VALUE solucion_actual, VALUE nodo_eliminar, VALUE new_node);
 
 /*
 Realiza una busqueda local a partir de una solucion aleatoria

@@ -65,7 +65,7 @@ VALUE method_mejora_solucion(VALUE self, VALUE solucion_actual, VALUE nodo_elimi
 /*
 Devuelve cuanto de más prometedora es un cambio en una solucion
 */
-VALUE method_mejora_solucion_2(VALUE self, VALUE solucion_actual, VALUE nodo_eliminar, VALUE new_node)
+VALUE method_grado_mejora_solucion(VALUE self, VALUE solucion_actual, VALUE nodo_eliminar, VALUE new_node)
 {
 	VALUE coste_nuevo_nodo;
 	VALUE vector_auxiliar;
@@ -257,11 +257,11 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 					bandera_mejor_solucion = 1;
 					hash_mejor_solucion = hash_alternativa;
 					mejor_solucion = alternativa;
-					coste_mejor_solucion = method_mejora_solucion_2(self, solucion, item, nodo_alternativo);
+					coste_mejor_solucion = method_grado_mejora_solucion(self, solucion, item, nodo_alternativo);
 				}
 				else
 				{
-					VALUE coste_alternativa = method_mejora_solucion_2(self, solucion, item, nodo_alternativo);
+					VALUE coste_alternativa = method_grado_mejora_solucion(self, solucion, item, nodo_alternativo);
 					
 					if(NUM2DBL(coste_alternativa) > NUM2DBL(coste_mejor_solucion))
 					{
@@ -294,7 +294,7 @@ void Init_c_mmdp()
 	module_mmdp = rb_define_module("MMDP");
 	class_mmdp = rb_define_class_under(module_mmdp, "MMDP", class_basic_mmdp);
 	rb_define_method(class_mmdp, "mejora_solucion", method_mejora_solucion, 3);
-	rb_define_method(class_mmdp, "grado_mejora_solucion", method_mejora_solucion_2, 3);
+	rb_define_method(class_mmdp, "grado_mejora_solucion", method_grado_mejora_solucion, 3);
 	rb_define_method(class_mmdp, "busqueda_local_first_improvement", method_busqueda_local_first_improvement, 3);
 	rb_define_method(class_mmdp, "busqueda_local_best_improvement", method_busqueda_local_best_improvement, 3);
 }
