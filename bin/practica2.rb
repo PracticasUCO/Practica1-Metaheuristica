@@ -121,6 +121,7 @@ opt["search"] = opt["search"].to_sym
 
 puts "Carga completa..."
 
+maximo = -Float::INFINITY
 opt["loops-externos"].times.with_index do |index|
 	solucion, coste = problem.generar_solucion_busqueda_local(opt["search"])
 	
@@ -128,4 +129,10 @@ opt["loops-externos"].times.with_index do |index|
 	puts "#{solucion}"
 	puts "Coste: #{coste}"
 	puts
+
+	if coste > maximo
+		maximo = coste
+	end
 end
+
+puts "Maximo obtenido: #{maximo}"
