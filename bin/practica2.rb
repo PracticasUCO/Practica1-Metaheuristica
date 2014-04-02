@@ -122,6 +122,9 @@ opt["search"] = opt["search"].to_sym
 puts "Carga completa..."
 
 maximo = -Float::INFINITY
+media = 0
+desviacion = 0
+valores = Array.new
 opt["loops-externos"].times.with_index do |index|
 	solucion, coste = problem.generar_solucion_busqueda_local(opt["search"])
 	
@@ -133,6 +136,21 @@ opt["loops-externos"].times.with_index do |index|
 	if coste > maximo
 		maximo = coste
 	end
+
+	media += coste
+	valores << coste
 end
 
+media /= opt["loops-externos"]
+
+valores.each do |v|
+	desviacion += ((v*v) - (media*media))
+end
+
+desviacion /= opt["loops-externos"]
+
+desviacion = Math.sqrt(desviacion)
+
 puts "Maximo obtenido: #{maximo}"
+puts "Media: #{media}"
+puts "Desviacion: #{desviacion}"
