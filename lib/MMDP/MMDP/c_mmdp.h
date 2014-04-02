@@ -63,10 +63,9 @@ de maximizar la funcion objetivo de la solucion. Recibe como parametros:
 - solucion: La solucion a optimizar
 - coste_actual: coste de la solucion a optimizar
 - limite: Limite de iteraciones maximo
-- temperatura_final: Temperatura final entre 0 y 0.5 a través de la cual ya no se buscaran más soluciones
-- coeficiente: Coeficiente de bajada de la solucion
+- es: clase de enfriamiento simulado que controlara el cambio de soluciones
 */
-VALUE method_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion, VALUE coste_actual, VALUE limite, VALUE temperatura_final, VALUE coeficiente);
+VALUE method_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion, VALUE coste_actual, VALUE es);
 
 /*
 Devuelve la diferencia entre dos arrays
