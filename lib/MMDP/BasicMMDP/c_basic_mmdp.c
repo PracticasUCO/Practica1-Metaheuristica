@@ -157,7 +157,7 @@ VALUE method_merge_diversidad_minima(VALUE self, VALUE solucion, VALUE nuevo_nod
 
 VALUE method_diversidad_minima_parcial(VALUE self, VALUE solucion, VALUE nuevo_nodo)
 {
-	VALUE minimo = DBL2NUM(10);
+	VALUE minimo = DBL2NUM(0);
 	VALUE origen;
 	VALUE valor_nuevo_nodo;
 	long int i; //Auxiliares
