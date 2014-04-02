@@ -155,6 +155,46 @@ VALUE method_merge_diversidad_minima(VALUE self, VALUE solucion, VALUE nuevo_nod
 	return minimo;
 }
 
+VALUE method_diversidad_minima_parcial(VALUE self, VALUE solucion, VALUE nuevo_nodo)
+{
+	VALUE minimo = DBL2NUM(10);
+	VALUE origen;
+	VALUE destino;
+	VALUE valor_actual = DBL2NUM(15);
+	VALUE valor_nuevo_nodo;
+	long int i, j; //Auxiliares
+	int count_minimo = 0;
+
+	if(TYPE(nuevo_nodo) == T_NIL)
+	{
+		rb_raise(rb_eTypeError, "nuevo_nodo debe de ser un nodo, no nil\n");
+	}
+
+	for(i = 0; i < RARRAY_LEN(solucion); i++)
+	{
+		origen = rb_ary_entry(solucion, i);
+
+		valor_nuevo_nodo = method_obtener_coste_entre(self, origen, nuevo_nodo);
+		
+		if(valor_nuevo_nodo == Qfalse)
+		{
+			continue;
+		}
+
+		if(count_minimo == 0)
+		{
+			minimo = valor_nuevo_nodo;
+			count_minimo = 1;
+		}
+		else if(NUM2DBL(valor_nuevo_nodo) < NUM2DBL(minimo))
+		{
+			minimo = valor_nuevo_nodo;
+		}
+	}
+
+	return minimo;	
+}
+
 /*
 funcion_objetivo es un sinonimo de diversidad minima
 */
@@ -173,4 +213,5 @@ void Init_c_basic_mmdp()
 	rb_define_method(class_basic_mmdp, "diversidad_minima", method_diversidad_minima, 1);
 	rb_define_method(class_basic_mmdp, "merge_diversidad_minima", method_merge_diversidad_minima, 2);
 	rb_define_method(class_basic_mmdp, "funcion_objetivo", method_funcion_objetivo, 1);
+	rb_define_method(class_basic_mmdp, "diversidad_minima_parcial", method_diversidad_minima_parcial, 2);
 }
