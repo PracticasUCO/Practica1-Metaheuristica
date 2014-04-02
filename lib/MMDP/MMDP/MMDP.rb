@@ -72,11 +72,11 @@ module MMDP
 				# Not implemented yet
 			end
 
-			puts "diff: #{anterior - coste_actual}"
+			coste_actual = diversidad_minima(solucion);
 
 			return solucion, coste_actual
 		end
 
-		protected :busqueda_global, :busqueda_local_best_improvement, :obtener_diferencia_soluciones, :busqueda_local_first_improvement
+		protected :busqueda_global, :busqueda_local_best_improvement, :busqueda_local_first_improvement, :mejora_solucion
 	end
 end
