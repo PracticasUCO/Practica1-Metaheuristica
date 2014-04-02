@@ -12,7 +12,7 @@ class TestBasicMMDP < MiniTest::Test
 	def test_basic_params
 		assert_equal(30, @t.total_nodes)
 		assert_equal(9, @t.solution_nodes)
-		assert_equal(29, @t.lista_nodos.length)
+		assert_equal(30, @t.lista_nodos.length)
 	end
 	
 	def test_solution
