@@ -64,13 +64,17 @@ module MMDP
 				@total_nodes = m.to_i
 				@solution_nodes = n.to_i
 
-				file.each do |linea|
+				file.each_with_index do |linea, index|
 					origen, destino, coste = linea.split(/ +/)
 					signature = Array.new
 					signature << origen << destino
 					signature.sort!
 
-					@lista_nodos.push(origen) if not @lista_nodos.include? origen
+					if index == 1
+						@lista_nodos.push(origen)
+					end
+					@lista_nodos.push(destino) if not @lista_nodos.include? destino
+					
 
 					@nodes[signature] = coste.to_f if not @nodes.has_key? signature
 				end
