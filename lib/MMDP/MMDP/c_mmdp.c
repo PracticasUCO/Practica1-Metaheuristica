@@ -240,8 +240,6 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 				continue;
 			}
 
-			limite_inicio++;
-
 			if(method_mejora_solucion(self, alternativa, item, nodo_alternativo) == Qtrue)
 			{
 				VALUE hash_alternativa;
