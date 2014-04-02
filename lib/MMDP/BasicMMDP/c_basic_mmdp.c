@@ -159,10 +159,8 @@ VALUE method_diversidad_minima_parcial(VALUE self, VALUE solucion, VALUE nuevo_n
 {
 	VALUE minimo = DBL2NUM(10);
 	VALUE origen;
-	VALUE destino;
-	VALUE valor_actual = DBL2NUM(15);
 	VALUE valor_nuevo_nodo;
-	long int i, j; //Auxiliares
+	long int i; //Auxiliares
 	int count_minimo = 0;
 
 	if(TYPE(nuevo_nodo) == T_NIL)
