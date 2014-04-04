@@ -1,5 +1,7 @@
 #! /usr/bin/env ruby -w
 
+require_relative 'c_basic_tsp'
+
 # En el modulo TSP se encuentran todas las clases pertenecientes al problema
 # del TSP
 module TSP
@@ -56,13 +58,13 @@ module TSP
 		end
 
 		# Iterador que accede a cada elemento de la matriz de costes
-		def each
-			@caminos.each do |ciudad|
-				ciudad.each do |coste|
-					yield coste
-				end
-			end
-		end
+		# def each
+		# 	@caminos.each do |ciudad|
+		# 		ciudad.each do |coste|
+		# 			yield coste
+		# 		end
+		# 	end
+		# end
 
 		# Calcula el coste de una solucion dada
 		#
