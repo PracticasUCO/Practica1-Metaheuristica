@@ -3,6 +3,9 @@
 VALUE module_tsp;
 VALUE class_basic_tsp;
 
+/*
+Iterador que accede a cada elemento de la matriz de costes
+*/
 VALUE method_btsp_each(VALUE self)
 {
 	VALUE caminos = rb_iv_get(self, "@caminos");
@@ -20,6 +23,12 @@ VALUE method_btsp_each(VALUE self)
 	}
 	return Qnil;
 }
+
+/*
+Calcula el coste de una solucion dada
+
+Recibe como parametro un Array con las ciudades que se van a visitar
+*/
 
 VALUE method_btsp_coste_solucion(VALUE self, VALUE ciudades)
 {
