@@ -4,7 +4,7 @@
 #include <ruby.h>
 
 // Constructor de la clase ES
-void Init_c_es();
+void Init_ES();
 
 // Modulo ES
 VALUE module_es = Qnil;
@@ -38,12 +38,6 @@ La funcion de disminución de la temperatura viene determinada por el
 tipo y por el coeficiente de cambio determinado en la clase
 */
 VALUE method_enfriar(VALUE self);
-
-/*
-Devuelve el tipo de funcion de disminución de la temperatura,
-actualmente este valor solo puede ser :geometrica
-*/
-VALUE method_tipo(VALUE self);
 
 /*
 Devuelve el coeficiente de cambio usado en la funcion de temperatura

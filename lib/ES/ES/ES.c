@@ -1,6 +1,6 @@
 #include "ES.h"
 #include <math.h>
-
+#include <stdio.h>
 /*
 Este metodo devuelve la temperatura actual del algoritmo
 */
@@ -17,12 +17,11 @@ la temperatura.
 VALUE method_probabilidad(VALUE self)
 {
 	ID method_rand = rb_intern("rand");
-
-
-	double valorTemperatura = NUM2DBL(rb_iv_get(self, "@temperatura"));
-	double valorAleatorio = NUM2DBL(rb_funcall(rb_cObject, method_rand, 0));
+	VALUE valorInicio = rb_iv_get(self, "@temperatura_inicio");
+	VALUE valorTemperatura = rb_iv_get(self, "@temperatura");
+	VALUE valorAleatorio = rb_funcall(rb_cObject, method_rand, 1, valorInicio);
 	
-	if(valorAleatorio <= valorTemperatura)
+	if(NUM2DBL(valorAleatorio) <= NUM2DBL(valorTemperatura))
 	{
 		return Qtrue;
 	}
@@ -43,33 +42,14 @@ VALUE method_enfriar(VALUE self)
 {
 	VALUE coeficiente;
 	VALUE temperaturaActual;
-	ID tipo;
-	ID tipo_geometrica;
 
 	coeficiente = rb_iv_get(self, "@coeficiente");
 	temperaturaActual = rb_iv_get(self, "@temperatura");
-	tipo = rb_iv_get(self, "@tipo");
-	tipo_geometrica = ID2SYM(rb_intern("geometrica"));
 
-	if(tipo == tipo_geometrica)
-	{
-		temperaturaActual = DBL2NUM(NUM2DBL(temperaturaActual) * NUM2DBL(coeficiente));
-		rb_iv_set(self, "@temperatura", temperaturaActual);
-	}
-	else
-	{
-		rb_raise(rb_eTypeError, "El tipo de la clase ES no es correcto");
-	}
-	return Qnil;
-}
-
-/*
-Devuelve el tipo de funcion de disminución de la temperatura,
-actualmente este valor solo puede ser :geometrica
-*/
-VALUE method_tipo(VALUE self)
-{
-	return rb_iv_get(self, "@tipo");
+	temperaturaActual = DBL2NUM(NUM2DBL(temperaturaActual) * NUM2DBL(coeficiente));
+	rb_iv_set(self, "@temperatura", temperaturaActual);
+	
+	return temperaturaActual;
 }
 
 /*
@@ -85,27 +65,28 @@ Restaura la temperatura a su punto inicial
 */
 VALUE method_reset(VALUE self)
 {
-	VALUE valorInicial = INT2NUM(1);
+	VALUE valorInicial = rb_iv_get(self, "@temperatura_inicio");
 	rb_iv_set(self, "@temperatura", valorInicial);
-	return Qnil;
+	return valorInicial;
 }
 
-VALUE method_es_initialize(int argc, VALUE *argv, VALUE es)
+VALUE method_es_initialize(VALUE self, VALUE temperatura, VALUE coeficiente)
 {
 	rb_iv_set(self, "@temperatura", temperatura);
 	rb_iv_set(self, "@coeficiente", coeficiente);
 	rb_iv_set(self, "@temperatura_inicio", temperatura);
+	return self;
 }
 
 
-void Init_c_es()
+void Init_ES()
 {
 	module_es = rb_define_module("ES");
 	class_es = rb_define_class_under(module_es, "ES", rb_cObject);
+	rb_define_method(class_es, "initialize", method_es_initialize, 2);
 	rb_define_method(class_es, "temperatura", method_temperatura, 0);
 	rb_define_method(class_es, "probabilidad", method_probabilidad, 0);
 	rb_define_method(class_es, "enfriar", method_enfriar, 0);
-	rb_define_method(class_es, "tipo", method_tipo, 0);
 	rb_define_method(class_es, "coeficiente", method_coeficiente, 0);
 	rb_define_method(class_es, "reset", method_reset, 0);
 }
