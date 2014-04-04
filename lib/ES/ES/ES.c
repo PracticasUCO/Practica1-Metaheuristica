@@ -92,8 +92,11 @@ VALUE method_reset(VALUE self)
 
 VALUE method_es_initialize(int argc, VALUE *argv, VALUE es)
 {
-
+	rb_iv_set(self, "@temperatura", temperatura);
+	rb_iv_set(self, "@coeficiente", coeficiente);
+	rb_iv_set(self, "@temperatura_inicio", temperatura);
 }
+
 
 void Init_c_es()
 {

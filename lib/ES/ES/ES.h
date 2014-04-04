@@ -12,12 +12,7 @@ VALUE module_es = Qnil;
 // Clase ES
 VALUE class_es = Qnil;
 
-VALUE method_es_initialize(VALUE self, VALUE temperatura, VALUE coeficiente)
-{
-	rb_iv_set(self, "@temperatura", temperatura);
-	rb_iv_set(self, "@coeficiente", coeficiente);
-	rb_iv_set(self, "@temperatura_inicio", temperatura);
-}
+VALUE method_es_initialize(VALUE self, VALUE temperatura, VALUE coeficiente);
 
 
 /*
