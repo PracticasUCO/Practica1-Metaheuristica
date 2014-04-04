@@ -90,6 +90,11 @@ VALUE method_reset(VALUE self)
 	return Qnil;
 }
 
+VALUE method_es_initialize(int argc, VALUE *argv, VALUE es)
+{
+
+}
+
 void Init_c_es()
 {
 	module_es = rb_define_module("ES");
