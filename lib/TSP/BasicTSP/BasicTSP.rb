@@ -57,38 +57,6 @@ module TSP
 			@caminos[index]
 		end
 
-		# Iterador que accede a cada elemento de la matriz de costes
-		# def each
-		# 	@caminos.each do |ciudad|
-		# 		ciudad.each do |coste|
-		# 			yield coste
-		# 		end
-		# 	end
-		# end
-
-		# Calcula el coste de una solucion dada
-		#
-		# Recibe como parametro un Array con las ciudades que se van a visitar
-		# def coste_solucion(ciudades)
-		# 	raise TypeError, "ciudades debe de ser un Array" unless ciudades.kind_of? Array
-			
-		# 	coste_actual = 0.0
-			
-		# 	first = ciudades.each
-		# 	second = ciudades.each
-
-		# 	second.next
-
-		# 	loop do
-		# 		indexA = first.next
-		# 		indexB = second.next
-		# 		coste_actual += self[indexA][indexB]
-		# 	end
-
-		# 	coste_actual += self[ciudades[-1]][ciudades[0]]
-		# 	return coste_actual
-		# end
-
 		# Genera una solucion aleatoria al problema del
 		# viajante del comercio
 		def generar_solucion_aleatoria
