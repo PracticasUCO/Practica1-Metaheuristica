@@ -69,25 +69,25 @@ module TSP
 		# Calcula el coste de una solucion dada
 		#
 		# Recibe como parametro un Array con las ciudades que se van a visitar
-		def coste_solucion(ciudades)
-			raise TypeError, "ciudades debe de ser un Array" unless ciudades.kind_of? Array
+		# def coste_solucion(ciudades)
+		# 	raise TypeError, "ciudades debe de ser un Array" unless ciudades.kind_of? Array
 			
-			coste_actual = 0.0
+		# 	coste_actual = 0.0
 			
-			first = ciudades.each
-			second = ciudades.each
+		# 	first = ciudades.each
+		# 	second = ciudades.each
 
-			second.next
+		# 	second.next
 
-			loop do
-				indexA = first.next
-				indexB = second.next
-				coste_actual += self[indexA][indexB]
-			end
+		# 	loop do
+		# 		indexA = first.next
+		# 		indexB = second.next
+		# 		coste_actual += self[indexA][indexB]
+		# 	end
 
-			coste_actual += self[ciudades[-1]][ciudades[0]]
-			return coste_actual
-		end
+		# 	coste_actual += self[ciudades[-1]][ciudades[0]]
+		# 	return coste_actual
+		# end
 
 		# Genera una solucion aleatoria al problema del
 		# viajante del comercio
