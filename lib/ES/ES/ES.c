@@ -72,6 +72,26 @@ VALUE method_reset(VALUE self)
 
 VALUE method_es_initialize(VALUE self, VALUE temperatura, VALUE coeficiente)
 {
+	if((TYPE(temperatura) != T_FIXNUM) && (TYPE(temperatura) != T_FLOAT))
+	{
+		rb_raise(rb_eTypeError, "La temperatura de inicio debe de ser un numero\n");
+	}
+
+	if((TYPE(coeficiente) != T_FIXNUM) && (TYPE(coeficiente) != T_FLOAT))
+	{
+		rb_raise(rb_eTypeError, "El coeficiente debe de ser un flotante\n");
+	}
+
+	if(NUM2DBL(temperatura) < 0)
+	{
+		rb_raise(rb_eTypeError, "La temperatura no puede ser negativa\n");
+	}
+
+	if((NUM2DBL(coeficiente) <= 0) || (NUM2DBL(coeficiente) >= 1))
+	{
+		rb_raise(rb_eTypeError, "El coeficiente debe oscilar entre 0-1 (exclusive)\n");
+	}
+
 	rb_iv_set(self, "@temperatura", temperatura);
 	rb_iv_set(self, "@coeficiente", coeficiente);
 	rb_iv_set(self, "@temperatura_inicio", temperatura);
