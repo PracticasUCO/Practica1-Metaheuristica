@@ -1,6 +1,5 @@
 #include "ES.h"
-#include <math.h>
-#include <stdio.h>
+
 /*
 Este metodo devuelve la temperatura actual del algoritmo
 */
@@ -70,6 +69,11 @@ VALUE method_reset(VALUE self)
 	return valorInicial;
 }
 
+/*
+Constructor de la clase ES. Recibe como parametros:
+- temperatura: El valor de la temperatura inicial. Este valor debe de ser un numero positivo
+- coeficiente: Valor del coeficiente. Este valor debe de ser un numero entre 0-1 exclusive
+*/
 VALUE method_es_initialize(VALUE self, VALUE temperatura, VALUE coeficiente)
 {
 	if((TYPE(temperatura) != T_FIXNUM) && (TYPE(temperatura) != T_FLOAT))
