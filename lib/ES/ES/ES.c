@@ -1,6 +1,5 @@
-#include "c_es.h"
+#include "ES.h"
 #include <math.h>
-#include <stdio.h>
 
 /*
 Este metodo devuelve la temperatura actual del algoritmo
