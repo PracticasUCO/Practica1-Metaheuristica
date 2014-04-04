@@ -52,7 +52,7 @@ class TestES < MiniTest::Test
 		assert_raises(TypeError, "La temperatura debe de ser un valor numerico") {ES::ES.new("a", 0.5)}
 		assert_raises(TypeError, "El coeficiente debe de ser un valor numerico") {ES::ES.new(3, "a")}
 		assert_raises(TypeError, "La temperatura no puede ser negativa") {ES::ES.new(-5, 0.23)}
-		assert_raises(TypeError, "La temperatura no puede ser cero") {ES::ES.new(0, 0.1)}
+		assert_raises(TypeError, "La temperatura no puede menor que uno") {ES::ES.new(0.999, 0.1)}
 		assert_raises(TypeError, "El coeficiente no pude ser cero") {ES::ES.new(1, 0)}
 		assert_raises(TypeError, "El coeficiente no puede ser menor que cero") {ES::ES.new(1, -0.1)}
 		assert_raises(TypeError, "El coeficiente no puede ser uno") {ES::ES.new(2, 1)}
