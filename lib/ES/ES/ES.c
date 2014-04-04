@@ -86,7 +86,7 @@ VALUE method_es_initialize(VALUE self, VALUE temperatura, VALUE coeficiente)
 		rb_raise(rb_eTypeError, "El coeficiente debe de ser un flotante\n");
 	}
 
-	if(NUM2DBL(temperatura) < 0)
+	if(NUM2DBL(temperatura) < 1)
 	{
 		rb_raise(rb_eTypeError, "La temperatura no puede ser negativa\n");
 	}
