@@ -1,5 +1,5 @@
 #include "c_mmdp.h"
-#include "../../ES/ES/c_es.h"
+#include "../../ES/ES/ES.h"
 /*
 Devuelve la diferencia entre dos arrays
 */
