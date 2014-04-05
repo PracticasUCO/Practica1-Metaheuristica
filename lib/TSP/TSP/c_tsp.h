@@ -1,11 +1,3 @@
-#ifndef __LOCAL_SEARCH_SYMBOLS
-#define __LOCAL_SEARCH_SYMBOLS
-// Global Syms
-VALUE symbol_first_improvement = ID2SYM(rb_intern("first_improvemnt"));
-VALUE symbol_best_improvement = ID2SYM(rb_intern("best_improvement"));
-VALUE symbol_enfriamiento_simulado = ID2SYM(rb_intern("enfriamiento_simulado"));
-#endif
-
 #ifndef __TSP_C__
 #define __TSP_C__
 
@@ -16,9 +8,8 @@ VALUE class_tsp;
 void Init_c_tsp();
 
 // Methods
-VALUE method_tsp_question_mejora_solucion(VALUE self, VALUE solucion, VALUE coste, VALUE nodo_a, VALUE nodo_b);
 VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE coste, VALUE nodo_a, VALUE nodo_b);
-VALUE method_tsp_diferencia_soluciones(VALUE self, VALUE solucion_a, VALUE solucion_b);
+VALUE method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b);
 VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE limite);
 VALUE method_tsp_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE limite);
 VALUE method_tsp_busqueda_local(VALUE self);
