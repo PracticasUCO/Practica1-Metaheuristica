@@ -173,12 +173,8 @@ VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VA
 
 	for(i = 0; ((i < RARRAY_LEN(solucion)) && (NUM2INT(limite_actual) < NUM2INT(limite))); i++)
 	{
-		for(j = i; ((j < RARRAY_LEN(solucion)) && (NUM2INT(limite_actual) < NUM2INT(limite))); j++)
+		for(j = i + 1; ((j < RARRAY_LEN(solucion)) && (NUM2INT(limite_actual) < NUM2INT(limite))); j++)
 		{
-			if(i == j)
-			{
-				continue;
-			}
 			limite_actual = INT2NUM(NUM2INT(limite_actual) + 1);
 
 			coste_alternativa = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
