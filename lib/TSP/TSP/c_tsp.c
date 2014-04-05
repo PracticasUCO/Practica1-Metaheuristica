@@ -62,9 +62,6 @@ mantiene intacto simplemente devuelve cero. El grado en el que aumenta o
 disminuye el coste de la solucion se puede calcular sumando el valor devuelto
 a el coste que se tenía de la solucion.
 
-Este metodo es más eficiente que calcular el coste de dos soluciones diferentes
-ya que hara en la mayoría de las ocasiones menos iteraciones.
-
 Los parametros que recibe son:
 - solucion: La solucion actual antes de realizar el intercambio
 - nodo_a: Indice del nodo primero que se desea intercambiar
@@ -136,15 +133,14 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE nodo_a,
 		posterior_b = INT2NUM(NUM2INT(nodo_b) + 1);
 	}
 
-	coste_inicial = DBL2NUM(NUM2DBL(method_btsp_reader_2(self, anterior_a, nodo_a)) + NUM2DBL(method_btsp_reader_2(self, nodo_a, posterior_a)));
-	coste_inicial = DBL2NUM(NUM2DBL(coste_inicial) + NUM2DBL(method_btsp_reader_2(self, anterior_b, nodo_b)) + NUM2DBL(method_btsp_reader_2(self, nodo_b, posterior_b)));
+	coste_inicial = method_btsp_coste_solucion(self, solucion);
+	method_tsp_opt(self, solucion, nodo_a, nodo_b);
+
+	coste_final = method_btsp_coste_solucion(self, solucion);
 
 	method_tsp_opt(self, solucion, nodo_a, nodo_b);
 
-	coste_final = DBL2NUM(NUM2DBL(method_btsp_reader_2(self, anterior_a, nodo_a)) + NUM2DBL(method_btsp_reader_2(self, nodo_a, posterior_a)));
-	coste_final = DBL2NUM(NUM2DBL(coste_inicial) + NUM2DBL(method_btsp_reader_2(self, anterior_b, nodo_b)) + NUM2DBL(method_btsp_reader_2(self, nodo_b, posterior_b)));
 
-	method_tsp_opt(self, solucion, nodo_a, nodo_b);
 	return DBL2NUM(NUM2DBL(coste_final) - NUM2DBL(coste_inicial));
 }
 
@@ -158,6 +154,7 @@ first improvement. Recibe como parametros:
 VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE limite)
 {
 	VALUE coste_alternativa;
+	double coste_actual = NUM2DBL(coste_solucion);
 	VALUE limite_actual = INT2NUM(0);
 	VALUE empaquetado;
 	long int i, j;
@@ -181,23 +178,25 @@ VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VA
 
 	if(NUM2INT(limite) == 0)
 	{
-		limite = INT2NUM(RARRAY_LEN(solucion) * 3);
+		limite = INT2NUM(RARRAY_LEN(solucion) * RARRAY_LEN(solucion));
 	}
-
-	fprintf(stderr, "Se inicia:\n");
-	show_vector(solucion);
 
 	for(i = 0; ((i < RARRAY_LEN(solucion)) && (NUM2INT(limite_actual) < NUM2INT(limite))); i++)
 	{
 		for(j = i; ((j < RARRAY_LEN(solucion)) && (NUM2INT(limite_actual) < NUM2INT(limite))); j++)
 		{
+			if(i == j)
+			{
+				continue;
+			}
 			limite_actual = INT2NUM(NUM2INT(limite_actual) + 1);
-			fprintf(stderr, "Vuelta: %d\n", i*RARRAY_LEN(solucion) + j);
+
 			coste_alternativa = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
 
 			if(NUM2DBL(coste_alternativa) < 0)
 			{
-				coste_solucion = NUM2DBL(coste_solucion) + NUM2DBL(coste_alternativa);
+				coste_actual += NUM2DBL(coste_alternativa);
+
 				method_tsp_opt(self, solucion, INT2NUM(i), INT2NUM(j));
 			}
 		}
@@ -205,7 +204,7 @@ VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VA
 
 	empaquetado = rb_ary_new();
 	rb_ary_push(empaquetado, solucion);
-	rb_ary_push(empaquetado, coste_solucion);
+	rb_ary_push(empaquetado, DBL2NUM(coste_actual));
 	return empaquetado;
 }
 
