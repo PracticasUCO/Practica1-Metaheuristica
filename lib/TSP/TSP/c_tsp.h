@@ -16,7 +16,9 @@ VALUE class_tsp;
 void Init_c_tsp();
 
 // Methods
-VALUE method_tsp_mejora_solucion(VALUE self, VALUE solucion_a, VALUE costeA, VALUE nodo_a, VALUE nodo_b);
+VALUE method_tsp_question_mejora_solucion(VALUE self, VALUE solucion, VALUE coste, VALUE nodo_a, VALUE nodo_b);
+VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE coste, VALUE nodo_a, VALUE nodo_b);
+VALUE method_tsp_diferencia_soluciones(VALUE self, VALUE solucion_a, VALUE solucion_b);
 VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE limite);
 VALUE method_tsp_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE limite);
 VALUE method_tsp_busqueda_local(VALUE self);
