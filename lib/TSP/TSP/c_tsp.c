@@ -1,6 +1,11 @@
 #include "c_tsp.h"
 #include "../BasicTSP/c_basic_tsp.c"
 
+VALUE method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b)
+{
+	return Qnil;
+}
+
 /*
 Devuelve un valor negativo cuando el coste de la solucion disminuye y un valor
 positivo cuando el coste de la solucion aumenta. Si el coste de la solucion se
@@ -27,6 +32,10 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE coste, 
 	VALUE posterior_a;
 	VALUE anterior_b;
 	VALUE posterior_b;
+	VALUE fila_anterior_a;
+	VALUE fila_a;
+	VALUE fila_anterior_b;
+	VALUE fila_b;
 	solucion = rb_check_array_type(solucion);
 
 	if((TYPE(nodo_a) != T_FIXNUM) || (TYPE(nodo_b) != T_FIXNUM))
@@ -82,21 +91,7 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE coste, 
 		posterior_b = INT2NUM(NUM2INT(nodo_b) + 1);
 	}
 
-	coste_inicial = method_btsp_reader(method_btsp_reader(self, anterior_a), nodo_a);
-	coste_inicial = DBL2NUM(NUM2DBL(coste_inicial) + NUM2DBL(method_btsp_reader(method_btsp_reader(self, nodo_a), posterior_a)));
-	coste_inicial = DBL2NUM(NUM2DBL(coste_inicial) + NUM2DBL(method_btsp_reader(method_btsp_reader(self, anterior_b), nodo_b)));
-	coste_inicial = DBL2NUM(NUM2DBL(coste_inicial) + NUM2DBL(method_btsp_reader(method_btsp_reader(self, nodo_b), posterior_b)));
-
-	method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b);
-
-	coste_final = method_btsp_reader(method_btsp_reader(self, anterior_a), nodo_a);
-	coste_final = DBL2NUM(NUM2DBL(coste_inicial) + NUM2DBL(method_btsp_reader(method_btsp_reader(self, nodo_a), posterior_a)));
-	coste_final = DBL2NUM(NUM2DBL(coste_inicial) + NUM2DBL(method_btsp_reader(method_btsp_reader(self, anterior_b), nodo_b)));
-	coste_final = DBL2NUM(NUM2DBL(coste_inicial) + NUM2DBL(method_btsp_reader(method_btsp_reader(self, nodo_b), posterior_b)));
-
-	method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b);
-
-	return DBL2NUM(NUM2DBL(coste_inicial) - NUM2DBL(coste_final));
+	return Qnil;
 }
 
 void Init_c_tsp()
