@@ -1,9 +1,19 @@
 #include "c_tsp.h"
 #include "../BasicTSP/c_basic_tsp.c"
 
-VALUE method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b)
+void method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b)
 {
-	return Qnil;
+	VALUE value_at_a;
+	VALUE value_at_b;
+
+	value_at_a = rb_ary_entry(solucion, NUM2INT(nodo_a));
+	value_at_b = rb_ary_entry(solucion, NUM2INT(nodo_b));
+
+	rb_ary_delete_at(solucion, NUM2INT(nodo_a));
+	rb_ary_delete_at(solucion, NUM2INT(nodo_b));
+
+	rb_ary_store(solucion, NUM2INT(nodo_a), value_at_b);
+	rb_ary_store(solucion, NUM2INT(nodo_b), value_at_a);
 }
 
 /*
