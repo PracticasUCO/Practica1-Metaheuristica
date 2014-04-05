@@ -10,7 +10,7 @@ Ejemplo:
 Si solucion = [1,2,3,4,5,6] y escribimos
 TSP.opt(solucion, 1,3) => [1,4,3,2,5,6]
 */
-void method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b)
+VALUE method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b)
 {
 	VALUE value_at_a;
 	VALUE value_at_b;
@@ -42,6 +42,8 @@ void method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b)
 
 	rb_ary_store(solucion, NUM2INT(nodo_a), value_at_b);
 	rb_ary_store(solucion, NUM2INT(nodo_b), value_at_a);
+
+	return Qnil;
 }
 
 /*
@@ -198,4 +200,7 @@ void Init_c_tsp()
 {
 	Init_c_basic_tsp();
 	class_tsp = rb_define_class_under(module_tsp, "TSP", class_basic_tsp);
+	rb_define_private_method(class_tsp, "opt", method_tsp_opt, 3);
+	rb_define_private_method(class_tsp, "grado_mejora_solucion", method_tsp_grado_mejora_solucion, 3);
+	rb_define_private_method(class_tsp, "busqueda_local_first_improvement", method_tsp_busqueda_local_first_improvement, 3);
 }
