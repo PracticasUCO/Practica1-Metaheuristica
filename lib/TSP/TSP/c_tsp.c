@@ -49,9 +49,6 @@ VALUE method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b)
 	value_at_a = rb_ary_entry(solucion, NUM2INT(nodo_a));
 	value_at_b = rb_ary_entry(solucion, NUM2INT(nodo_b));
 
-	rb_ary_delete_at(solucion, NUM2INT(nodo_a));
-	rb_ary_delete_at(solucion, NUM2INT(nodo_b));
-
 	rb_ary_store(solucion, NUM2INT(nodo_a), value_at_b);
 	rb_ary_store(solucion, NUM2INT(nodo_b), value_at_a);
 
@@ -187,11 +184,15 @@ VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VA
 		limite = INT2NUM(RARRAY_LEN(solucion) * 3);
 	}
 
+	fprintf(stderr, "Se inicia:\n");
+	show_vector(solucion);
+
 	for(i = 0; ((i < RARRAY_LEN(solucion)) && (NUM2INT(limite_actual) < NUM2INT(limite))); i++)
 	{
 		for(j = i; ((j < RARRAY_LEN(solucion)) && (NUM2INT(limite_actual) < NUM2INT(limite))); j++)
 		{
 			limite_actual = INT2NUM(NUM2INT(limite_actual) + 1);
+			fprintf(stderr, "Vuelta: %d\n", i*RARRAY_LEN(solucion) + j);
 			coste_alternativa = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
 
 			if(NUM2DBL(coste_alternativa) < 0)
