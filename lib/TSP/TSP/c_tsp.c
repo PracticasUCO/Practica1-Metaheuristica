@@ -32,10 +32,6 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE coste, 
 	VALUE posterior_a;
 	VALUE anterior_b;
 	VALUE posterior_b;
-	VALUE fila_anterior_a;
-	VALUE fila_a;
-	VALUE fila_anterior_b;
-	VALUE fila_b;
 	solucion = rb_check_array_type(solucion);
 
 	if((TYPE(nodo_a) != T_FIXNUM) || (TYPE(nodo_b) != T_FIXNUM))
@@ -91,7 +87,16 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE coste, 
 		posterior_b = INT2NUM(NUM2INT(nodo_b) + 1);
 	}
 
-	return Qnil;
+	coste_inicial = DBL2NUM(NUM2DBL(method_bstp_reader_2(self, anterior_a, nodo_a)) + NUM2DBL(method_bstp_reader_2(self, nodo_a, posterior_a)));
+	coste_inicial = DBL2NUM(NUM2DBL(coste_inicial) + NUM2DBL(method_bstp_reader_2(self, anterior_b, nodo_b)) + NUM2DBL(method_bstp_reader_2(self, nodo_b, posterior_b)));
+
+	method_tsp_opt(self, solucion, nodo_a, nodo_b);
+
+	coste_final = DBL2NUM(NUM2DBL(method_bstp_reader_2(self, anterior_a, nodo_a)) + NUM2DBL(method_bstp_reader_2(self, nodo_a, posterior_a)));
+	coste_final = DBL2NUM(NUM2DBL(coste_inicial) + NUM2DBL(method_bstp_reader_2(self, anterior_b, nodo_b)) + NUM2DBL(method_bstp_reader_2(self, nodo_b, posterior_b)));
+
+	method_tsp_opt(self, solucion, nodo_a, nodo_b);
+	return DBL2NUM(NUM2DBL(coste_final) - NUM2DBL(coste_inicial));
 }
 
 void Init_c_tsp()
