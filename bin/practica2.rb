@@ -122,6 +122,7 @@ opt["search"] = opt["search"].to_sym
 puts "Carga completa..."
 
 maximo = -Float::INFINITY
+minimo = Float::INFINITY
 media = 0
 desviacion = 0
 valores = Array.new
@@ -135,6 +136,10 @@ opt["loops-externos"].times.with_index do |index|
 
 	if coste > maximo
 		maximo = coste
+	end
+
+	if coste < minimo
+		minimo = coste
 	end
 
 	media += coste
@@ -151,6 +156,6 @@ desviacion /= opt["loops-externos"]
 
 desviacion = Math.sqrt(desviacion)
 
-puts "Maximo obtenido: #{maximo}"
+puts "Maximo: #{maximo} - Minimo: #{minimo}"
 puts "Media: #{media}"
 puts "Desviacion: #{desviacion}"
