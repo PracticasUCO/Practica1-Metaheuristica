@@ -51,12 +51,6 @@ module TSP
 			end
 		end
 
-		# Accede a un elemento del la matriz de costes entre ciudades
-		def [](index)
-			raise TypeError, "index must be an integer" unless index.kind_of? Integer
-			@caminos[index]
-		end
-
 		# Genera una solucion aleatoria al problema del
 		# viajante del comercio
 		def generar_solucion_aleatoria

@@ -24,6 +24,18 @@ VALUE method_btsp_each(VALUE self)
 	return Qnil;
 }
 
+VALUE method_btsp_accesor(VALUE self, VALUE index)
+{
+	VALUE caminos;
+	if(TYPE(index) != T_FIXNUM)
+	{
+		rb_raise(rb_eTypeError, "index must be an integer\n");
+	}
+
+	caminos = rb_iv_get(self, "@caminos");
+	return rb_ary_entry(caminos, NUM2INT(index));
+}
+
 /*
 Calcula el coste de una solucion dada
 
@@ -56,4 +68,5 @@ void Init_c_basic_tsp()
 	class_basic_tsp = rb_define_class_under(module_tsp, "BasicTSP", rb_cObject);
 	rb_define_method(class_basic_tsp, "each", method_btsp_each, 0);
 	rb_define_method(class_basic_tsp, "coste_solucion", method_btsp_coste_solucion, 1);
+	rb_define_method(class_basic_tsp, "[]", method_btsp_accesor, 1);
 }
