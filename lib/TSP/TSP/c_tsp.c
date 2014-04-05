@@ -3,16 +3,6 @@
 #include "../BasicTSP/c_basic_tsp.c"
 #include <stdio.h>
 
-void show_vector(VALUE ary)
-{
-	int i;
-	for(i = 0; i < RARRAY_LEN(ary); i++)
-	{
-		fprintf(stderr, "%d - ", NUM2INT(rb_ary_entry(ary, i)));
-	}
-	fprintf(stderr, "\n");
-}
-
 /*
 Este metodo realiza el intercambio de dos nodos en una posicion concreta
 del vector solucion. Recibe como parametros el vector con la solucion
