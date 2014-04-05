@@ -137,6 +137,13 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE nodo_a,
 	return DBL2NUM(NUM2DBL(coste_final) - NUM2DBL(coste_inicial));
 }
 
+/*
+Este metodo es el encargado de realizar la busqueda local mediante el algoritmo de
+first improvement. Recibe como parametros:
+- solucion: La solución a mejorar
+- coste_solucion: El coste de la solucion a mejorar (como es TSP se trata de minimizar dicho coste)
+- limite: Numero de iteraciones máximas a dar. Si se pone a cero se establecera a solucion.length * 3
+*/
 VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE limite)
 {
 	VALUE coste_alternativa;
