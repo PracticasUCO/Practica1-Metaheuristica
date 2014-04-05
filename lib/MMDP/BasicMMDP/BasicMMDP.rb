@@ -2,6 +2,8 @@
 #! /usr/bin/env ruby
 # encoding: utf-8
 
+require_relative 'c_basic_mmdp'
+
 ## El modulo MMDP engloba a todas las clases pertenecientes a MMDP
 module MMDP
 	# La clase BasicMMDP proporciona la funcionalidad basica para la
@@ -62,13 +64,17 @@ module MMDP
 				@total_nodes = m.to_i
 				@solution_nodes = n.to_i
 
-				file.each do |linea|
+				file.each_with_index do |linea, index|
 					origen, destino, coste = linea.split(/ +/)
 					signature = Array.new
 					signature << origen << destino
 					signature.sort!
 
-					@lista_nodos.push(origen) if not @lista_nodos.include? origen
+					if index == 1
+						@lista_nodos.push(origen)
+					end
+					@lista_nodos.push(destino) if not @lista_nodos.include? destino
+					
 
 					@nodes[signature] = coste.to_f if not @nodes.has_key? signature
 				end
@@ -93,125 +99,7 @@ module MMDP
 			return solucion, coste_actual	
 		end
 
-		# Devuelve la distancia o coste entre dos nodos.
-		# Si no encuentra los nodos, devolvera cero
-		def obtener_coste_entre(nodo_a, nodo_b)
-			raise TypeError, "nodo_a must be a String" unless nodo_a.kind_of? String
-			raise TypeError, "nodo_b must be a String" unless nodo_b.kind_of? String
-			
-			signature = Array.new
-			signature << nodo_a << nodo_b
-			signature.sort!
-
-			return @nodes[signature] if @nodes.has_key? signature
-			return 0 unless @nodes.has_key? signature
-		end
-
-		# Devuelve la suma de distancias o costes de un vector
-		# solucion.
-		#
-		# Como parametros recibe un Array con lo elementos
-		# que forman parte de la solucion.
-		#
-		# Opcionalmente puede recibir una serie de nuevos nodos
-		# a añadir, en cuyo caso devolvera la cantidad total
-		# que esos nodos contribuiran a la suma de costes (no 
-		# la suma total del vector, sino la suma de los nuevos nodos)
-		def obtener_suma_costes(solucion, *nuevo_nodo)
-			raise TypeError, "El parametro solucion debe de ser un array" unless solucion.kind_of? Array
-
-			if solucion.empty?
-				return 0.0
-			end
-
-			coste = 0.0
-			etapas_internas = 0
-			etapas_externas = 0
-
-			if nuevo_nodo.empty?
-				solucion.each do |origen|
-					etapas_externas += 1
-					solucion.each do |destino|
-						next if origen == destino
-						etapas_internas += 1
-						g = obtener_coste_entre(origen, destino)
-						coste += obtener_coste_entre(origen, destino)
-						#puts "Coste cambian: #{coste - g} --> #{coste}"
-
-						if g > 180 or g < 50
-							puts "Se ha introduccido un coste no valido #{g}"
-						end
-
-						unless @nodes.values.include? g
-							puts "Este valor no existe #{g}"
-						end
-					end
-				end
-
-				# Se divide el coste entre dos ya que se ha sumado cada nodo dos veces
-				coste /= 2 
-
-				if coste < solucion.length * 53 or coste > solucion.length * 180
-					puts "1 --> El coste es erroneo en #{coste} : #{solucion.length * 53} - #{solucion.length * 180}"
-				end
-
-			else
-				solucion.each do |nodo|
-					nuevo_nodo.each do |nuevo|
-						coste += obtener_coste_entre(nodo, nuevo) unless solucion.include? nuevo
-					end
-				end
-				
-				if coste < (solucion.length + 1) * 53 or coste > (solucion.length + 1) * 180
-					puts "2 --> El coste es erroneo en #{coste} : #{(solucion.length  + 1) * 53} - #{(solucion.length + 1) * 180}"
-				end
-			end
-
-			if nuevo_nodo.empty?
-				puts "Etapas internas: #{etapas_internas} etapas_externas: #{etapas_externas}"
-			end
-
-			return coste
-		end
-
-		# Este metodo devuelve la diversidad minimia que existe en una solucion
-		# Puede recibir una serie de nodos, en cuyo caso devolveria la diversidad
-		# minima que habría despues de añadir dichos nodos
-		def diversidad_minima(solucion, *nuevo_nodo)
-			raise TypeError, "El parametro solucion debe de ser un array" unless solucion.kind_of? Array
-
-			if solucion.empty?
-				return 0.0
-			end
-
-			minimo = Float::INFINITY
-
-			solucion.each do |origen|
-				solucion.each do |destino|
-					next if origen == destino
-					valor = obtener_coste_entre(origen, destino)
-					minimo = valor if valor < minimo
-				end
-			end
-			
-			unless nuevo_nodo.empty?
-				solucion.each do |nodo|
-					nuevo_nodo.each do |nuevo|
-						valor = obtener_coste_entre(nodo, nuevo)
-						minimo = obtener_coste_entre(nodo, nuevo) if valor < minimo
-					end
-				end
-			end
-
-			return minimo
-		end
-
-		# funcion_objetivo es un sinonimo de diversidad minima
-		def funcion_objetivo(solucion, *nodo)
-			return diversidad_minima(solucion, nodo)
-		end
-
 		# Definicion de los metodos privados de la clase
-		private :obtener_coste_entre, :obtener_suma_costes, :diversidad_minima
+		private :obtener_coste_entre, :diversidad_minima
 	end
 end

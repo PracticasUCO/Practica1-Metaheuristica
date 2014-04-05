@@ -4,8 +4,10 @@
 # Loads mkmf which is used to make makefiles for Ruby extensions
 require 'mkmf'
 
+$CFLAGS="-fbounds-check -fdefault-inline -ffast-math -ffloat-store -fforce-addr -ffunction-cse -finline"
+
 # Give it a name
-extension_name = 'c_es'
+extension_name = 'ES'
 
 # The destination
 dir_config(extension_name)
