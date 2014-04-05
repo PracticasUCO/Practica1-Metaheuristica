@@ -7,7 +7,7 @@ VALUE class_basic_tsp;
 
 //Methods
 VALUE method_btsp_each(VALUE self);
-VALUE method_btsp_accesor(VALUE self, VALUE index);
+VALUE method_btsp_reader(VALUE self, VALUE index);
 VALUE method_btsp_coste_solucion(VALUE self, VALUE ciudades);
 void Init_c_basic_tsp();
 

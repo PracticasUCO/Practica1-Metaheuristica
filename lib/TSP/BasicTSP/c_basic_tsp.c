@@ -22,7 +22,7 @@ VALUE method_btsp_each(VALUE self)
 	return Qnil;
 }
 
-VALUE method_btsp_accesor(VALUE self, VALUE index)
+VALUE method_btsp_reader(VALUE self, VALUE index)
 {
 	VALUE caminos;
 	if(TYPE(index) != T_FIXNUM)
@@ -66,5 +66,5 @@ void Init_c_basic_tsp()
 	class_basic_tsp = rb_define_class_under(module_tsp, "BasicTSP", rb_cObject);
 	rb_define_method(class_basic_tsp, "each", method_btsp_each, 0);
 	rb_define_method(class_basic_tsp, "coste_solucion", method_btsp_coste_solucion, 1);
-	rb_define_method(class_basic_tsp, "[]", method_btsp_accesor, 1);
+	rb_define_method(class_basic_tsp, "[]", method_btsp_reader, 1);
 }
