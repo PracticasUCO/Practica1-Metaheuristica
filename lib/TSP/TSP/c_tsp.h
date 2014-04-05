@@ -5,6 +5,8 @@
 #include "../BasicTSP/c_basic_tsp.h" //Esto habra que cambiarlo
 
 VALUE class_tsp;
-void Init_TSP();
+void Init_c_tsp();
 
+// Methods
+VALUE method_tsp_initialize(VALUE self, VALUE path);
 #endif
