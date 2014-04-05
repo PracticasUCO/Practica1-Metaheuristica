@@ -1,6 +1,15 @@
 #include "c_tsp.h"
 #include "../BasicTSP/c_basic_tsp.c"
 
+/*
+Este metodo realiza el intercambio de dos nodos en una posicion concreta
+del vector solucion. Recibe como parametros el vector con la solucion
+a intercambiar y los dos indices a intercambiar (nodo_a y nodo_b).
+
+Ejemplo:
+Si solucion = [1,2,3,4,5,6] y escribimos
+TSP.opt(solucion, 1,3) => [1,4,3,2,5,6]
+*/
 void method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b)
 {
 	VALUE value_at_a;
