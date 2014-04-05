@@ -64,10 +64,6 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE nodo_a,
 {
 	VALUE coste_inicial;
 	VALUE coste_final;
-	VALUE anterior_a;
-	VALUE posterior_a;
-	VALUE anterior_b;
-	VALUE posterior_b;
 	solucion = rb_check_array_type(solucion);
 
 	if((TYPE(nodo_a) != T_FIXNUM) || (TYPE(nodo_b) != T_FIXNUM))
@@ -85,42 +81,6 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE nodo_a,
 	{
 		rb_raise(rb_eTypeError, "nodo_b se sale de rango: %d - max: %d\n", NUM2INT(nodo_b), 
 					RARRAY_LEN(solucion) - 1);
-	}
-
-	if(NUM2INT(nodo_a) == 0)
-	{
-		anterior_a = INT2NUM(RARRAY_LEN(solucion) - 1);
-	}
-	else
-	{
-		anterior_a = INT2NUM(NUM2INT(nodo_a) - 1);
-	}
-
-	if(NUM2INT(nodo_a) == RARRAY_LEN(solucion) - 1)
-	{
-		posterior_a = INT2NUM(0);
-	}
-	else
-	{
-		posterior_a = INT2NUM(NUM2INT(nodo_a) + 1);
-	}
-
-	if(NUM2INT(nodo_b) == 0)
-	{
-		anterior_b = INT2NUM(RARRAY_LEN(solucion) - 1);
-	}
-	else
-	{
-		anterior_b = INT2NUM(NUM2INT(nodo_b) - 1);
-	}
-
-	if(NUM2INT(nodo_b) == RARRAY_LEN(solucion) - 1)
-	{
-		posterior_b = INT2NUM(0);
-	}
-	else
-	{
-		posterior_b = INT2NUM(NUM2INT(nodo_b) + 1);
 	}
 
 	coste_inicial = method_btsp_coste_solucion(self, solucion);
