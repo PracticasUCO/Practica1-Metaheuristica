@@ -1,7 +1,5 @@
 #include <ruby.h>
-
-VALUE module_tsp;
-VALUE class_basic_tsp;
+#include "c_basic_tsp.h"
 
 /*
 Iterador que accede a cada elemento de la matriz de costes
