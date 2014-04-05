@@ -189,7 +189,7 @@ VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VA
 			{
 				continue;
 			}
-			limite_actual = INT2NUM(NUM2INT(limite_actual) + 1);
+			//limite_actual = INT2NUM(NUM2INT(limite_actual) + 1);
 
 			coste_alternativa = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
 
@@ -198,6 +198,7 @@ VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VA
 				coste_actual += NUM2DBL(coste_alternativa);
 
 				method_tsp_opt(self, solucion, INT2NUM(i), INT2NUM(j));
+				j--;
 			}
 		}
 	}
