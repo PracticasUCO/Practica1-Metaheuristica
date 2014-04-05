@@ -137,6 +137,34 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE coste, 
 	return DBL2NUM(NUM2DBL(coste_final) - NUM2DBL(coste_inicial));
 }
 
+VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE limite)
+{
+	VALUE coste_alternativa;
+	VALUE limite_actual = INT2NUM(0);
+	VALUE empaquetado;
+	long int i, j;
+
+	for(i = 0; ((i < RARRAY_LEN(solucion)) && (NUM2INT(limite_actual) < NUM2INT(limite))); i++)
+	{
+		for(j = i; ((j < RARRAY_LEN(solucion)) && (NUM2INT(limite_actual) < NUM2INT(limite))); j++)
+		{
+			limite_actual = INT2NUM(NUM2INT(limite_actual) + 1);
+			coste_alternativa = method_tsp_grado_mejora_solucion(self, solucion, coste_solucion, INT2NUM(i), INT2NUM(j));
+
+			if(NUM2DBL(coste_alternativa) < 0)
+			{
+				coste_solucion = NUM2DBL(coste_solucion) + NUM2DBL(coste_alternativa);
+				method_tsp_opt(self, solucion, INT2NUM(i), INT2NUM(j));
+			}
+		}
+	}
+
+	empaquetado = rb_ary_new();
+	rb_ary_push(empaquetado, solucion);
+	rb_ary_push(empaquetado, coste_solucion);
+	return empaquetado;
+}
+
 void Init_c_tsp()
 {
 	Init_c_basic_tsp();
