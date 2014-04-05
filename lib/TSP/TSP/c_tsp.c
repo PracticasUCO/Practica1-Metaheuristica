@@ -6,6 +6,25 @@ void method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b)
 	VALUE value_at_a;
 	VALUE value_at_b;
 
+	solucion = rb_check_array_type(solucion);
+
+	if((TYPE(nodo_a) != T_FIXNUM) || (TYPE(nodo_b) != T_FIXNUM))
+	{
+		rb_raise(rb_eTypeError, "nodo_a and nodo_b must be an integer\n");
+	}
+
+	if((NUM2INT(nodo_a) < 0) || (NUM2INT(nodo_a) >= RARRAY_LEN(solucion)))
+	{
+		rb_raise(rb_eTypeError, 
+			"nodo_a excede el rango %d-%d. Actual %d\n", 0, RARRAY_LEN(solucion) - 1, NUM2INT(nodo_a));
+	}
+
+	if((NUM2INT(nodo_b) < 0) || (NUM2INT(nodo_b) >= RARRAY_LEN(solucion)))
+	{
+		rb_raise(rb_eTypeError, 
+			"nodo_b excede el rango %d-%d. Actual %d\n", 0, RARRAY_LEN(solucion) - 1, NUM2INT(nodo_b));
+	}
+
 	value_at_a = rb_ary_entry(solucion, NUM2INT(nodo_a));
 	value_at_b = rb_ary_entry(solucion, NUM2INT(nodo_b));
 
