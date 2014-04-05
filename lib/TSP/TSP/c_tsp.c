@@ -62,7 +62,7 @@ Los parametros que recibe son:
 Atencion: Tanto nodo_a como nodo_b son los indices del vector a intercambiar, no el contenido de
 los nodos.
 */
-VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE coste, VALUE nodo_a, VALUE nodo_b)
+VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b)
 {
 	VALUE coste_inicial;
 	VALUE coste_final;
@@ -149,7 +149,7 @@ VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VA
 		for(j = i; ((j < RARRAY_LEN(solucion)) && (NUM2INT(limite_actual) < NUM2INT(limite))); j++)
 		{
 			limite_actual = INT2NUM(NUM2INT(limite_actual) + 1);
-			coste_alternativa = method_tsp_grado_mejora_solucion(self, solucion, coste_solucion, INT2NUM(i), INT2NUM(j));
+			coste_alternativa = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
 
 			if(NUM2DBL(coste_alternativa) < 0)
 			{
