@@ -10,7 +10,7 @@ module TSP
 			super
 		end
 
-		def busqueda_local(tipo)
+		def generar_solucion_busqueda_local(tipo)
 			raise "tipo must be a symbol" unless tipo.kind_of? Symbol
 
 			unless tipo == :first_improvement or tipo == :best_improvement or tipo == :enfriamiento_simulado
