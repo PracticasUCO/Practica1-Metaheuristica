@@ -34,6 +34,41 @@ VALUE method_btsp_reader(VALUE self, VALUE index)
 	return rb_ary_entry(caminos, NUM2INT(index));
 }
 
+VALUE method_btsp_reader_2(VALUE self, VALUE index_fila, VALUE index_columna)
+{
+	VALUE caminos;
+	VALUE fila;
+	VALUE valor;
+	
+	if((TYPE(index_fila) != T_FIXNUM) || (TYPE(index_columna) != T_FIXNUM))
+	{
+		rb_raise(rb_eTypeError, "index_fila and index_columna must be an integer\n");
+	}
+
+	if((NUM2INT(index_fila) < 0) || (NUM2INT(index_columna)))
+	{
+		rb_raise(rb_eTypeError, "index_fila and index_columna must be greater than zero\n");
+	}
+
+	caminos = rb_iv_get(self, "@caminos");
+
+	if(NUM2INT(index_fila) >= RARRAY_LEN(caminos))
+	{
+		rb_raise(rb_eTypeError, "index_fila can't be greater than %d\n", RARRAY_LEN(caminos) - 1);
+	}
+
+	fila = rb_ary_entry(caminos, NUM2INT(index_fila));
+
+	if(NUM2INT(index_columna) >= RARRAY_LEN(fila))
+	{
+		rb_raise(rb_eTypeError, "index_columna can't be greater than %d\n", RARRAY_LEN(fila) - 1);
+	}
+
+	valor = rb_ary_entry(fila, NUM2INT(index_columna));
+
+	return valor;
+}
+
 /*
 Calcula el coste de una solucion dada
 
