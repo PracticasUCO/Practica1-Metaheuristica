@@ -45,9 +45,9 @@ VALUE method_btsp_reader_2(VALUE self, VALUE index_fila, VALUE index_columna)
 		rb_raise(rb_eTypeError, "index_fila and index_columna must be an integer\n");
 	}
 
-	if((NUM2INT(index_fila) < 0) || (NUM2INT(index_columna)))
+	if((NUM2INT(index_fila) < 0) || (NUM2INT(index_columna) < 0))
 	{
-		rb_raise(rb_eTypeError, "index_fila and index_columna must be greater than zero\n");
+		rb_raise(rb_eTypeError, "index_fila and index_columna must be greater than zero. index_fila: %d, index_columna: %d\n", NUM2INT(index_fila), NUM2INT(index_columna));
 	}
 
 	caminos = rb_iv_get(self, "@caminos");

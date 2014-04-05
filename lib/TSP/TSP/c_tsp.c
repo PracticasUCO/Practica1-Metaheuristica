@@ -1,4 +1,5 @@
 #include "c_tsp.h"
+#include "../BasicTSP/c_basic_tsp.h"
 #include "../BasicTSP/c_basic_tsp.c"
 
 /*
@@ -127,13 +128,13 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE nodo_a,
 		posterior_b = INT2NUM(NUM2INT(nodo_b) + 1);
 	}
 
-	coste_inicial = DBL2NUM(NUM2DBL(method_bstp_reader_2(self, anterior_a, nodo_a)) + NUM2DBL(method_bstp_reader_2(self, nodo_a, posterior_a)));
-	coste_inicial = DBL2NUM(NUM2DBL(coste_inicial) + NUM2DBL(method_bstp_reader_2(self, anterior_b, nodo_b)) + NUM2DBL(method_bstp_reader_2(self, nodo_b, posterior_b)));
+	coste_inicial = DBL2NUM(NUM2DBL(method_btsp_reader_2(self, anterior_a, nodo_a)) + NUM2DBL(method_btsp_reader_2(self, nodo_a, posterior_a)));
+	coste_inicial = DBL2NUM(NUM2DBL(coste_inicial) + NUM2DBL(method_btsp_reader_2(self, anterior_b, nodo_b)) + NUM2DBL(method_btsp_reader_2(self, nodo_b, posterior_b)));
 
 	method_tsp_opt(self, solucion, nodo_a, nodo_b);
 
-	coste_final = DBL2NUM(NUM2DBL(method_bstp_reader_2(self, anterior_a, nodo_a)) + NUM2DBL(method_bstp_reader_2(self, nodo_a, posterior_a)));
-	coste_final = DBL2NUM(NUM2DBL(coste_inicial) + NUM2DBL(method_bstp_reader_2(self, anterior_b, nodo_b)) + NUM2DBL(method_bstp_reader_2(self, nodo_b, posterior_b)));
+	coste_final = DBL2NUM(NUM2DBL(method_btsp_reader_2(self, anterior_a, nodo_a)) + NUM2DBL(method_btsp_reader_2(self, nodo_a, posterior_a)));
+	coste_final = DBL2NUM(NUM2DBL(coste_inicial) + NUM2DBL(method_btsp_reader_2(self, anterior_b, nodo_b)) + NUM2DBL(method_btsp_reader_2(self, nodo_b, posterior_b)));
 
 	method_tsp_opt(self, solucion, nodo_a, nodo_b);
 	return DBL2NUM(NUM2DBL(coste_final) - NUM2DBL(coste_inicial));

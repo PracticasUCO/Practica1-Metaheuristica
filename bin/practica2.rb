@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 require_relative '../lib/MMDP/MMDP/MMDP'
-require_relative '../lib/TSP/TSP'
+require_relative '../lib/TSP/TSP/TSP'
 require 'getopt/long'
 
 def mostrar_error_fichero_no_encontrado(fichero)
