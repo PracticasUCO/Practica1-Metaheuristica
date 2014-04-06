@@ -160,6 +160,7 @@ VALUE method_tsp_busqueda_local_best_improvement(VALUE self, VALUE solucion, VAL
 	VALUE alternativas; //Almacena en un vector las alternativas validas a la solucion
 	VALUE coste_alternativas; //En una tabla de hash se almacena el coste de cada una de las alternativas
 	VALUE empaquetado;
+	VALUE coste_anterior; //Almacena el coste de la ultima vuelta para comprobar si hubo mejoras
 	int i, j, l;
 
 	alternativas = rb_ary_new();
@@ -180,8 +181,10 @@ VALUE method_tsp_busqueda_local_best_improvement(VALUE self, VALUE solucion, VAL
 
 	if(NUM2INT(limite) == 0)
 	{
-		limite = INT2NUM(RARRAY_LEN(solucion) * 3);
+		limite = INT2NUM(RARRAY_LEN(solucion) * 10);
 	}
+
+	coste_anterior = DBL2NUM(NUM2DBL(coste_solucion));
 
 	for(l = 0; l < NUM2INT(limite); l++)
 	{
@@ -226,6 +229,15 @@ VALUE method_tsp_busqueda_local_best_improvement(VALUE self, VALUE solucion, VAL
 				rb_ary_clear(alternativas);
 				rb_hash_clear(coste_alternativas);
 			}
+		}
+
+		if(NUM2DBL(coste_solucion) == NUM2DBL(coste_anterior))
+		{
+			break;
+		}
+		else
+		{
+			coste_anterior = DBL2NUM(NUM2DBL(coste_solucion));
 		}
 	}
 
