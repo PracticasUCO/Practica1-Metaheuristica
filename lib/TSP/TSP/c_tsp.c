@@ -155,6 +155,75 @@ VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VA
 	return empaquetado;
 }
 
+VALUE method_tsp_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE limite)
+{
+	VALUE alternativas; //Almacena en un vector las alternativas validas a la solucion
+	VALUE coste_alternativas; //En una tabla de hash se almacena el coste de cada una de las alternativas
+	VALUE empaquetado;
+	int i, j, l;
+
+	alternativas = rb_ary_new();
+	coste_alternativas = rb_hash_new();
+	l = 0;
+
+	if(NUM2INT(limite) == 0)
+	{
+		limite = INT2NUM(RARRAY_LEN(solucion) * 3);
+	}
+
+	for(l = 0; l < NUM2INT(limite); l++)
+	{
+		for(i = 0; i < RARRAY_LEN(solucion); i++)
+		{
+			for(j = i + 1; j < RARRAY_LEN(solucion); j++)
+			{
+				VALUE coste_alternativa;
+
+				coste_alternativa = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
+
+				if(NUM2DBL(coste_alternativa) < 0)
+				{
+					rb_ary_push(alternativas, INT2NUM(j));
+					rb_hash_aset(coste_alternativas, INT2NUM(j), coste_alternativa);
+				}
+			}
+
+			if(RARRAY_LEN(alternativas) > 0)
+			{
+				VALUE nodo_maximo;
+				int sin_nodo_actualmente = 1;
+				int h;
+
+				for(h = 0; h < RARRAY_LEN(alternativas); h++)
+				{
+					VALUE item = rb_ary_entry(alternativas, h);
+
+					if(sin_nodo_actualmente == 1)
+					{
+						nodo_maximo = item;
+						sin_nodo_actualmente = 0;
+					}
+					else if(rb_hash_aref(coste_alternativas, item) > rb_hash_aref(coste_alternativas, nodo_maximo))
+					{
+						nodo_maximo = item;
+					}
+				}
+
+				method_tsp_opt(self, solucion, INT2NUM(i), nodo_maximo);
+				coste_solucion = DBL2NUM(NUM2DBL(coste_solucion) + NUM2DBL(rb_hash_aref(coste_alternativas, nodo_maximo)));
+				rb_ary_clear(alternativas);
+				rb_hash_clear(coste_alternativas);
+			}
+		}
+	}
+
+	empaquetado = rb_ary_new();
+	rb_ary_push(empaquetado, solucion);
+	rb_ary_push(empaquetado, coste_solucion);
+
+	return empaquetado;
+}
+
 void Init_c_tsp()
 {
 	Init_c_basic_tsp();
@@ -162,4 +231,5 @@ void Init_c_tsp()
 	rb_define_private_method(class_tsp, "opt", method_tsp_opt, 3);
 	rb_define_private_method(class_tsp, "grado_mejora_solucion", method_tsp_grado_mejora_solucion, 3);
 	rb_define_private_method(class_tsp, "busqueda_local_first_improvement", method_tsp_busqueda_local_first_improvement, 3);
+	rb_define_private_method(class_tsp, "busqueda_local_best_improvement", method_tsp_busqueda_local_best_improvement, 3);
 }
