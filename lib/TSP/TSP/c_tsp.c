@@ -193,7 +193,7 @@ VALUE method_tsp_busqueda_local_best_improvement(VALUE self, VALUE solucion, VAL
 
 	if(NUM2INT(limite) == 0)
 	{
-		limite = INT2NUM(RARRAY_LEN(solucion) * 10);
+		limite = INT2NUM(RARRAY_LEN(solucion) * RARRAY_LEN(solucion));
 	}
 
 	coste_anterior = DBL2NUM(NUM2DBL(coste_solucion));
