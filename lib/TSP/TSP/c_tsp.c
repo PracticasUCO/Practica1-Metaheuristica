@@ -167,6 +167,13 @@ VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VA
 	return empaquetado;
 }
 
+/*
+Realiza una busqueda local guiada por el algoritmo de seleccion best improvement para
+mejorar una solucion dada. Recibe como parametros:
+- solucion: La solucion a mejorar
+- coste_solucion: El coste actual de la solucion a mejorar
+- limite: Numero maximo de iteraciones a dar. Si se especifica a cero se establece automaticamente
+*/
 VALUE method_tsp_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE limite)
 {
 	VALUE alternativas; //Almacena en un vector las alternativas validas a la solucion
