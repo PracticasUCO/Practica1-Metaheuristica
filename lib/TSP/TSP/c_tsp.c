@@ -105,9 +105,9 @@ VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VA
 {
 	VALUE coste_alternativa;
 	double coste_actual = NUM2DBL(coste_solucion);
-	VALUE limite_actual = INT2NUM(0);
+	double coste_anterior = coste_actual;
 	VALUE empaquetado;
-	long int i, j;
+	long int i, j, l;
 
 	solucion = rb_check_array_type(solucion);
 
@@ -130,22 +130,34 @@ VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VA
 	{
 		limite = INT2NUM(RARRAY_LEN(solucion) * RARRAY_LEN(solucion));
 	}
-
-	for(i = 0; ((i < RARRAY_LEN(solucion)) && (NUM2INT(limite_actual) < NUM2INT(limite))); i++)
+	
+	for(l = 0; l < NUM2INT(limite); l++)
 	{
-		for(j = i + 1; ((j < RARRAY_LEN(solucion)) && (NUM2INT(limite_actual) < NUM2INT(limite))); j++)
+		for(i = 0; i < RARRAY_LEN(solucion); i++)
 		{
-			limite_actual = INT2NUM(NUM2INT(limite_actual) + 1);
-
-			coste_alternativa = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
-
-			if(NUM2DBL(coste_alternativa) < 0)
+			for(j = i + 1; j < RARRAY_LEN(solucion); j++)
 			{
-				coste_actual += NUM2DBL(coste_alternativa);
+				//limite_actual = INT2NUM(NUM2INT(limite_actual) + 1);
 
-				method_tsp_opt(self, solucion, INT2NUM(i), INT2NUM(j));
-				j--;
+				coste_alternativa = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
+
+				if(NUM2DBL(coste_alternativa) < 0)
+				{
+					coste_actual += NUM2DBL(coste_alternativa);
+
+					method_tsp_opt(self, solucion, INT2NUM(i), INT2NUM(j));
+					j--;
+				}
 			}
+		}
+
+		if(coste_actual == coste_anterior)
+		{
+			break;
+		}
+		else
+		{
+			coste_anterior = coste_actual;
 		}
 	}
 
