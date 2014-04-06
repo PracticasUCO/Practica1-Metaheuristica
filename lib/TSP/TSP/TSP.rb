@@ -19,8 +19,6 @@ module TSP
 
 			solucion, coste = generar_solucion_aleatoria()
 
-			puts "1--> #{coste}"
-
 			if tipo == :first_improvement
 				solucion, coste = busqueda_local_first_improvement(solucion, coste, 0);
 			elsif tipo == :best_improvement
@@ -28,8 +26,6 @@ module TSP
 			else
 				# Not implemented yet
 			end
-
-			puts "2--> #{coste}"
 
 			return solucion, coste
 		end
