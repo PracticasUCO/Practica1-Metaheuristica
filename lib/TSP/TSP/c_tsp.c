@@ -166,6 +166,18 @@ VALUE method_tsp_busqueda_local_best_improvement(VALUE self, VALUE solucion, VAL
 	coste_alternativas = rb_hash_new();
 	l = 0;
 
+	solucion = rb_check_array_type(solucion);
+
+	if((TYPE(coste_solucion) != T_FIXNUM) && (TYPE(coste_solucion) != T_FLOAT))
+	{
+		rb_raise(rb_eTypeError, "coste_solucion must be a number\n");
+	}
+
+	if(TYPE(limite) != T_FIXNUM)
+	{
+		rb_raise(rb_eTypeError, "limite must be an integer\n");
+	}
+
 	if(NUM2INT(limite) == 0)
 	{
 		limite = INT2NUM(RARRAY_LEN(solucion) * 3);
