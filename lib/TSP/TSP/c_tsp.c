@@ -1,6 +1,6 @@
 #include "c_tsp.h"
 #include "../BasicTSP/c_basic_tsp.h"
-#include "../BasicTSP/c_basic_tsp.c"
+//#include "../BasicTSP/c_basic_tsp.c"
 #include <stdio.h>
 
 /*
