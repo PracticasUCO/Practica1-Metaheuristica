@@ -44,7 +44,7 @@ VALUE method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b)
 	return Qnil;
 }
 
-VALUE method_tsp_entorno(VALUE ary, VALUE index)
+VALUE method_tsp_entorno(VALUE self, VALUE ary, VALUE index)
 {
 	VALUE empaquetado;
 	VALUE item_anterior;
@@ -129,13 +129,13 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE nodo_a,
 
 	if((NUM2INT(nodo_a) != 0) && (NUM2INT(nodo_a) != RARRAY_LEN(solucion) - 1) && (NUM2INT(nodo_b) != 0) && (NUM2INT(nodo_b) != RARRAY_LEN(solucion)- 1))
 	{
-		entorno_a = method_tsp_entorno(solucion, nodo_a);
-		entorno_b = method_tsp_entorno(solucion, nodo_b);
+		entorno_a = method_tsp_entorno(self, solucion, nodo_a);
+		entorno_b = method_tsp_entorno(self, solucion, nodo_b);
 		coste_inicial = DBL2NUM(NUM2DBL(method_btsp_coste_solucion(self, entorno_a)) + NUM2DBL(method_btsp_coste_solucion(self, entorno_b)));
 		method_tsp_opt(self, solucion, nodo_a, nodo_b);
 
-		entorno_a = method_tsp_entorno(solucion, nodo_a);
-		entorno_b = method_tsp_entorno(solucion, nodo_b);
+		entorno_a = method_tsp_entorno(self, solucion, nodo_a);
+		entorno_b = method_tsp_entorno(self, solucion, nodo_b);
 		coste_final = DBL2NUM(NUM2DBL(method_btsp_coste_solucion(self, entorno_a)) + NUM2DBL(method_btsp_coste_solucion(self, entorno_b)));
 		method_tsp_opt(self, solucion, nodo_a, nodo_b);
 	}
@@ -332,4 +332,5 @@ void Init_c_tsp()
 	rb_define_private_method(class_tsp, "grado_mejora_solucion", method_tsp_grado_mejora_solucion, 3);
 	rb_define_private_method(class_tsp, "busqueda_local_first_improvement", method_tsp_busqueda_local_first_improvement, 3);
 	rb_define_private_method(class_tsp, "busqueda_local_best_improvement", method_tsp_busqueda_local_best_improvement, 3);
+	rb_define_private_method(class_tsp, "entorno_de", method_tsp_entorno, 2);
 }
