@@ -1,7 +1,6 @@
 #include "c_tsp.h"
 #include "../BasicTSP/c_basic_tsp.h"
 #include "../BasicTSP/c_basic_tsp.c"
-#include <stdio.h>
 
 /*
 Este metodo realiza el intercambio de dos nodos en una posicion concreta
@@ -45,6 +44,48 @@ VALUE method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b)
 	return Qnil;
 }
 
+VALUE method_tsp_entorno(VALUE ary, VALUE index)
+{
+	VALUE empaquetado;
+	VALUE item_anterior;
+	VALUE item_actual;
+	VALUE item_posterior;
+	int anterior;
+	int posterior;
+	int actual;
+
+	actual = NUM2INT(index);
+
+	if(actual == 0)
+	{
+		anterior = RARRAY_LEN(ary) - 1;
+	}
+	else
+	{
+		anterior = actual - 1;
+	}
+
+	if(actual == RARRAY_LEN(ary) - 1)
+	{
+		posterior = 0;
+	}
+	else
+	{
+		posterior = actual + 1;
+	}
+
+	item_anterior = rb_ary_entry(ary, anterior);
+	item_actual = rb_ary_entry(ary, actual);
+	item_posterior = rb_ary_entry(ary, posterior);
+
+	empaquetado = rb_ary_new();
+	rb_ary_push(empaquetado, item_anterior);
+	rb_ary_push(empaquetado, item_actual);
+	rb_ary_push(empaquetado, item_posterior);
+
+	return empaquetado;
+}
+
 /*
 Devuelve un valor negativo cuando el coste de la solucion disminuye y un valor
 positivo cuando el coste de la solucion aumenta. Si el coste de la solucion se
@@ -64,6 +105,9 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE nodo_a,
 {
 	VALUE coste_inicial;
 	VALUE coste_final;
+	VALUE entorno_a;
+	VALUE entorno_b;
+
 	solucion = rb_check_array_type(solucion);
 
 	if((TYPE(nodo_a) != T_FIXNUM) || (TYPE(nodo_b) != T_FIXNUM))
@@ -83,13 +127,26 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE nodo_a,
 					RARRAY_LEN(solucion) - 1);
 	}
 
-	coste_inicial = method_btsp_coste_solucion(self, solucion);
-	method_tsp_opt(self, solucion, nodo_a, nodo_b);
+	if((NUM2INT(nodo_a) != 0) && (NUM2INT(nodo_a) != RARRAY_LEN(solucion) - 1) && (NUM2INT(nodo_b) != 0) && (NUM2INT(nodo_b) != RARRAY_LEN(solucion)- 1))
+	{
+		entorno_a = method_tsp_entorno(solucion, nodo_a);
+		entorno_b = method_tsp_entorno(solucion, nodo_b);
+		coste_inicial = DBL2NUM(NUM2DBL(method_btsp_coste_solucion(self, entorno_a)) + NUM2DBL(method_btsp_coste_solucion(self, entorno_b)));
+		method_tsp_opt(self, solucion, nodo_a, nodo_b);
 
-	coste_final = method_btsp_coste_solucion(self, solucion);
+		entorno_a = method_tsp_entorno(solucion, nodo_a);
+		entorno_b = method_tsp_entorno(solucion, nodo_b);
+		coste_final = DBL2NUM(NUM2DBL(method_btsp_coste_solucion(self, entorno_a)) + NUM2DBL(method_btsp_coste_solucion(self, entorno_b)));
+		method_tsp_opt(self, solucion, nodo_a, nodo_b);
+	}
+	else
+	{
+		coste_inicial = method_btsp_coste_solucion(self, solucion);
+		method_tsp_opt(self, solucion, nodo_a, nodo_b);
 
-	method_tsp_opt(self, solucion, nodo_a, nodo_b);
-
+		coste_final = method_btsp_coste_solucion(self, solucion);
+		method_tsp_opt(self, solucion, nodo_a, nodo_b);
+	}
 
 	return DBL2NUM(NUM2DBL(coste_final) - NUM2DBL(coste_inicial));
 }
