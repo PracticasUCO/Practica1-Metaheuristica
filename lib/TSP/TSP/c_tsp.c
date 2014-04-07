@@ -44,6 +44,12 @@ VALUE method_tsp_opt(VALUE self, VALUE solucion, VALUE nodo_a, VALUE nodo_b)
 	return Qnil;
 }
 
+/*
+Devuelve el entorno en un vector ary alrededor de index.
+Por ejemplo
+a = [2,3,4,5,8,6]
+TSP.entorno_de(a, 3) => [4, 5, 8]
+*/
 VALUE method_tsp_entorno(VALUE self, VALUE ary, VALUE index)
 {
 	VALUE empaquetado;
