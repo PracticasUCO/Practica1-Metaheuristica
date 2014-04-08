@@ -372,9 +372,9 @@ void Init_c_mmdp()
 {
 	module_mmdp = rb_define_module("MMDP");
 	class_mmdp = rb_define_class_under(module_mmdp, "MMDP", class_basic_mmdp);
-	rb_define_method(class_mmdp, "mejora_solucion", method_mejora_solucion, 3);
-	rb_define_method(class_mmdp, "grado_mejora_solucion", method_grado_mejora_solucion, 3);
-	rb_define_method(class_mmdp, "busqueda_local_first_improvement", method_busqueda_local_first_improvement, 3);
-	rb_define_method(class_mmdp, "busqueda_local_best_improvement", method_busqueda_local_best_improvement, 3);
+	rb_define_private_method(class_mmdp, "mejora_solucion", method_mejora_solucion, 3);
+	rb_define_private_method(class_mmdp, "grado_mejora_solucion", method_grado_mejora_solucion, 3);
+	rb_define_private_method(class_mmdp, "busqueda_local_first_improvement", method_busqueda_local_first_improvement, 3);
+	rb_define_private_method(class_mmdp, "busqueda_local_best_improvement", method_busqueda_local_best_improvement, 3);
 	rb_define_private_method(class_mmdp, "busqueda_local_enfriamiento_simulado", method_busqueda_local_enfriamiento_simulado, 4);
 }
