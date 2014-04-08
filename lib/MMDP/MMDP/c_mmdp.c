@@ -362,7 +362,7 @@ VALUE method_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion, VA
 
 	coste_actual = method_diversidad_minima(self, best_solution);
 
-	empaquetado = method_busqueda_local_first_improvement(self, best_solution, best_value, INT2NUM(RARRAY_LEN(solucion) * 10));
+	empaquetado = method_busqueda_local_first_improvement(self, best_solution, coste_actual, INT2NUM(RARRAY_LEN(solucion) * 10));
 
 	return empaquetado;
 }
