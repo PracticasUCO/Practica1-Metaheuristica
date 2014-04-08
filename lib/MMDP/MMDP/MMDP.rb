@@ -3,6 +3,7 @@
 
 require_relative("../BasicMMDP/BasicMMDP")
 require_relative("c_mmdp")
+require_relative("../../ES/ES/ES")
 
 # El modulo MMDP engloba a todas las clases relacionadas con el problema
 # MaxMinDiversityProblem
@@ -67,7 +68,9 @@ module MMDP
 			elsif tipo == :first_improvement
 				solucion, coste_actual = busqueda_local_first_improvement(solucion, coste_actual, solution_nodes * total_nodes)
 			else
-				# Not implemented yet
+				es = ES::ES.new(coste_actual * total_nodes, 0.75);
+
+				solucion, coste_actual = busqueda_local_enfriamiento_simulado(solucion, coste_actual, es, 0.5)
 			end
 
 			return solucion, coste_actual

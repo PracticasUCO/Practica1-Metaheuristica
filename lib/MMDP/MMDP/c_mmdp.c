@@ -290,7 +290,81 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 VALUE method_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion, VALUE coste_actual, VALUE es,
 																	VALUE temperatura_minima)
 {
-	
+	VALUE lista_nodos;
+	long int i, j;
+	VALUE best_solution;
+	VALUE best_value;
+	VALUE hash_inclusion;
+	VALUE empaquetado;
+
+	lista_nodos = rb_iv_get(self, "@lista_nodos");
+	best_solution = rb_ary_dup(solucion);
+	best_value = DBL2NUM(NUM2DBL(coste_actual));
+	hash_inclusion = rb_hash_new();
+
+	for(i = 0; i < RARRAY_LEN(lista_nodos); i++)
+	{
+		VALUE item = rb_ary_entry(lista_nodos, i);
+
+		if(rb_ary_includes(solucion, item) == Qtrue)
+		{
+			rb_hash_aset(hash_inclusion, item, Qtrue);
+		}
+		else
+		{
+			rb_hash_aset(hash_inclusion, item, Qfalse);
+		}
+	}
+
+	while(NUM2DBL(method_temperatura(es)) > NUM2DBL(temperatura_minima))
+	{
+		VALUE last_solution_cost;
+		for(i = 0; i < RARRAY_LEN(solucion); i++)
+		{
+			VALUE item_actual = rb_ary_entry(solucion, i);
+
+			for(j = 0; j < RARRAY_LEN(lista_nodos); j++)
+			{
+				VALUE item_alternativo = rb_ary_entry(lista_nodos, j);
+				VALUE grado_mejora;
+
+				if(rb_hash_aref(hash_inclusion, item_alternativo) == Qtrue)
+				{
+					continue;
+				}
+
+				grado_mejora = method_grado_mejora_solucion(self, solucion, item_actual, item_alternativo);
+
+				if((NUM2DBL(grado_mejora) > NUM2DBL(coste_actual)) || (method_probabilidad(es) == Qtrue))
+				{
+					rb_ary_store(solucion, i, item_alternativo);
+					coste_actual = DBL2NUM(NUM2DBL(grado_mejora));
+					rb_hash_aset(hash_inclusion, item_actual, Qfalse);
+					rb_hash_aset(hash_inclusion, item_alternativo, Qtrue);
+
+					
+					if(NUM2DBL(grado_mejora) > NUM2DBL(coste_actual))
+					{
+						last_solution_cost = method_diversidad_minima(self, solucion);
+
+						if(NUM2DBL(last_solution_cost) > NUM2DBL(best_value))
+						{
+							best_value = DBL2NUM(NUM2DBL(last_solution_cost));
+							best_solution = rb_ary_dup(solucion);
+						}
+					}
+				}
+			}
+		}
+		
+		method_enfriar(es);
+	}
+
+	coste_actual = method_diversidad_minima(self, best_solution);
+
+	empaquetado = method_busqueda_local_first_improvement(self, best_solution, best_value, INT2NUM(RARRAY_LEN(solucion) * 10));
+
+	return empaquetado;
 }
 
 
@@ -302,4 +376,5 @@ void Init_c_mmdp()
 	rb_define_method(class_mmdp, "grado_mejora_solucion", method_grado_mejora_solucion, 3);
 	rb_define_method(class_mmdp, "busqueda_local_first_improvement", method_busqueda_local_first_improvement, 3);
 	rb_define_method(class_mmdp, "busqueda_local_best_improvement", method_busqueda_local_best_improvement, 3);
+	rb_define_private_method(class_mmdp, "busqueda_local_enfriamiento_simulado", method_busqueda_local_enfriamiento_simulado, 4);
 }
