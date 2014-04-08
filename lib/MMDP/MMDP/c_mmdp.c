@@ -287,6 +287,11 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 	return empaquetado;
 }
 
+VALUE method_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion, VALUE coste_actual, VALUE es,
+																	VALUE temperatura_minima)
+{
+	
+}
 
 
 void Init_c_mmdp()
