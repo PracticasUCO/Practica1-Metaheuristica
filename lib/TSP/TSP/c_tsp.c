@@ -330,6 +330,58 @@ VALUE method_tsp_busqueda_local_best_improvement(VALUE self, VALUE solucion, VAL
 	return empaquetado;
 }
 
+VALUE method_tsp_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE es, VALUE temperatura_minima)
+{
+	VALUE best_solution;
+	VALUE best_cost;
+	VALUE empaquetado;
+	long int i, j;
+
+	best_solution = rb_ary_dup(solucion);
+	best_cost = coste_solucion;
+
+	while(NUM2DBL(method_temperatura(es)) > NUM2DBL(temperatura_minima))
+	{
+		for(i = 0; i < RARRAY_LEN(solucion); i++)
+		{
+			VALUE item = rb_ary_entry(solucion, i);
+
+			for(j = i + 1; j < RARRAY_LEN(solucion); j++)
+			{
+				VALUE alternativa = rb_ary_entry(solucion, j);
+				VALUE coste;
+
+				if(i == j)
+				{
+					continue;
+				}
+
+				coste = method_tsp_grado_mejora_solucion(self, solucion, item, alternativa);
+
+				if((NUM2DBL(coste) < NUM2DBL(coste_solucion)) || (method_probabilidad(es) == Qtrue))
+				{
+					method_tsp_opt(self, solucion, INT2NUM(i), INT2NUM(j));
+					coste_solucion = DBL2NUM(NUM2DBL(coste_solucion) + NUM2DBL(coste));
+					j--;
+
+					if(NUM2DBL(coste_solucion) < NUM2DBL(best_cost))
+					{
+						best_cost = coste_solucion;
+						best_solution = rb_ary_dup(solucion);
+					}
+				}
+			}
+		}
+		method_enfriar(es);
+	}
+
+	empaquetado = rb_ary_new();
+	rb_ary_push(empaquetado, best_solution);
+	rb_ary_push(empaquetado, best_cost);
+
+	return empaquetado;
+}
+
 void Init_c_tsp()
 {
 	Init_c_basic_tsp();
@@ -339,4 +391,5 @@ void Init_c_tsp()
 	rb_define_private_method(class_tsp, "busqueda_local_first_improvement", method_tsp_busqueda_local_first_improvement, 3);
 	rb_define_private_method(class_tsp, "busqueda_local_best_improvement", method_tsp_busqueda_local_best_improvement, 3);
 	rb_define_private_method(class_tsp, "entorno_de", method_tsp_entorno, 2);
+	rb_define_private_method(class_tsp, "busqueda_local_enfriamiento_simulado", method_tsp_busqueda_local_enfriamiento_simulado, 4);
 }
