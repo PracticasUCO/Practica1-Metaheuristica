@@ -68,7 +68,7 @@ module MMDP
 			elsif tipo == :first_improvement
 				solucion, coste_actual = busqueda_local_first_improvement(solucion, coste_actual, solution_nodes * total_nodes)
 			else
-				es = ES::ES.new(coste_actual * total_nodes, 0.95);
+				es = ES::ES.new(coste_actual * total_nodes, 0.75);
 
 				solucion, coste_actual = busqueda_local_enfriamiento_simulado(solucion, coste_actual, es, 0.5)
 			end
