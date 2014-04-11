@@ -2,6 +2,7 @@
 
 require_relative '../BasicTSP/BasicTSP'
 require_relative 'c_tsp'
+require_relative '../../ES/ES/ES'
 
 module TSP
 	class TSP < BasicTSP
@@ -24,7 +25,8 @@ module TSP
 			elsif tipo == :best_improvement
 				solucion, coste = busqueda_local_best_improvement(solucion, coste, 0);
 			else
-				# Not implemented yet
+				es = ES::ES.new(coste * numero_ciudades, 0.7)
+				solucion, coste = busqueda_local_enfriamiento_simulado(solucion, coste, es, 0.01)
 			end
 
 			return solucion, coste
