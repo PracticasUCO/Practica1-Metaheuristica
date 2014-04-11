@@ -88,7 +88,7 @@ end
 if opt["loops"]
 	opt["loops"] = opt["loops"].to_i
 else
-	opt["loops"] = 1000
+	opt["loops"] = 100
 end
 
 opt["search"] = opt["search"].to_sym
