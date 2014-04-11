@@ -337,6 +337,7 @@ VALUE method_tsp_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion
 	VALUE best_cost;
 	VALUE empaquetado;
 	long int i, j;
+	short int copia = 0;
 
 	best_solution = rb_ary_dup(solucion);
 	best_cost = coste_solucion;
@@ -366,11 +367,17 @@ VALUE method_tsp_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion
 
 					if(NUM2DBL(coste_solucion) < NUM2DBL(best_cost))
 					{
-						best_solution = rb_ary_dup(solucion);
+						//best_solution = rb_ary_dup(solucion);
 						best_cost = coste_solucion;
 					}
 				}
 			}
+		}
+
+		if(copia == 1)
+		{
+			copia = 0;
+			best_solution = rb_ary_dup(solucion);
 		}
 		method_enfriar(es);
 	}
