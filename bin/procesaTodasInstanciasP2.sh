@@ -43,19 +43,19 @@ do
 				mejorValor=$(cat "../information/best_values_$tipo.txt" | grep $nombreFichero | cut -d ' ' -f 2)
 
 				tiempoInicio=$(date +%s.%N)
-				salida=$(./practica2 -p $tipo -f "$f" -s $s -a BLb | grep "Función objetivo final:")
+				salida=$(ruby bin/practica2.rb -p $tipo -f "$f" -s $s -a best_improvement | grep "Función objetivo final:")
 				valor=$(echo $salida | cut -d ' ' -f 4)
 				tiempo=$(echo "$(date +%s.%N)-$tiempoInicio" | bc)
 				echo -n "$nombreFichero,$tipo,$valor,$tiempo," >> $temporal
 
 				tiempoInicio=$(date +%s.%N)
-				salida=$(./practica2 -p $tipo -f "$f" -s $s -a BLf | grep "Función objetivo final:")
+				salida=$(ruby bin/practica2.rb -p $tipo -f "$f" -s $s -a first_improvement | grep "Función objetivo final:")
 				valor=$(echo $salida | cut -d ' ' -f 4)
 				tiempo=$(echo "$(date +%s.%N)-$tiempoInicio" | bc)
 				echo -n "$valor,$tiempo," >> $temporal
 
 				tiempoInicio=$(date +%s.%N)
-				salida=$(./practica2 -p $tipo -f "$f" -s $s -a ES | grep "Función objetivo final:")
+				salida=$(ruby bin/practica2.rb -p $tipo -f "$f" -s $s -a enfriamiento_simulado | grep "Función objetivo final:")
 				valor=$(echo $salida | cut -d ' ' -f 4)
 				tiempo=$(echo "$(date +%s.%N)-$tiempoInicio" | bc)
 				echo "$valor,$tiempo,$mejorValor" >> $temporal
