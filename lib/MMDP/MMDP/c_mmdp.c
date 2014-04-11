@@ -296,15 +296,11 @@ VALUE method_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion, VA
 	VALUE incluidos;
 	VALUE empaquetado;
 	long int i, j;
-	int limite_inicio;
-	int limite;
-	int limite_externo;
 
 	lista_nodos = rb_iv_get(self, "@lista_nodos");
 	best_solution = rb_ary_dup(solucion);
 	best_cost = coste_actual;
 	incluidos = rb_hash_new();
-	limite_inicio = RARRAY_LEN(lista_nodos) * 3;
 
 	for(i = 0; i < RARRAY_LEN(lista_nodos); i++)
 	{
@@ -322,36 +318,40 @@ VALUE method_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion, VA
 
 	while(NUM2DBL(method_temperatura(es)) > NUM2DBL(temperatura_minima))
 	{
-		limite = limite_inicio;
+		ID method_rand = rb_intern("rand");
 
-		for(i = 0; ((i < RARRAY_LEN(solucion)) && (limite > 0)); i++)
+		for(i = 0; i < RARRAY_LEN(solucion); i++)
 		{
 			VALUE item = rb_ary_entry(solucion, i);
 
-			for(j = 0; ((j < RARRAY_LEN(lista_nodos)) && (limite > 0)); j++, limite--)
+			for(j = 0; j < RARRAY_LEN(lista_nodos); j++)
 			{
 				VALUE alternativa = rb_ary_entry(lista_nodos, j);
-				VALUE coste;
+				VALUE valorAleatorio = rb_funcall(rb_cObject, method_rand, 0);
+				VALUE grado_mejora;
 
 				if((rb_hash_aref(incluidos, alternativa) == Qtrue) || (rb_hash_aref(incluidos, item) == Qfalse))
 				{
-					limite++;
 					continue;
 				}
 
-				coste = method_grado_mejora_solucion(self, solucion, item, alternativa);
-
-				if((NUM2DBL(coste) > NUM2DBL(coste_actual)) || (method_probabilidad(es) == Qtrue))
+				if(NUM2DBL(valorAleatorio) <= 0.3)
 				{
-					rb_ary_store(solucion, i, alternativa);
+					continue;
+				}
+
+				grado_mejora = method_grado_mejora_solucion(self, solucion, item, alternativa);
+
+				if((NUM2DBL(grado_mejora) > 0) || (method_probabilidad(es) == Qtrue))
+				{
 					rb_hash_aset(incluidos, item, Qfalse);
 					rb_hash_aset(incluidos, alternativa, Qtrue);
-					coste_actual = coste;
+					rb_ary_store(solucion, i, alternativa);
 
-					if(NUM2DBL(coste) > NUM2DBL(coste_actual))
+					if(NUM2DBL(grado_mejora) > 0)
 					{
 						best_solution = rb_ary_dup(solucion);
-						fprintf(stderr, "Se hallo una mejora a %lf\n", NUM2DBL(coste));
+						best_cost = method_diversidad_minima(self, best_solution);
 					}
 				}
 			}
@@ -359,11 +359,10 @@ VALUE method_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion, VA
 		method_enfriar(es);
 	}
 
-	limite_externo = RARRAY_LEN(best_solution);
+	empaquetado = rb_ary_new();
+	rb_ary_push(empaquetado, best_solution);
+	rb_ary_push(empaquetado, best_cost);
 
-	limite_inicio = (RARRAY_LEN(best_solution) / 2) * (RARRAY_LEN(lista_nodos) / 2);
-
-	empaquetado = method_busqueda_local_first_improvement(self, best_solution, method_diversidad_minima(self, best_solution), INT2NUM(RARRAY_LEN(best_solution) * 3));
 	return empaquetado;
 }
 
