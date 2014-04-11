@@ -198,18 +198,13 @@ VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VA
 	
 	for(l = 0; l < NUM2INT(limite); l++)
 	{
-		for(i = 0; i < RARRAY_LEN(solucion); i++)
+		for(i = 1; i < RARRAY_LEN(solucion) - 1; i++)
 		{
-			for(j = i + 1; j < RARRAY_LEN(solucion); j++)
+			for(j = i + 1; j < RARRAY_LEN(solucion) - 1; j++)
 			{
 				//limite_actual = INT2NUM(NUM2INT(limite_actual) + 1);
 
 				coste_alternativa = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
-
-				if(TYPE(coste_alternativa) == T_FALSE)
-				{
-					continue;
-				}
 
 				if(NUM2DBL(coste_alternativa) < 0)
 				{
@@ -277,18 +272,13 @@ VALUE method_tsp_busqueda_local_best_improvement(VALUE self, VALUE solucion, VAL
 
 	for(l = 0; l < NUM2INT(limite); l++)
 	{
-		for(i = 0; i < RARRAY_LEN(solucion); i++)
+		for(i = 1; i < RARRAY_LEN(solucion) - 1; i++)
 		{
-			for(j = i + 1; j < RARRAY_LEN(solucion); j++)
+			for(j = i + 1; j < RARRAY_LEN(solucion) - 1; j++)
 			{
 				VALUE coste_alternativa;
 
 				coste_alternativa = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
-
-				if(TYPE(coste_alternativa) == T_FALSE)
-				{
-					continue;
-				}
 
 				if(NUM2DBL(coste_alternativa) < 0)
 				{
@@ -355,26 +345,16 @@ VALUE method_tsp_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion
 
 	while(NUM2DBL(method_temperatura(es)) > NUM2DBL(temperatura_minima))
 	{
-		for(i = 0; i < RARRAY_LEN(solucion); i++)
+		for(i = 1; i < RARRAY_LEN(solucion) - 1; i++)
 		{
 			VALUE item = rb_ary_entry(solucion, i);
 
-			for(j = 0; j < RARRAY_LEN(solucion); j++)
+			for(j = i + 1; j < RARRAY_LEN(solucion) - 1; j++)
 			{
 				VALUE alternativa = rb_ary_entry(solucion, j);
 				VALUE coste;
 
-				if(i == j)
-				{
-					continue;
-				}
-
 				coste = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
-
-				if(TYPE(coste) == T_FALSE)
-				{
-					continue;
-				}
 
 				if((NUM2DBL(coste) < 0) || (method_probabilidad(es) == Qtrue))
 				{
@@ -385,6 +365,7 @@ VALUE method_tsp_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion
 					{
 						//best_solution = rb_ary_dup(solucion);
 						best_cost = coste_solucion;
+						copia = 1;
 					}
 				}
 			}
