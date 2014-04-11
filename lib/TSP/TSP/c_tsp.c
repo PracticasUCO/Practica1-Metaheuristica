@@ -144,6 +144,7 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE nodo_a,
 		entorno_b = method_tsp_entorno(self, solucion, nodo_b);
 		coste_final = DBL2NUM(NUM2DBL(method_btsp_coste_solucion(self, entorno_a)) + NUM2DBL(method_btsp_coste_solucion(self, entorno_b)));
 		method_tsp_opt(self, solucion, nodo_a, nodo_b);
+
 	}
 	else
 	{
@@ -346,7 +347,7 @@ VALUE method_tsp_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion
 		{
 			VALUE item = rb_ary_entry(solucion, i);
 
-			for(j = i + 1; j < RARRAY_LEN(solucion); j++)
+			for(j = 0; j < RARRAY_LEN(solucion); j++)
 			{
 				VALUE alternativa = rb_ary_entry(solucion, j);
 				VALUE coste;
@@ -356,18 +357,17 @@ VALUE method_tsp_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion
 					continue;
 				}
 
-				coste = method_tsp_grado_mejora_solucion(self, solucion, item, alternativa);
+				coste = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
 
-				if((NUM2DBL(coste) < NUM2DBL(coste_solucion)) || (method_probabilidad(es) == Qtrue))
+				if((NUM2DBL(coste) < 0) || (method_probabilidad(es) == Qtrue))
 				{
+					coste_solucion = DBL2NUM(NUM2DBL(coste) + NUM2DBL(coste_solucion));
 					method_tsp_opt(self, solucion, INT2NUM(i), INT2NUM(j));
-					coste_solucion = DBL2NUM(NUM2DBL(coste_solucion) + NUM2DBL(coste));
-					j--;
 
 					if(NUM2DBL(coste_solucion) < NUM2DBL(best_cost))
 					{
-						best_cost = coste_solucion;
 						best_solution = rb_ary_dup(solucion);
+						best_cost = coste_solucion;
 					}
 				}
 			}
