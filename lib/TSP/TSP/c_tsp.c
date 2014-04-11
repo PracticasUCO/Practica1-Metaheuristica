@@ -148,11 +148,12 @@ VALUE method_tsp_grado_mejora_solucion(VALUE self, VALUE solucion, VALUE nodo_a,
 	}
 	else
 	{
-		coste_inicial = method_btsp_coste_solucion(self, solucion);
+		/*coste_inicial = method_btsp_coste_solucion(self, solucion);
 		method_tsp_opt(self, solucion, nodo_a, nodo_b);
 
 		coste_final = method_btsp_coste_solucion(self, solucion);
-		method_tsp_opt(self, solucion, nodo_a, nodo_b);
+		method_tsp_opt(self, solucion, nodo_a, nodo_b);*/
+		return Qfalse;
 	}
 
 	return DBL2NUM(NUM2DBL(coste_final) - NUM2DBL(coste_inicial));
@@ -204,6 +205,11 @@ VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VA
 				//limite_actual = INT2NUM(NUM2INT(limite_actual) + 1);
 
 				coste_alternativa = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
+
+				if(TYPE(coste_alternativa) == T_FALSE)
+				{
+					continue;
+				}
 
 				if(NUM2DBL(coste_alternativa) < 0)
 				{
@@ -278,6 +284,11 @@ VALUE method_tsp_busqueda_local_best_improvement(VALUE self, VALUE solucion, VAL
 				VALUE coste_alternativa;
 
 				coste_alternativa = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
+
+				if(TYPE(coste_alternativa) == T_FALSE)
+				{
+					continue;
+				}
 
 				if(NUM2DBL(coste_alternativa) < 0)
 				{
@@ -359,6 +370,11 @@ VALUE method_tsp_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion
 				}
 
 				coste = method_tsp_grado_mejora_solucion(self, solucion, INT2NUM(i), INT2NUM(j));
+
+				if(TYPE(coste) == T_FALSE)
+				{
+					continue;
+				}
 
 				if((NUM2DBL(coste) < 0) || (method_probabilidad(es) == Qtrue))
 				{
