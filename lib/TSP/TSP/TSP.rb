@@ -1,8 +1,8 @@
 #! /usr/bin/env ruby
 
 require_relative '../BasicTSP/BasicTSP'
-require_relative 'c_tsp'
 require_relative '../../ES/ES/ES'
+require_relative 'c_tsp'
 
 module TSP
 	class TSP < BasicTSP
