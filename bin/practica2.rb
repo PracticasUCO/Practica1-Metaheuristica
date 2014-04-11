@@ -25,9 +25,8 @@ opt = Getopt::Long.getopts(
 	["--type", "-p", Getopt::REQUIRED],
 	["--instance", "-f", Getopt::REQUIRED],
 	["--seed", "-s", Getopt::REQUIRED],
-	["--loops-internos", "-l", Getopt::REQUIRED],
-	["--search", nil, Getopt::REQUIRED],
-	["--loops-externos", nil, Getopt::REQUIRED]
+	["--loops", "-l", Getopt::REQUIRED],
+	["--search", "-a", Getopt::REQUIRED],
 	)
 rescue Getopt::Long::Error => e
 	puts "Una o varias de las opciones introduccidas es incorrecta."
@@ -36,34 +35,19 @@ rescue Getopt::Long::Error => e
 end
 
 if opt["help"]
-	puts "La forma de uso de este script es"
-	puts "\t ruby practica2.rb [opciones]"
-	puts
-	puts "Las opciones que se pueden utilizar son:"
-	puts "\t --type o -p: Indica el tipo de problema a resolver."
-	puts "\t las opciones soportadas son:"
-	puts "\t \t MMDP: Resuelve el problema de hallar un conjunto de individuos maximizando su diversidad minima"
-	puts "\t \t TSP: Resuelve el problema del viajante de comercio"
-	puts
-	puts "\t --type es un argumento de uso obligatorio."
-	puts
-	puts "\t --instance o -f: Indica donde se encuentra la instancia a leer"
-	puts
-	puts "\t --instance es un argumento de uso obligatorio."
-	puts
-	puts "\t --seed: Inicializa una semilla. Si se omite se tomara un valor aleatorio"
-	puts
-	puts "\t--loops: Indica el numero de iteraciones a dar como maximo para hallar la solucion"
-	puts
-	puts "\t --search: Indica el tipo de busqueda a realizar, puede tener los valores:"
-	puts "\t \t first_improvement: Para una busqueda local usando el selector de primero el mejor"
-	puts "\t \t best_improvement: Para una busqueda local usando el selector de selección del mejor candidato"
-	puts "\t \t enfriamiento_simulado: Para una busqueda local usando el selector de enfriamiento simulado"
-	puts
-	puts "\t \t --search es un parametro obligatorio"
-	puts "\t \t Si no se especifica se usara por defecto first_improvement"
-	puts
-	puts "\t --help: Muestra esta ayuda."
+	puts "El programa puede ser invocado con los siguientes parametros:"
+	puts "\t --help -h: Muestra esta ayuda"
+	puts "\t --type -p: Indica el tipo de problema a resolver. El valor que"
+	puts "\t puede tomar es MMDP o TSP"
+	puts "\t --instance -f: Indica que instancia ejecutar."
+	puts "\t --seed -s: El numero de la semilla a ejecutar. Si se omite"
+	puts "\t se usara un valor aleatorio"
+	puts "\t --loops -l: Numero de iteraciones a dar por instancia"
+	puts "\t --search -a: Tipo de busqueda a realizar puede tomar los"
+	puts "\t siguientes valores:"
+	puts "\t \t - first_improvement"
+	puts "\t \t - best_improvement"
+	puts "\t \t - enfriamiento_simulado"
 	exit
 end
 
@@ -80,82 +64,52 @@ if opt["type"] == "MMDP"
 	begin
 		problem = MMDP::MMDP.new(opt["instance"])
 	rescue Errno::ENOENT => e
-		mostrar_error_fichero_no_encontrado(opt['instance'])
+		mostrar_error_fichero_no_encontrado(opt["instance"])
 	rescue TypeError => e
-		mostrar_error_fichero_incorrecto(opt['instance'])
+		mostrar_error_fichero_incorrecto(opt["instance"])
 	rescue RuntimeError => e
-		mostrar_error_fichero_incorrecto(opt['instance'])
+		mostrar_error_fichero_incorrecto(opt["instance"])
 	end
 elsif opt["type"] == "TSP"
 	begin
 		problem = TSP::TSP.new(opt["instance"])
 	rescue Errno::ENOENT => e
-		mostrar_error_fichero_no_encontrado(opt['instance'])
+		mostrar_error_fichero_no_encontrado(opt["instance"])
 	rescue TypeError => e
-		mostrar_error_fichero_incorrecto(opt['instance'])
+		mostrar_error_fichero_incorrecto(opt["instance"])
 	rescue RuntimeError => e
-		mostrar_error_fichero_incorrecto(opt['instance'])
+		mostrar_error_fichero_incorrecto(opt["instance"])
 	end
 else
-	puts "Argumento no reconocido para --type #{opt["type"]}"
+	puts "No se reconocio el tipo: #{opt["type"]}"
 	exit
 end
 
-if opt["loops-internos"]
-	opt["loops-internos"] = opt["loops-internos"].to_i
+if opt["loops"]
+	opt["loops"] = opt["loops"].to_i
 else
-	if opt["type"] == "MMDP"
-		opt["loops-internos"] = problem.total_nodes * 10
-	else
-		opt["loops-internos"] = problem.numero_ciudades * 10
-	end
-end
-
-if opt["loops-externos"]
-	opt["loops-externos"] = opt["loops-externos"].to_i
-else
-	opt["loops-externos"] = 300
+	opt["loops"] = 1000
 end
 
 opt["search"] = opt["search"].to_sym
 
-puts "Carga completa..."
-
-maximo = -Float::INFINITY
 minimo = Float::INFINITY
-media = 0
-desviacion = 0
-valores = Array.new
-opt["loops-externos"].times.with_index do |index|
+maximo = -Float::INFINITY
+
+opt["loops"].times.with_index do |index|
 	solucion, coste = problem.generar_solucion_busqueda_local(opt["search"])
-	
-	puts "Solucion #{index}: "
-	puts "#{solucion}"
+	puts "Solucion #{index + 1}: #{solucion}"
 	puts "Coste: #{coste}"
 	puts
 
-	if coste > maximo
-		maximo = coste
-	end
-
-	if coste < minimo
-		minimo = coste
-	end
-
-	media += coste
-	valores << coste
+	minimo = coste if coste < minimo
+	maximo = coste if coste > maximo
 end
 
-media /= opt["loops-externos"]
+puts "Extremos generados --> Minimo: #{minimo} Maximo: #{maximo}"
 
-valores.each do |v|
-	desviacion += ((v*v) - (media*media))
+if opt["type"] == "MMDP"
+	puts "Función objetivo final: #{maximo}"
+else
+	puts "Función objetivo final: #{minimo}"
 end
-
-desviacion /= opt["loops-externos"]
-
-desviacion = Math.sqrt(desviacion)
-
-puts "Maximo: #{maximo} - Minimo: #{minimo}"
-puts "Media: #{media}"
-puts "Desviacion: #{desviacion}"
