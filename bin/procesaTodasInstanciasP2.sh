@@ -40,7 +40,7 @@ do
 			do
 				nombreFichero=$(basename $f)
 
-				mejorValor=$(cat "../information/best_values_$tipo.txt" | grep $nombreFichero | cut -d ' ' -f 2)
+				mejorValor=$(cat "information/best_values_$tipo.txt" | grep $nombreFichero | cut -d ' ' -f 2)
 
 				tiempoInicio=$(date +%s.%N)
 				salida=$(ruby bin/practica2.rb -p $tipo -f "$f" -s $s -a best_improvement | grep "Función objetivo final:")
