@@ -25,7 +25,6 @@ opt = Getopt::Long.getopts(
 	["--type", "-p", Getopt::REQUIRED],
 	["--instance", "-f", Getopt::REQUIRED],
 	["--seed", "-s", Getopt::REQUIRED],
-	["--loops", "-l", Getopt::REQUIRED],
 	["--search", "-a", Getopt::REQUIRED],
 	)
 rescue Getopt::Long::Error => e
@@ -42,7 +41,6 @@ if opt["help"]
 	puts "\t --instance -f: Indica que instancia ejecutar."
 	puts "\t --seed -s: El numero de la semilla a ejecutar. Si se omite"
 	puts "\t se usara un valor aleatorio"
-	puts "\t --loops -l: Numero de iteraciones a dar por instancia"
 	puts "\t --search -a: Tipo de busqueda a realizar puede tomar los"
 	puts "\t siguientes valores:"
 	puts "\t \t - first_improvement"
@@ -85,31 +83,11 @@ else
 	exit
 end
 
-if opt["loops"]
-	opt["loops"] = opt["loops"].to_i
-else
-	opt["loops"] = 100
-end
-
 opt["search"] = opt["search"].to_sym
 
-minimo = Float::INFINITY
-maximo = -Float::INFINITY
+solucion, coste = problem.generar_solucion_busqueda_local(opt["search"])
+puts "Solucion: #{solucion}"
+puts "Coste: #{coste}"
+puts
 
-opt["loops"].times.with_index do |index|
-	solucion, coste = problem.generar_solucion_busqueda_local(opt["search"])
-	puts "Solucion #{index + 1}: #{solucion}"
-	puts "Coste: #{coste}"
-	puts
-
-	minimo = coste if coste < minimo
-	maximo = coste if coste > maximo
-end
-
-puts "Extremos generados --> Minimo: #{minimo} Maximo: #{maximo}"
-
-if opt["type"] == "MMDP"
-	puts "Función objetivo final: #{maximo}"
-else
-	puts "Función objetivo final: #{minimo}"
-end
+puts "Función objetivo final: #{coste}"
