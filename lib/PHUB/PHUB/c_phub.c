@@ -48,3 +48,11 @@ VALUE separar_nodos(VALUE self, VALUE solucion)
 	
 	return empaquetado;
 }
+
+void Init_c_phub()
+{
+	phub_module = rb_define_module("PHUB");
+	class_phub = rb_define_class_under(phub_module, "PHUB", CBasicPHub);
+	rb_define_private_method(class_phub, "random_number", random_number, 0);
+	rb_define_private_method(class_phub, "separar_nodos", separar_nodos, 1);
+}
