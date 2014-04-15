@@ -156,12 +156,7 @@ VALUE operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE fitnes
 	}
 	else if(RARRAY_LEN(lista_soluciones) == NUM2INT(n_elementos))
 	{
-		int i;
-		for(i = 0; i < RARRAY_LEN(lista_soluciones); i++)
-		{
-			VALUE item = rb_ary_entry(lista_soluciones, i);
-			rb_ary_push(lista_seleccionados, item);
-		}
+		lista_seleccionados = rb_ary_dup(lista_soluciones);
 	}
 	else
 	{
