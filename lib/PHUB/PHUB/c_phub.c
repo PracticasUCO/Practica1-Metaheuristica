@@ -172,6 +172,76 @@ VALUE operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE fitnes
 	return lista_seleccionados;
 }
 
+/*
+Realiza un torneo entre lista_soluciones para seleccionar a n_elementos de forma al azar. El resultado puede
+incluir a la misma solución varias veces.
+
+Recibe como argumentos:
+- lista_soluciones: Un vector con todas las soluciones por las que debatirse
+- fitness_soluciones: Una tabla de hash que contiene el coste de cada una de las soluciones
+- n_elementos: Numero de elementos a elegir
+*/
+VALUE operador_seleccion_torneo_injusto(VALUE self, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_elementos)
+{
+	VALUE lista_seleccionados;
+	VALUE indice_loco;
+	int i; //Auxiliar
+	
+	lista_soluciones = rb_check_array(lista_soluciones);	
+	fitness_soluciones = rb_check_hash(fitness_soluciones);
+	
+	if(TYPE(n_elementos) != T_FIXNUM)
+	{
+		rb_raise(rb_eTypeError, "n_elementos debe de ser un valor entero\n");
+	}
+	
+	lista_seleccionados = rb_ary_new();
+	
+	for(i = 0; i < NUM2INT(n_elementos); i++)
+	{
+		VALUE competidor_a;
+		VALUE fitness_a;
+		
+		VALUE competidor_b;
+		VALUE fitness_b;
+		
+		//Selección del competidor A
+		
+		indice_loco = rb_f_rand(1, INT2NUM(RARRAY_LEN(lista_soluciones)), rb_cObject);
+		competidor_a = rb_ary_entry(lista_soluciones, NUM2INT(indice_loco));
+		fitness_a = rb_hash_aref(fitness_soluciones, competidor_a);
+		
+		//Selección del competidor B
+		
+		indice_loco = rb_f_rand(1, INT2NUM(RARRAY_LEN(lista_soluciones)), rb_cObject);
+		competidor_b = rb_ary_entry(lista_soluciones, NUM2INT(indice_loco));
+		fitness_b = rb_hash_aref(fitness_soluciones, competidor_b);
+		
+		//Comprobación de la veracidad del fitness
+		if((TYPE(fitness_b) != T_FLOAT) && (TYPE(fitness_b) != T_FIXNUM))
+		{
+			rb_raise(rb_eTypeError, "Se ha descubierto un fitness no valido\n");
+		}
+		
+		if((TYPE(fitness_a) != T_FLOAT) && (TYPE(fitness_a) != T_FIXNUM))
+		{
+			rb_raise(rb_eTypeError, "Se ha descubierto un fitness no valido\n");
+		}
+		
+		//Torneo entre los participantes
+		if(NUM2DBL(fitness_a) <= NUM2DBL(fitness_b))
+		{
+			rb_ary_push(lista_seleccionados, competidor_a);
+		}
+		else
+		{
+			rb_ary_push(lista_seleccionados, competidor_b);
+		}
+	}
+	
+	return lista_seleccionados;
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
@@ -179,4 +249,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "random_number", random_number, 0);
 	rb_define_private_method(class_phub, "separar_nodos", separar_nodos, 1);
 	rb_define_private_method(class_phub, "torneo", operador_seleccion_torneo, 3);
+	rb_define_private_method(class_phub, "torneo_injusto", operador_seleccion_torneo_injusto, 3);
 }
