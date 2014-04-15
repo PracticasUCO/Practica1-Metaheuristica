@@ -7,9 +7,7 @@ Genera un valor aleatorio entre 0 y 1
 */
 VALUE random_number(VALUE self)
 {
-	//double random_number = drand48();
-	return random_f_rand(0, Qnil, rb_cObject);
-	//return DBL2NUM(random_number);
+	return DBL2NUM(rb_genrand_real());
 }
 
 /*
@@ -72,8 +70,8 @@ VALUE operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE fitnes
 {
 	VALUE lista_seleccionados;
 
-	lista_soluciones = rb_check_array(lista_soluciones);
-	fitness_soluciones = rb_check_hash(fitness_soluciones);
+	lista_soluciones = rb_check_array_type(lista_soluciones);
+	fitness_soluciones = rb_check_hash_type(fitness_soluciones);
 	
 	if(TYPE(n_elementos) != T_FIXNUM)
 	{
@@ -98,8 +96,6 @@ VALUE operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE fitnes
 		// Inicio de la selección de individuos
 		while(cuenta > 0)
 		{
-			VALUE indice_ganador;
-			
 			VALUE competidor_a;
 			VALUE fitness_a;
 			VALUE indice_a;
@@ -111,13 +107,13 @@ VALUE operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE fitnes
 			cuenta--;
 			
 			//Selección del primer individuo al azar
-			indice_loco = rb_f_rand(1, INT2NUM(RARRAY_LEN(numeros_disponibles)), rb_cObject);
+			indice_loco = INT2NUM(rb_genrand_ulong_limited(RARRAY_LEN(lista_soluciones) - 1));
 			indice_loco = rb_ary_entry(numeros_disponibles, NUM2INT(indice_loco));
 			indice_a = indice_loco;
 			rb_ary_delete(numeros_disponibles, indice_loco);
 			
 			//Selección del segundo individuo al azar
-			indice_loco = rb_f_rand(1, INT2NUM(RARRAY_LEN(numeros_disponibles)), rb_cObject);
+			indice_loco = INT2NUM(rb_genrand_ulong_limited(RARRAY_LEN(lista_soluciones) - 1));
 			indice_loco = rb_ary_entry(numeros_disponibles, NUM2INT(indice_loco));
 			indice_b = indice_loco;
 			rb_ary_delete(numeros_disponibles, indice_loco);
@@ -183,8 +179,8 @@ VALUE operador_seleccion_torneo_injusto(VALUE self, VALUE lista_soluciones, VALU
 	VALUE indice_loco;
 	int i; //Auxiliar
 	
-	lista_soluciones = rb_check_array(lista_soluciones);	
-	fitness_soluciones = rb_check_hash(fitness_soluciones);
+	lista_soluciones = rb_check_array_type(lista_soluciones);	
+	fitness_soluciones = rb_check_hash_type(fitness_soluciones);
 	
 	if(TYPE(n_elementos) != T_FIXNUM)
 	{
@@ -203,13 +199,13 @@ VALUE operador_seleccion_torneo_injusto(VALUE self, VALUE lista_soluciones, VALU
 		
 		//Selección del competidor A
 		
-		indice_loco = rb_f_rand(1, INT2NUM(RARRAY_LEN(lista_soluciones)), rb_cObject);
+		indice_loco = INT2NUM(rb_genrand_ulong_limited(RARRAY_LEN(lista_soluciones) - 1));
 		competidor_a = rb_ary_entry(lista_soluciones, NUM2INT(indice_loco));
 		fitness_a = rb_hash_aref(fitness_soluciones, competidor_a);
 		
 		//Selección del competidor B
 		
-		indice_loco = rb_f_rand(1, INT2NUM(RARRAY_LEN(lista_soluciones)), rb_cObject);
+		indice_loco = INT2NUM(rb_genrand_ulong_limited(RARRAY_LEN(lista_soluciones) - 1));
 		competidor_b = rb_ary_entry(lista_soluciones, NUM2INT(indice_loco));
 		fitness_b = rb_hash_aref(fitness_soluciones, competidor_b);
 		
