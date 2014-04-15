@@ -58,7 +58,8 @@ Recibe como argumentos:
 - n_elementos: Numero de elementos a elegir
 
 Si n_elementos en más pequeño que el número de elementos que hay en la lista_soluciones el
-método devolverá false.
+método ejecutara un torneo injusto a través del cual puede ser que aparezcan individuos
+repetidos.
 
 Este método devuelve un conjunto de individuos de la lista de soluciones seleccionados al azar
 mediante torneo, con la particularidad de que el conjunto devuelto no tiene elementos repetidos.
@@ -164,9 +165,9 @@ VALUE operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE fitnes
 	}
 	else
 	{
-		//No se puede realizar un torneo de ningún tipo por lo
-		//que se devuelve Qfalse
-		return Qfalse;
+		//No se aplican las reglas de torneo convencionales ya que no hay
+		//suficientes individuos
+		return operador_seleccion_torneo_injusto(self, lista_soluciones, fitness_soluciones, n_elementos);
 	}
 	
 	return lista_seleccionados;
