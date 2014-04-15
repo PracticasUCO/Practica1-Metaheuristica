@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby
 # enconding: utf-8
 
-require_relative '../BasicPHUB/BasicPHub'
+require_relative '../BasicPHub/BasicPHub'
 require_relative '../CapacitedPHubNode/CapacitedPHubNode'
 require_relative 'c_phub'
 
