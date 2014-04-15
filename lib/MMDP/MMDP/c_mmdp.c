@@ -23,15 +23,15 @@ VALUE method_ary_diff(VALUE ary1, VALUE ary2)
 
 
 /*
-Este metodo calcula la diferencia entre la solucion actual y otra solucion
+Este método calcula la diferencia entre la solución actual y otra solución
 obtenida como resultado de eliminar un nodo y añadir otro
 
-Los parametros de esta funcion son:
-	- solucion_actual: pasa como argumento la solucion actual
+Los parámetros de esta función son:
+	- solución_actual: pasa como argumento la solución actual
 	- coste_actual: pasa como argumento el coste actual
-	- nodo_eliminar: pasa como argumento el nodo que se borrara de la solucion,
- 	  si el nodo no pertenece a la solucion se lanzara una excepcion TypeError
-	- new_node: el nodo nuevo que va a entrar en la solucion
+	- nodo_eliminar: pasa como argumento el nodo que se borrara de la solución,
+ 	  si el nodo no pertenece a la solución se lanzara una excepción TypeError
+	- new_node: el nodo nuevo que va a entrar en la solución
 */
 VALUE method_mejora_solucion(VALUE self, VALUE solucion_actual, VALUE nodo_eliminar, VALUE new_node)
 {
@@ -42,8 +42,8 @@ VALUE method_mejora_solucion(VALUE self, VALUE solucion_actual, VALUE nodo_elimi
 	// Aquí van a ir todas las comprobaciones
 		// solucion_actual debe ser un array --> Ok
 		// coste_actual debe ser un numero --> Not yet
-		// nodo_eliminar debe de estar en la solucion --> Not yet
-		// new_node debe de estar en la lista de nodos de la solucion --> Not yet
+		// nodo_eliminar debe de estar en la solución --> Not yet
+		// new_node debe de estar en la lista de nodos de la solución --> Not yet
 	solucion_actual = rb_check_array_type(solucion_actual);
 	// Algoritmo
 	
@@ -63,7 +63,7 @@ VALUE method_mejora_solucion(VALUE self, VALUE solucion_actual, VALUE nodo_elimi
 }
 
 /*
-Devuelve cuanto de más prometedora es un cambio en una solucion
+Devuelve cuanto de más prometedora es un cambio en una solución
 */
 VALUE method_grado_mejora_solucion(VALUE self, VALUE solucion_actual, VALUE nodo_eliminar, VALUE new_node)
 {
@@ -75,8 +75,8 @@ VALUE method_grado_mejora_solucion(VALUE self, VALUE solucion_actual, VALUE nodo
 	// Aquí van a ir todas las comprobaciones
 		// solucion_actual debe ser un array --> Ok
 		// coste_actual debe ser un numero --> Not yet
-		// nodo_eliminar debe de estar en la solucion --> Not yet
-		// new_node debe de estar en la lista de nodos de la solucion --> Not yet
+		// nodo_eliminar debe de estar en la solución --> Not yet
+		// new_node debe de estar en la lista de nodos de la solución --> Not yet
 	solucion_actual = rb_check_array_type(solucion_actual);
 	// Algoritmo
 	
@@ -91,28 +91,28 @@ VALUE method_grado_mejora_solucion(VALUE self, VALUE solucion_actual, VALUE nodo
 }
 
 /*
-Realiza una busqueda local a partir de una solucion aleatoria
+Realiza una búsqueda local a partir de una solución aleatoria
 utilizando un algoritmo de escalada basado en 
-la tecnica de "first improvement", es decir, se acepta
+la técnica de "first improvement", es decir, se acepta
 la primera mejora conseguida y se continua de tratar
 de mejorar a partir de ese punto. Se reciben tres
-parametros que son:
-	- solucion generada de forma aleatoria
+parámetros que son:
+	- solución generada de forma aleatoria
 	- coste_solucion generada de forma aleatoria
 */
 VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE coste_solucion, VALUE limite)
 {
 	VALUE nodos_lista; //Copia de lista_nodos
-	VALUE hash_inclusion; //Indica que valores estan en la solucion y cuales no
-	VALUE empaquetado; //Se trata de un Array con la solucion final y su coste
+	VALUE hash_inclusion; //Indica que valores están en la solución y cuales no
+	VALUE empaquetado; //Se trata de un Array con la solución final y su coste
    int i, j; //Auxiliares
 	int limite_inicio = 0;
 	int salir_externo = 0;
-	int limite_busqueda; // Indica cuando se ha terminado de observar la solucion actual
+	int limite_busqueda; // Indica cuando se ha terminado de observar la solución actual
 
-	//Aquí va la comprobacion de variables
-		//Solucion debe de ser un array --> Ok
-		//Coste_solucion debe de ser un valor numerico --> Not yet
+	//Aquí va la comprobación de variables
+		//Solución debe de ser un array --> Ok
+		//Coste_solucion debe de ser un valor numérico --> Not yet
 		//limite debe de ser un entero --> Not yet
 	solucion = rb_check_array_type(solucion);
 
@@ -173,22 +173,22 @@ VALUE method_busqueda_local_first_improvement(VALUE self, VALUE solucion, VALUE 
 }
 
 /*
-Realiza una busqueda local para tratar de mejorar lo maximo posible el
-vector solucion
+Realiza una búsqueda local para tratar de mejorar lo máximo posible el
+vector solución
 
-Recibe como parametros el array con la soluciones escogidas y
-Devuelve un vector solucion optimizado
+Recibe como parámetros el array con la soluciones escogidas y
+Devuelve un vector solución optimizado
  
-Este metodo sigue un algoritmo de busqueda local mediante la tecnica
-de best improvement, optimizado mediante un parametro de corte para
+Este método sigue un algoritmo de búsqueda local mediante la técnica
+de best improvement, optimizado mediante un parámetro de corte para
 no llegar a explorar todas las soluciones vecinas.
 
-El metodo de parada es cuando se hayan explorado más soluciones que
+El método de parada es cuando se hayan explorado más soluciones que
 solution_nodes / @punto_ruptura
 
 @punto_ruptura usualmente se configura a log2(solution_nodes)
 
-Como parametros recibe el vector solución a mejorar y el coste
+Como parámetros recibe el vector solución a mejorar y el coste
 de dicho vector
 */
 VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE coste_actual, VALUE limite)
@@ -202,7 +202,7 @@ VALUE method_busqueda_local_best_improvement(VALUE self, VALUE solucion, VALUE c
 	int i, j;
 	int limite_inicio = 0;
 	int bandera_mejor_solucion = 0;
-	VALUE empaquetado; // Array que contendra la solucion y el coste para devolverlo
+	VALUE empaquetado; // Array que contendrá la solución y el coste para devolverlo
 
 	solucion = rb_check_array_type(solucion);
 
