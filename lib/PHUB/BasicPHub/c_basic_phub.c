@@ -15,7 +15,7 @@ VALUE rb_funcion_objetivo(VALUE self, VALUE solucion)
 
 	if(tipoParametro != T_ARRAY)
 	{
-		rb_raise(rb_eTypeError, "Solucion debe de ser un Array\n");
+		rb_raise(rb_eTypeError, "Solución debe de ser un Array\n");
 	}
 	
 	

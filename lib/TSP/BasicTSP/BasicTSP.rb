@@ -8,12 +8,12 @@ module TSP
 
 	# La clase BasicTSP trata de resolver el problema del viajante de comercio.
 	# En este problema, se tiene una serie de ciudades que deben de ser visitadas
-	# de manera que se empieze y se acabe en la misma ciudad. El problema consiste
+	# de manera que se empiece y se acabe en la misma ciudad. El problema consiste
 	# en elegir como se visitaran tales ciudades de manera que el coste de
 	# transitar por ellas sea el menor posible.
 	#
-	# Se asume para esta implementacion que el coste entre dos ciudades
-	# cualesquiera es simetrica, es decir, el coste de ir desde A hasta B debe ser
+	# Se asume para esta implementación que el coste entre dos ciudades
+	# cualesquiera es simétrica, es decir, el coste de ir desde A hasta B debe ser
 	# el mismo que el coste de ir desde B hasta A
 	class BasicTSP
 		include Enumerable
@@ -34,8 +34,8 @@ module TSP
 				# La primera linea nos da información acerca del numero de ciudades que hay
 				# almacenadas en el fichero
 				#
-				# Nosotros lo guardamos para poder consultarlo rapidamente en el futuro a
-				# traves del metodo TSP#numero_ciudades
+				# Nosotros lo guardamos para poder consultarlo rápidamente en el futuro a
+				# través del método TSP#numero_ciudades
 				@numero_ciudades = f.gets.to_i
 
 				# Ahora podemos ir realizando una lectura completa del resto de la base de datos
@@ -51,7 +51,7 @@ module TSP
 			end
 		end
 
-		# Genera una solucion aleatoria al problema del
+		# Genera una solución aleatoria al problema del
 		# viajante del comercio
 		def generar_solucion_aleatoria
 			ciudades = Array.new(numero_ciudades) {|index| index}

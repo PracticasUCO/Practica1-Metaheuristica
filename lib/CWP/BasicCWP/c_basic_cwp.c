@@ -1,6 +1,6 @@
 #include "c_basic_cwp.h"
 
-// Inicializacion de la clase
+// Inicialización de la clase
 void Init_c_basic_cwp() {
 	module_cwp = rb_define_module("CWP");
 	c_basic_cwp = rb_define_class_under(module_cwp, "BasicCWP", rb_cObject);
@@ -37,7 +37,7 @@ static VALUE diferencia_ary(VALUE ary1, VALUE ary2)
 	return ary3;
 }
 /*
-La funcion objetivo devuelve el numero de cortes que se producen
+La función objetivo devuelve el numero de cortes que se producen
 al ordenar el grafo de forma lineal.
 */
 VALUE method_funcion_objetivo(VALUE self, VALUE v_nodes) {
@@ -78,7 +78,7 @@ VALUE method_funcion_objetivo(VALUE self, VALUE v_nodes) {
 		//Leo para_cerrar
 		cerrando = rb_hash_aref(para_cerrar, nodo);
 		
-		//Si habia nodos que cerraban en esta posicion, los resto de opened
+		//Si había nodos que cerraban en esta posición, los resto de opened
 		if(TYPE(cerrando) != T_NIL)
 		{
 			opened -= RARRAY_LEN(cerrando);
@@ -88,7 +88,7 @@ VALUE method_funcion_objetivo(VALUE self, VALUE v_nodes) {
 		//Aumentamos la cuenta tantas veces como abiertos existan
 		count += opened;
 		
-		//Procesamos nodas las aberturas
+		//Procesamos todas las aberturas
 		while(RARRAY_LEN(aberturas) > 0)
 		{
 			//Cojo el nodo de la abertura

@@ -15,7 +15,7 @@ void Init_c_basic_capacited_phub_node() {
 };
 
 /*
-	Este metodo devuelve la distancia euclidea entre dos nodos CapacitedPHubNode
+	Este método devuelve la distancia euclídea entre dos nodos CapacitedPHubNode
 */
 VALUE method_distancia(VALUE self, VALUE vecino) {
 	VALUE coordenadasPropias = rb_iv_get(self, "@coordenadas");
@@ -53,11 +53,11 @@ VALUE method_distancia(VALUE self, VALUE vecino) {
 }
 
 /*
-Devuelve true cuando se pude realizar la conexion entre dos nodos y false en
+Devuelve true cuando se pude realizar la conexión entre dos nodos y false en
 caso contrario.
 
-Se puede realizar la conexion entre dos nodos cuando uno de ellos esta actuando como
-concentrador y el otro como cliente, y además, la demanda del que actua como cliente
+Se puede realizar la conexión entre dos nodos cuando uno de ellos esta actuando como
+concentrador y el otro como cliente, y además, la demanda del que actúa como cliente
 es inferior o igual a la reserva del concentrador.
 */
 VALUE method_se_puede_conectar(VALUE self, VALUE otro)
@@ -126,13 +126,13 @@ VALUE method_esta_conectado(VALUE self)
 }
 
 /*
-Realiza la conexion entre dos nodos. No se comprueba si se llega o no a saturar a
-otro nodo. Si no se puede realizar la conexion (por ejemplo por que uno de los extremos
+Realiza la conexión entre dos nodos. No se comprueba si se llega o no a saturar a
+otro nodo. Si no se puede realizar la conexión (por ejemplo por que uno de los extremos
 no sea un CapacitedPHubNode se lanzara una excepción de tipo TypeError)
 */
 VALUE method_conectar_a(VALUE self, VALUE otro)
 {
-	//Metodos
+	//Métodos
 	VALUE get_tipo = rb_intern("tipo");
 	VALUE get_demanda = rb_intern("demanda");
 	VALUE get_id = rb_intern("id");

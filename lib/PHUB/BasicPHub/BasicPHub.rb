@@ -11,26 +11,26 @@ del PHUB
 module PHUB
 =begin rdoc
 	La clase BasicPHub es la responsable de leer el fichero de base de datos
-	del problema proporcionado y conservar una representancion de todos
+	del problema proporcionado y conservar una representación de todos
 	los nodos del problema.
 
-	Además de esto, debe dar un solución basica generada de forma aleatoria
+	Además de esto, debe dar un solución básica generada de forma aleatoria
 =end
 	class BasicPHub
-		# nodos guarda una representacion vectorial de todos los nodos
+		# nodos guarda una representación vectorial de todos los nodos
 		# que hay en la base de datos. Estos nodos puede estar ya conectados
 		# o no, dependiendo de si ha elegido conectarlos o no
 		attr_reader :nodos
 		
 		# numero_concentradores indica el numero de concentradores que debe
-		# de aparecer en la solucion
+		# de aparecer en la solución
 		attr_reader :numero_concentradores
 		
 		# Devuelve la capacidad de un concentrador, ya que todos tienen
 		# la misma capacidad
 		attr_reader :capacidad_concentrador
 		
-		# Constructor de la clase BasicPHub, recibe como paremetro un
+		# Constructor de la clase BasicPHub, recibe como parámetro un
 		# String que indica de donde leer la base de datos.
 		def initialize(path_db)
 			@nodos = Array.new
@@ -69,7 +69,7 @@ module PHUB
 			end
 		end
 		
-		# Comprueba que se puede llegar a una solucion.
+		# Comprueba que se puede llegar a una solución.
 		# Devuelve true si es posible o false en caso contrario
 		def solucion_factible?
 			nodos_solucion = nodos.sort_by {|nodo| nodo.demanda}
@@ -93,7 +93,7 @@ module PHUB
 			end
 		end
 		
-		# Genera una solucion aleatoria
+		# Genera una solución aleatoria
 		def generar_solucion_aleatoria
 			if solucion_factible?
 				lista_de_nodos = nodos.dup
@@ -146,7 +146,7 @@ module PHUB
 		end
 		
 		def pretty_solution(solucion)
-			raise TypeError, "Solucion debe de ser un Array" unless solucion.kind_of? Array
+			raise TypeError, "Solución debe de ser un Array" unless solucion.kind_of? Array
 			
 			nueva_solucion = Array.new
 			

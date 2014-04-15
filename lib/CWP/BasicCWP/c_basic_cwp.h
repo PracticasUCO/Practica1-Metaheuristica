@@ -7,11 +7,11 @@ VALUE c_basic_cwp = Qnil;
 // Modulo CWP
 VALUE module_cwp = Qnil;
 
-// Prototipo para la inicializacion de la clase
+// Prototipo para la inicialización de la clase
 void Init_c_basic_cwp();
 
 /*
-La funcion objetivo devuelve el numero de cortes que se producen
+La función objetivo devuelve el numero de cortes que se producen
 al ordenar el grafo de forma lineal.
 */
 VALUE method_funcion_objetivo(VALUE self, VALUE v_nodes);

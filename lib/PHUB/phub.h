@@ -4,7 +4,7 @@
 #include <ruby.h>
 
 /*
-El  modulo PHUB representa a todas las clases que estan relacionadas
+El  modulo PHUB representa a todas las clases que están relacionadas
 con el problema del PHUB
 */
 VALUE phub_module = Qnil;

@@ -70,9 +70,9 @@ VALUE method_btsp_reader_2(VALUE self, VALUE index_fila, VALUE index_columna)
 }
 
 /*
-Calcula el coste de una solucion dada
+Calcula el coste de una solución dada
 
-Recibe como parametro un Array con las ciudades que se van a visitar
+Recibe como parámetro un Array con las ciudades que se van a visitar
 */
 
 VALUE method_btsp_coste_solucion(VALUE self, VALUE ciudades)

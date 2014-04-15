@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 /*
-Este metodo devuelve la temperatura actual del algoritmo
+Este método devuelve la temperatura actual del algoritmo
 */
 VALUE method_temperatura(VALUE self)
 {
@@ -10,7 +10,7 @@ VALUE method_temperatura(VALUE self)
 }
 
 /*
-Este metodo devuelve un valor booleano True o False de forma aleatoria.
+Este método devuelve un valor booleano True o False de forma aleatoria.
 La probabilidad de que devuelva True sera mayor contra más alta sea
 la temperatura.
 */
@@ -36,7 +36,7 @@ VALUE method_probabilidad(VALUE self)
 Disminuye la temperatura interna de la clase de manera que haya menor
 probabilidad de conseguir un valor True.
 
-La funcion de disminución de la temperatura viene determinada por el
+La función de disminución de la temperatura viene determinada por el
 tipo y por el coeficiente de cambio determinado en la clase
 */
 VALUE method_enfriar(VALUE self)
@@ -54,7 +54,7 @@ VALUE method_enfriar(VALUE self)
 }
 
 /*
-Devuelve el coeficiente de cambio usado en la funcion de temperatura
+Devuelve el coeficiente de cambio usado en la función de temperatura
 */
 VALUE method_coeficiente(VALUE self)
 {
@@ -72,7 +72,7 @@ VALUE method_reset(VALUE self)
 }
 
 /*
-Constructor de la clase ES. Recibe como parametros:
+Constructor de la clase ES. Recibe como parámetros:
 - temperatura: El valor de la temperatura inicial. Este valor debe de ser un numero positivo
 - coeficiente: Valor del coeficiente. Este valor debe de ser un numero entre 0-1 exclusive
 */

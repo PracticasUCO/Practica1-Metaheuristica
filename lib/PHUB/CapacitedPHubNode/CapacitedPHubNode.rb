@@ -6,14 +6,14 @@ require_relative 'c_basic_capacited_phub_node'
 
 module PHUB
 =begin rdoc
-	La clase CapacitedPHubNode representa a un nodo de problema Capacited P Hub.
-	Un nodo estara representado por sus coordenadas, su demanda y si es
+	La clase CapacitedPHubNode representa a un nodo de problema CapacitedPHub.
+	Un nodo estará representado por sus coordenadas, su demanda y si es
 	concentrador o no.
 
-	Las coordenadas indican la posicion del espacio donde se encuentra
+	Las coordenadas indican la posición del espacio donde se encuentra
 	el nodo.
 
-	La demanda del nodo indica que recursos demanda este cuando actua como
+	La demanda del nodo indica que recursos demanda este cuando actúa como
 	cliente.
 
 	Un nodo puede ser de dos tipos:
@@ -22,17 +22,17 @@ module PHUB
 	- Concentrador, es autosuficiente y puede realizar sus funciones, además
 	de recibir las peticiones de los demás nodos.
 
-	Cada nodo concentrador tiene ademas una capacidad maxima de servicio que
+	Cada nodo concentrador tiene ademas una capacidad máxima de servicio que
 	no puede ser sobrepasada
 =end
 	class CapacitedPHubNode
 		include Enumerable
 		
-		# cuenta_id es un atributo global que lleva la cuenta del proximo
+		# cuenta_id es un atributo global que lleva la cuenta del próximo
 		# id a establecer
 		@@cuenta_id = 0
 		
-		# id es el numero de identificacion del nodo creado, este numero
+		# id es el numero de identificación del nodo creado, este numero
 		# es unico para cada nodo
 		attr_reader :id
 		
@@ -45,7 +45,7 @@ module PHUB
 		attr_reader :reserva
 		
 		# capacidad_servicio devuelve la capacidad que tiene el nodo
-		# para servir a los demas nodos cuando este actua de concentrador
+		# para servir a los demas nodos cuando este actúa de concentrador
 		attr_reader :capacidad_servicio
 		
 		# demanda devuelve la necesidad de recursos de un nodo cuando
@@ -56,28 +56,28 @@ module PHUB
 		# por ultima vez un nodo como cliente
 		attr_reader :id_concentrador
 		
-		# Constructor de nodo. Recibe como parametros
+		# Constructor de nodo. Recibe como parámetros
 		# coordenadas: indica las coordenadas en el plano del vector, por
 		# defecto en el (0,0)
 		# 
 		# demanda: Necesidad de recursos a ser satisfecha por un nodo cuando
-		# actua como cliente
+		# actúa como cliente
 		#
 		# tipo: Indica si el nodo es de tipo cliente o de tipo concentrador
-		# valdra :cliente cuando sea lo primero y :concentrador cuando sea
+		# valdrá :cliente cuando sea lo primero y :concentrador cuando sea
 		# lo segundo
 		#
-		# capacidad_servicio: Indica la cantidad de recursos maxima que puede
-		# servir el nodo cuando actua como concentrador
+		# capacidad_servicio: Indica la cantidad de recursos máxima que puede
+		# servir el nodo cuando actúa como concentrador
 		#
 		#
-		# Todos los parametros tiene valores por defecto, los cuales son:
+		# Todos los parámetros tiene valores por defecto, los cuales son:
 		# Coordenadas: [0, 0]
 		# Demanda: 1
 		# Tipo: :cliente
 		# capacidad_servicio: Infinita
 		#
-		# Inicialmente todos los nodos estan desconectados, esto signifia que no podran funcionar
+		# Inicialmente todos los nodos están desconectados, esto significa que no podrán funcionar
 		# si son clientes hasta que se conecten a un concentrador
 		def initialize(coordenadas: [0, 0], demanda: 1, tipo: :cliente, capacidad_servicio: Float::INFINITY, id: nil)
 			raise TypeError, "Las coordenadas deben de ser un Array" unless coordenadas.kind_of? Array
@@ -91,7 +91,7 @@ module PHUB
 			raise TypeError, "La capacidad del servicio debe de ser positiva mayor que cero" unless capacidad_servicio.> 0
 			
 			coordenadas.each do |coordenada|
-				raise TypeError, "Las coordenadas deben ser valores numericos" unless coordenada.kind_of? Numeric
+				raise TypeError, "Las coordenadas deben ser valores numéricos" unless coordenada.kind_of? Numeric
 			end
 			
 			@coordenadas = coordenadas
@@ -113,7 +113,7 @@ module PHUB
 
 		# tipo establece que tipo de nodo es el que se esta almacenando
 		# puede ser de dos tipos:
-		# :concentrador : une a distintos nodos clientes dandoles servicio
+		# :concentrador : une a distintos nodos clientes dándoles servicio
 		# :cliente : para funcionar necesita conectarse a un nodo concentrador
 		def tipo=(value)
 			raise TypeError, "Value solo puede ser un Symbol con los valores :cliente o :concentrador" unless value.kind_of? Symbol
@@ -130,37 +130,8 @@ module PHUB
 			@tipo
 		end
 		
-		# Devuelve la distancia del nodo actual a otro nodo
-		#def distancia(other)
-		#	raise TypeError, "other debe de ser otro CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
-		#	otherX, otherY = other.coordenadas
-		#	propiaX, propiaY = coordenadas
-		#	Math.sqrt(((otherX - propiaX) ** 2) + ( (otherY - propiaY ) ** 2 ))
-		#end
-		
-		# Establece a quien conectar el nodo. Ojo que no se comprueba que la conexion no sature
-		# a un concentrador. Es responsabilidad del encargado de la conexion de verificar los fallos
-		# La conexion siempre se efectua, al no ser que se intenten conectar dos nodos del mismo tipo
-		# o se mande un parametro no correcto. En caso de error se levanta una excepcion del tipo TypeError
-	# 	def conectar_a=(other)
-	# 		raise TypeError, "other must be a CapacitedPHubNode" unless other.kind_of? CapacitedPHubNode
-	# 		raise TypeError, "un nodo no puede conectarse a si mismo" if self.eql? other
-	# 		raise TypeError, "Un concentrador solo pude conectarse a clientes y viceversa" if self.tipo.eql? other.tipo
-	# 		
-	# 		if self.tipo == :cliente
-	# 			desconectar # Nos desconectamos del nodo al que estuviesemos conectados
-	# 			@connected << other
-	# 			@id_concentrador = other.id
-	# 		else
-	# 			if not conectado_a(other)
-	# 				@connected << other
-	# 				@reserva -= other.demanda
-	# 			end
-	# 		end
-	# 	end
-		
 		# Devuelve a quien esta conectado el nodo.
-		# Si no recibe parametros devuelve la lista de nodos a las que se encuentra conectado.
+		# Si no recibe parámetros devuelve la lista de nodos a las que se encuentra conectado.
 		# En caso contrario, devuelve si esta conectado a cada uno de los nodos de la lista
 		def conectado_a(*other)
 			if other.length == 0
@@ -168,7 +139,7 @@ module PHUB
 			else
 				resultado = false
 				other.each do |nodo|
-					raise TypeError, "Todos los parametros de conectado_a deben de ser nodos" unless nodo.kind_of? CapacitedPHubNode
+					raise TypeError, "Todos los parámetros de conectado_a deben de ser nodos" unless nodo.kind_of? CapacitedPHubNode
 					
 					if @connected.include? nodo
 						resultado = true
@@ -190,37 +161,10 @@ module PHUB
 			end
 		end
 		
-		# Se compara con otro metodo
+		# Se compara con otro método
 		def <=>(other)
 			self.id.<=> other.id
 		end
-		
-		# Comprueba si se puede conectar a otro nodo
-		# Recibe como parametro un nodo CapacitedPHubNode
-	# 	def se_puede_conectar?(other)
-	# 		raise TypeError, "other debe de ser un nodo" unless other.kind_of? CapacitedPHubNode
-	# 		
-	# 		if other.tipo == tipo
-	# 			return false
-	# 		else
-	# 			if other.tipo == :concentrador
-	# 				return other.reserva >= demanda
-	# 			else
-	# 				return reserva >= other.demanda
-	# 			end
-	# 		end
-	# 	end
-		
-		# Indica si el nodo esta conectado o no. Devuelve true si
-		# el nodo esta conectado a algun otro nodo o false en caso
-		# contrario
-	# 	def esta_conectado?
-	# 		if conectado_a.length == 0
-	# 			false
-	# 		else
-	# 			true
-	# 		end
-	# 	end
 		
 		# Desconecta completamente el nodo
 		def desconectar
