@@ -6,30 +6,30 @@ require_relative 'c_basic_mmdp'
 
 ## El modulo MMDP engloba a todas las clases pertenecientes a MMDP
 module MMDP
-	# La clase BasicMMDP proporciona la funcionalidad basica para la
-	# resolucion del problema Max Min Diversity Problem, el cual trata.
+	# La clase BasicMMDP proporciona la funcionalidad básica para la
+	# resolución del problema Max Min Diversity Problem, el cual trata.
 	#
 	# En este problema se tiene un conjunto de N individuos, de los
 	# cuales se trata de escoger M individuos (siendo M < N) de manera
 	# que se maximize la diversidad entre los individuos elegidos
 	#
-	# La clase BasicMMDP solo proporciona una funcionalidad basica a
-	# este problema, no alcanzado por ello la solucion optima
+	# La clase BasicMMDP solo proporciona una funcionalidad básica a
+	# este problema, no alcanzado por ello la solución optima
 	class BasicMMDP
 		# El atributo total_nodes indica el numero total de nodos que
 		# hay en la base de datos
 		attr_reader :total_nodes 
 
-		# El atributo solution_nodes indica el numero maximo de nodos
-		# que debe aparecer en la solucion
+		# El atributo solution_nodes indica el numero máximo de nodos
+		# que debe aparecer en la solución
 		attr_reader :solution_nodes
 
 		# El atributo lista_nodos indica la lista de nodos que se ha
 		# leido de la base de datos
 		attr_reader :lista_nodos
 		
-		# Constructor de MMDP. Recibe como parametro un string
-		# con la direccion de la base de datos que se deseea leer
+		# Constructor de MMDP. Recibe como parámetro un string
+		# con la dirección de la base de datos que se desea leer
 
 		def initialize(path_db)
 			leer_instancia(path_db)
@@ -82,12 +82,12 @@ module MMDP
 		end
 
 		# Genera una solución aleatoriamente a partir de la base de datos
-		# que se ha leido previamente. La solucion generada trata que
-		# el coste sea el maximo posible. 
+		# que se ha leído previamente. La solución generada trata que
+		# el coste sea el máximo posible. 
 		#
-		# Recibe como parametro el valor de seed, que indicara con que
+		# Recibe como parámetro el valor de seed, que indicara con que
 		# valor se inicializa una secuencia aleatoria, en caso de
-		# no introduccir ningún valor o de introduccir el valor cero
+		# no introducir ningún valor o de introducir el valor cero
 		# se usara el valor de Random.new_seed
 		# 
 		# Devuelve un vector con los nodos
@@ -99,7 +99,7 @@ module MMDP
 			return solucion, coste_actual	
 		end
 
-		# Definicion de los metodos privados de la clase
+		# Definición de los métodos privados de la clase
 		private :obtener_coste_entre, :diversidad_minima
 	end
 end

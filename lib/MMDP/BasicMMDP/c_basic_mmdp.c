@@ -3,9 +3,9 @@
 
 /*
 Devuelve la distancia o coste entre dos nodos.
-Si no encuentra los nodos, devolvera cero.
+Si no encuentra los nodos, devolverá cero.
 
-Recibe como parametros el nodo origen y el nodo
+Recibe como parámetros el nodo origen y el nodo
 destino.
 
 Si no encuentra el coste entre los dos nodos
@@ -34,18 +34,18 @@ VALUE method_obtener_coste_entre(VALUE self, VALUE origen, VALUE destino)
 }
 
 /*
-Este metodo devuelve la diversidad minimia que existe en una solucion
-Puede recibir una serie de nodos, en cuyo caso devolveria la diversidad
-minima que habría despues de añadir dichos nodos
+Este método devuelve la diversidad mínima que existe en una solución
+Puede recibir una serie de nodos, en cuyo caso devolvería la diversidad
+mínima que habría después de añadir dichos nodos
 */
 VALUE method_diversidad_minima(VALUE self, VALUE solucion)
 {
 	VALUE minimo = DBL2NUM(0);
 	VALUE origen;
 	VALUE destino;
-	VALUE valor_actual; //Valor actual de la diversidad minima
+	VALUE valor_actual; //Valor actual de la diversidad mínima
 	long int i, j; //Auxiliares
-	int count_minimo = 0; //Si vale 1 se empieza a tener en cuenta el valor del minimo
+	int count_minimo = 0; //Si vale 1 se empieza a tener en cuenta el valor del mínimo
 
 	solucion = rb_check_array_type(solucion);
 
@@ -194,7 +194,7 @@ VALUE method_diversidad_minima_parcial(VALUE self, VALUE solucion, VALUE nuevo_n
 }
 
 /*
-funcion_objetivo es un sinonimo de diversidad minima
+funcion_objetivo es un sinónimo de diversidad mínima
 */
 VALUE method_funcion_objetivo(VALUE self, VALUE solucion)
 {

@@ -14,31 +14,31 @@ void Init_c_basic_mmdp();
 
 /*
 Devuelve la distancia o coste entre dos nodos.
-Si no encuentra los nodos, devolvera cero.
+Si no encuentra los nodos, devolverá cero.
 
-Recibe como parametros el nodo origen y el nodo
+Recibe como parámetros el nodo origen y el nodo
 destino
 */
 VALUE method_obtener_coste_entre(VALUE self, VALUE origen, VALUE destino);
 
 /*
-Este metodo devuelve la diversidad minima que existe en una solucion
+Este método devuelve la diversidad mínima que existe en una solución
 */
 VALUE method_diversidad_minima(VALUE self, VALUE solucion);
 
 /*
-Este metodo devuelve la diversidad minima que existiria en una solucion
+Este método devuelve la diversidad mínima que existiría en una solución
 si se añadiese un nuevo nodo */
 VALUE method_merge_diversidad_minima(VALUE self, VALUE solucion, VALUE nuevo_nodo);
 
 /*
-Este metodo devuelve la diversidad minima que aportaria un nodo
-a una solucion se se añadiese
+Este método devuelve la diversidad mínima que aportaría un nodo
+a una solución se se añadiese
 */
 VALUE method_diversidad_minima_parcial(VALUE self, VALUE solucion, VALUE nuevo_nodo);
 
 /*
-funcion_objetivo es un sinonimo de diversidad minima
+funcion_objetivo es un sinónimo de diversidad mínima
 */
 VALUE method_funcion_objetivo(VALUE self, VALUE solucion);
 
