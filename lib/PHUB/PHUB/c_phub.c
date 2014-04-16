@@ -78,6 +78,11 @@ VALUE phub_operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE f
 		rb_raise(rb_eTypeError, "n_elementos debe de ser un número entero.\n");
 	}
 	
+	if(RARRAY_LEN(lista_soluciones) == 0)
+	{
+		rb_raise(rb_eTypeError, "No hay elementos sobre los cuales hacer un torneo.\n");
+	}
+	
 	lista_seleccionados = rb_ary_new();
 
 	if(RARRAY_LEN(lista_soluciones) > NUM2INT(n_elementos))
