@@ -234,6 +234,87 @@ VALUE phub_operador_seleccion_torneo_injusto(VALUE self, VALUE lista_soluciones,
 	return lista_seleccionados;
 }
 
+/*
+Realiza una selección de +n_elementos+ de +lista_soluciones+ de manera aleatoria
+de manera tal que tienen mayor probabilidad de ser seleccionados aquellas
+soluciones que tengan menor fitness (ya que se trata de un problema de minimización).
+
+Tenga en cuenta que los elementos seleccionados pueden estar repetidos.
+*/
+VALUE phub_operador_seleccion_ruleta(VALUE self, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_elementos)
+{
+	double suma_fitness = 0;
+	double numero_ruleta; //Número aleatorio de la ruleta
+	VALUE fitness_ruleta; //Copia modificada de fitness_soluciones
+	VALUE elementos_seleccionados;
+	int i;
+	
+	lista_soluciones = rb_check_array_type(lista_soluciones);
+	fitness_soluciones = rb_check_hash_type(fitness_soluciones);
+	
+	if(TYPE(n_elementos) != T_FIXNUM)
+	{
+		rb_raise(rb_eTypeError, "n_elementos debe de ser un número entero.\n");
+	}
+	
+	elementos_seleccionados = rb_ary_new();
+	
+	//Creación y asignación de los valores de fitness ajustados a la ruleta
+	//También se produce la suma de los fitness
+	fitness_ruleta = rb_hash_new();
+	
+	for(i = 0; i < RARRAY_LEN(lista_soluciones); i++)
+	{
+		VALUE key = rb_ary_entry(lista_soluciones, i);
+		VALUE value = rb_hash_aref(fitness_soluciones, key);
+		
+		if((TYPE(value) != T_FLOAT) && (TYPE(value) != T_FIXNUM))
+		{
+			rb_raise(rb_eTypeError, "Se hallo un fitness no valido.\n");
+		}
+		
+		value = DBL2NUM(1/NUM2DBL(value));
+		rb_hash_aset(fitness_ruleta, key, value);
+		suma_fitness += NUM2DBL(value);
+	}
+	
+	//Normalización del fitness entre 0 y 1
+	for(i = 0; i < RARRAY_LEN(lista_soluciones); i++)
+	{
+		VALUE key = rb_ary_entry(lista_soluciones, i);
+		VALUE value = rb_hash_aref(fitness_ruleta, key);
+		
+		value = DBL2NUM(NUM2DBL(value) / suma_fitness);
+		
+		rb_hash_aset(fitness_ruleta, key, value);
+	}
+	
+	//Lanzamiento de la ruleta las veces necesarias
+	for(i = 0; i < NUM2INT(n_elementos); i++)
+	{
+		double suma = 0;
+		int j;
+		numero_ruleta = rb_genrand_real();
+		
+		for(j = 0; j < RARRAY_LEN(lista_soluciones); j++)
+		{
+			VALUE key = rb_ary_entry(lista_soluciones, j);
+			VALUE value = rb_hash_aref(fitness_ruleta, key);
+			
+			suma += NUM2DBL(value);
+			
+			if(suma >= numero_ruleta)
+			{
+				rb_ary_push(elementos_seleccionados, key);
+				break;
+			}
+		}
+	}
+	
+	//Devolviendo la solución
+	return elementos_seleccionados;
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
@@ -242,4 +323,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "separar_nodos", phub_separar_nodos, 1);
 	rb_define_private_method(class_phub, "torneo", phub_operador_seleccion_torneo, 3);
 	rb_define_private_method(class_phub, "torneo_injusto", phub_operador_seleccion_torneo_injusto, 3);
+	rb_define_private_method(class_phub, "ruleta", phub_operador_seleccion_ruleta, 3);
 }
