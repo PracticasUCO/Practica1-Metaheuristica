@@ -192,6 +192,11 @@ VALUE phub_operador_seleccion_torneo_injusto(VALUE self, VALUE lista_soluciones,
 		rb_raise(rb_eTypeError, "n_elementos debe de ser un valor entero\n");
 	}
 	
+	if(RARRAY_LEN(lista_soluciones) == 0)
+	{
+		rb_raise(rb_eTypeError, "No se puede realizar un torneo sin participantes.\n");
+	}
+	
 	lista_seleccionados = rb_ary_new();
 	
 	for(i = 0; i < NUM2INT(n_elementos); i++)
