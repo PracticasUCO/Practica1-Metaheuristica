@@ -370,6 +370,50 @@ VALUE phub_operador_seleccion(VALUE self, VALUE sym_seleccion, VALUE lista_soluc
 	}
 }
 
+/*
+Realiza el cruce entre +solucion_a+ y +solucion_b+ devolviendo dos
+soluciones hijas como resultado.
+*/
+VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
+{
+	VALUE conjunto_a;
+	VALUE conjunto_b;
+	
+	VALUE concentradores_a;
+	VALUE clientes_a;
+	
+	VALUE concentradores_b;
+	VALUE clientes_b;
+	
+	unsigned long int len_c_a; //Número de concentradores en A
+	unsigned long int len_c_b; //Número de concentradores en B
+	unsigned long int particion_a; //Partición de cruce en A
+	unsigned long int particion_b; //Partición de cruce en B
+	
+	VALUE empaquetado;
+	
+	solucion_a = rb_check_array_type(solucion_a);
+	solucion_b = rb_check_array_type(solucion_b);
+	
+	// Separamos los clientes de los concentradores
+	conjunto_a = phub_separar_nodos(self, solucion_a);
+	conjunto_b = phub_separar_nodos(self, solucion_b);
+	
+	// Cogemos el conjunto de concentradores y clientes
+	concentradores_a = rb_ary_entry(conjunto_a, 0);
+	clientes_a = rb_ary_entry(conjunto_a, 1);
+	
+	concentradores_b = rb_ary_entry(conjunto_b, 0);
+	clientes_b = rb_ary_entry(conjunto_b, 1);
+	
+	// Se establecen los limites y las particiones a cruzar
+	len_c_a = RARRAY_LEN(concentradores_a);
+	len_c_b = RARRAY_LEN(concentradores_b);
+	
+	particion_a = rb_genrand_ulong_limited(len_c_a - 2) + 1;
+	particion_b = rb_genrand_ulong_limited(len_c_b - 2) + 1;
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
