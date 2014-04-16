@@ -16,11 +16,19 @@ module PHUB
 		end
 		
 		# Ordena los elementos de una lista de soluciones según su fitness
-		def sort_by_fitness(lista_soluciones, fitness_soluciones)
+		def sort_by_fitness!(lista_soluciones, fitness_soluciones)
 			raise TypeError, "lista_soluciones debe de ser un Array" unless lista_soluciones.kind_of? Array
 			raise TypeError, "fitness_soluciones debe de ser una tabla de hash" unless fitness_soluciones? Hash
 			
 			lista_soluciones.sort_by! {|solucion| fitness_soluciones[solucion]}
+		end
+		
+		# Ordena los elementos de una lista de soluciones según su fitness
+		def sort_by_fitness(lista_soluciones, fitness_soluciones)
+			raise TypeError, "lista_soluciones debe de ser un Array" unless lista_soluciones.kind_of? Array
+			raise TypeError, "fitness_soluciones debe de ser una tabla de hash" unless fitness_soluciones? Hash
+			
+			return lista_soluciones.sort_by {|solucion| fitness_soluciones[solucion]}
 		end
 		
 		private :sort_by_fitness
