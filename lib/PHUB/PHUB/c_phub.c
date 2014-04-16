@@ -5,7 +5,7 @@
 /*
 Genera un valor aleatorio entre 0 y 1
 */
-VALUE random_number(VALUE self)
+VALUE phub_random_number(VALUE self)
 {
 	return DBL2NUM(rb_genrand_real());
 }
@@ -15,7 +15,7 @@ Separa los nodos concentradores de una solución de los nodos
 que actúan como clientes. Se devuelven en dos vectores el primero
 con los nodos concentradores y el segundo con los nodos cliente.
 */
-VALUE separar_nodos(VALUE self, VALUE solucion)
+VALUE phub_separar_nodos(VALUE self, VALUE solucion)
 {
 	VALUE concentradores;
 	VALUE clientes;
@@ -66,7 +66,7 @@ Esto significa que si se trata de obtener un conjunto de individuos mediante tor
 conjunto de individuos de la lista_soluciones proporcionada el resultado final sera igual
 a la lista_soluciones proporcionada.
 */
-VALUE operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_elementos)
+VALUE phub_operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_elementos)
 {
 	VALUE lista_seleccionados;
 
@@ -158,7 +158,7 @@ VALUE operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE fitnes
 	{
 		//No se aplican las reglas de torneo convencionales ya que no hay
 		//suficientes individuos
-		return operador_seleccion_torneo_injusto(self, lista_soluciones, fitness_soluciones, n_elementos);
+		return phub_operador_seleccion_torneo_injusto(self, lista_soluciones, fitness_soluciones, n_elementos);
 	}
 	
 	return lista_seleccionados;
@@ -173,7 +173,7 @@ Recibe como argumentos:
 - fitness_soluciones: Una tabla de hash que contiene el coste de cada una de las soluciones
 - n_elementos: Numero de elementos a elegir
 */
-VALUE operador_seleccion_torneo_injusto(VALUE self, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_elementos)
+VALUE phub_operador_seleccion_torneo_injusto(VALUE self, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_elementos)
 {
 	VALUE lista_seleccionados;
 	VALUE indice_loco;
@@ -238,8 +238,8 @@ void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
 	class_phub = rb_define_class_under(phub_module, "PHUB", CBasicPHub);
-	rb_define_private_method(class_phub, "random_number", random_number, 0);
-	rb_define_private_method(class_phub, "separar_nodos", separar_nodos, 1);
-	rb_define_private_method(class_phub, "torneo", operador_seleccion_torneo, 3);
-	rb_define_private_method(class_phub, "torneo_injusto", operador_seleccion_torneo_injusto, 3);
+	rb_define_private_method(class_phub, "random_number", phub_random_number, 0);
+	rb_define_private_method(class_phub, "separar_nodos", phub_separar_nodos, 1);
+	rb_define_private_method(class_phub, "torneo", phub_operador_seleccion_torneo, 3);
+	rb_define_private_method(class_phub, "torneo_injusto", phub_operador_seleccion_torneo_injusto, 3);
 }
