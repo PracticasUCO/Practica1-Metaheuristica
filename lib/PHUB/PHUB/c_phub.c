@@ -330,6 +330,46 @@ VALUE phub_operador_seleccion_ruleta(VALUE self, VALUE lista_soluciones, VALUE f
 	return elementos_seleccionados;
 }
 
+/*
+Selecciona +n_elementos+ entre +lista_soluciones+ al azar mediante
+torneo o mediante la técnica de la ruleta.
+
++fitness_soluciones+ hace referencia a una tabla de hash que contiene
+el valor objetivo de cada solución.
+
++sym_seleccion+ indica que tipo de selección realizar. Puede ser de dos
+valores: :torneo y :ruleta dependiendo de si se desea una selección mediante
+torneo o mediante ruleta respectivamente.
+*/
+VALUE phub_operador_seleccion(VALUE self, VALUE sym_seleccion, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_elementos)
+{
+	VALUE sym_torneo = ID2SYM(rb_intern("torneo"));
+	VALUE sym_ruleta = ID2SYM(rb_intern("ruleta"));
+	
+	//Los parámetros lista_soluciones, fitness_soluciones y n_elementos se comprueba en
+	//los métodos PHUB#torneo => phub_operador_seleccion_torneo y PHUB#ruleta =>
+	//phub_operador_seleccion_ruleta
+	
+	if(TYPE(sym_seleccion) != T_SYMBOL)
+	{
+		rb_raise(rb_eTypeError, "sym_seleccion debe de ser un símbolo.\n");
+	}
+	
+	if((sym_seleccion != sym_torneo) && (sym_seleccion != sym_ruleta))
+	{
+		rb_raise(rb_eTypeError, "sym_seleccion debe de ser :torneo o :ruleta.\n");
+	}
+	
+	if(sym_seleccion == sym_torneo)
+	{
+		return phub_operador_seleccion_torneo(self, lista_soluciones, fitness_soluciones, n_elementos);
+	}
+	else
+	{
+		return phub_operador_seleccion_ruleta(self, lista_soluciones, fitness_soluciones, n_elementos);
+	}
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
@@ -339,4 +379,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "torneo", phub_operador_seleccion_torneo, 3);
 	rb_define_private_method(class_phub, "torneo_injusto", phub_operador_seleccion_torneo_injusto, 3);
 	rb_define_private_method(class_phub, "ruleta", phub_operador_seleccion_ruleta, 3);
+	rb_define_private_method(class_phub, "seleccion", phub_operador_seleccion, 4);
 }
