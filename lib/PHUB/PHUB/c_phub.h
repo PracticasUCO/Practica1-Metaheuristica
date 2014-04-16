@@ -7,11 +7,11 @@
 VALUE class_phub = Qnil;
 
 //Metodos
-VALUE random_number(VALUE self);
-VALUE separar_nodos(VALUE self, VALUE solucion);
-VALUE operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_elementos);
-VALUE operador_seleccion_torneo_injusto(VALUE self, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_elementos);
-VALUE operador_seleccion_ruleta(VALUE self, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_elementos);
-VALUE operador_seleccion(VALUE self, VALUE id_seleccion, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_selecciones);
-VALUE operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b);
-VALUE operador_mutacion(VALUE self, VALUE solucion);
+VALUE phub_random_number(VALUE self);
+VALUE phub_separar_nodos(VALUE self, VALUE solucion);
+VALUE phub_operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_elementos);
+VALUE phub_operador_seleccion_torneo_injusto(VALUE self, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_elementos);
+VALUE phub_operador_seleccion_ruleta(VALUE self, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_elementos);
+VALUE phub_operador_seleccion(VALUE self, VALUE id_seleccion, VALUE lista_soluciones, VALUE fitness_soluciones, VALUE n_selecciones);
+VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b);
+VALUE phub_operador_mutacion(VALUE self, VALUE solucion);
