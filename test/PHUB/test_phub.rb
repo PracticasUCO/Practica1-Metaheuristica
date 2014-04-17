@@ -24,4 +24,43 @@ describe PHUBPrivate do
 			end
 		end
 	end
+	
+	describe "Cuando se llama a PHUB#separar_nodos" do
+		it "Debe de devolver dos vectores" do
+			*, solucion = @t.generar_solucion_aleatoria
+			
+			a, b = @t.separar_nodos(solucion)
+			
+			a.must_be_kind_of Array
+			b.must_be_kind_of Array
+		end
+		
+		it "El primer vector debe de ser solo de concentradores" do
+			*, solucion = @t.generar_solucion_aleatoria
+		
+			a, * = @t.separar_nodos(solucion)
+			
+			a.each do |nodo|
+				nodo.tipo.must_equal :concentrador
+			end
+		end
+		
+		it "El segundo vector debe de ser solo de clientes" do
+			*, solucion = @t.generar_solucion_aleatoria
+		
+			*, b = @t.separar_nodos(solucion)
+			
+			b.each do |nodo|
+				nodo.tipo.must_equal :cliente
+			end
+		end
+		
+		it "El primer vector debe de tener una longitud igual al número de concentradores necesarios" do
+			*, solucion = @t.generar_solucion_aleatoria
+		
+			a, * = @t.separar_nodos(solucion)
+			
+			a.length.must_equal @t.numero_concentradores
+		end
+	end
 end
