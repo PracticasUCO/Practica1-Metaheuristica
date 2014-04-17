@@ -439,7 +439,7 @@ VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
 	
 	//Cruce de los nodos concentradores.
 
-	for(i = 0; i < RARRAY_LEN(concentradores_a); i++)
+	for(i = 0; i < (unsigned long int) RARRAY_LEN(concentradores_a); i++)
 	{
 		VALUE nodo = rb_ary_entry(concentradores_a, i);
 		
@@ -458,7 +458,7 @@ VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
 		}
 	}
 	
-	for(i = 0; i < RARRAY_LEN(concentradores_b); i++)
+	for(i = 0; i < (unsigned long int) RARRAY_LEN(concentradores_b); i++)
 	{
 		VALUE nodo = rb_ary_entry(concentradores_b, i);
 		
@@ -492,16 +492,16 @@ VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
 	}
 	
 	//Eliminación de conexiones imposibles
-	for(i = 0; i < RARRAY_LEN(hijo_a); i++)
+	for(i = 0; i < (unsigned long int) RARRAY_LEN(hijo_a); i++)
 	{
 		VALUE concentrador_a = rb_ary_entry(hijo_a, i);
 		VALUE concentrador_b = rb_ary_entry(hijo_b, i);
 		
 		VALUE conectados_a = rb_iv_get(concentrador_a, "@connected");
 		VALUE conectados_b = rb_iv_get(concentrador_b, "@connected");
-		int j;
+		unsigned long int j;
 		
-		for(j = 0; j < RARRAY_LEN(conectados_a); j++)
+		for(j = 0; j < (unsigned long int) RARRAY_LEN(conectados_a); j++)
 		{
 			VALUE cliente_a = rb_ary_entry(conectados_a, j);
 			
@@ -519,7 +519,7 @@ VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
 		
 		rb_iv_set(concentrador_a, "@connected", conectados_a);
 		
-		for(j = 0; j < RARRAY_LEN(conectados_b); j++)
+		for(j = 0; j < (unsigned long int) RARRAY_LEN(conectados_b); j++)
 		{
 			VALUE cliente_b = rb_ary_entry(conectados_b, j);
 			
@@ -539,7 +539,7 @@ VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
 	}
 	
 	//Control sobre el resto de clientes no conectados
-	for(i = 0; i < RARRAY_LEN(lista_nodos); i++)
+	for(i = 0; i < (unsigned long int) RARRAY_LEN(lista_nodos); i++)
 	{
 		VALUE nodo_final = rb_ary_entry(lista_nodos, i);
 		
@@ -549,10 +549,10 @@ VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
 			VALUE connected = rb_iv_get(nodo_final, "@connected");
 			VALUE demanda = rb_iv_get(nodo_final, "@demanda");
 			VALUE reserva;
-			int j;
+			unsigned long int j;
 			rb_ary_clear(connected);
 			
-			for(j = 0; j < RARRAY_LEN(hijo_a); j++)
+			for(j = 0; j < (unsigned long int) RARRAY_LEN(hijo_a); j++)
 			{
 				VALUE concentrador = rb_ary_entry(hijo_a, j);
 				VALUE conectados_concentrador;
@@ -587,10 +587,10 @@ VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
 			VALUE connected = rb_iv_get(nodo_final, "@connected");
 			VALUE demanda = rb_iv_get(nodo_final, "@demanda");
 			VALUE reserva;
-			int j;
+			unsigned long int j;
 			rb_ary_clear(connected);
 			
-			for(j = 0; j < RARRAY_LEN(hijo_b); j++)
+			for(j = 0; j < (unsigned long int) RARRAY_LEN(hijo_b); j++)
 			{
 				VALUE concentrador = rb_ary_entry(hijo_b, j);
 				VALUE conectados_concentrador;
