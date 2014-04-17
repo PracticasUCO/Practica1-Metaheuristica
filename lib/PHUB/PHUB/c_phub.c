@@ -1,5 +1,6 @@
 #include <ruby.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "c_phub.h"
 #include "../CapacitedPHubNode/c_basic_phub_node.h"
 
@@ -88,7 +89,7 @@ VALUE phub_operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE f
 
 	if(RARRAY_LEN(lista_soluciones) > NUM2INT(n_elementos))
 	{
-		VALUE indice_loco;
+		int indice_loco;
 		VALUE numeros_disponibles = rb_ary_new();
 		int cuenta = NUM2INT(n_elementos);
 		int i;
@@ -104,32 +105,35 @@ VALUE phub_operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE f
 		{
 			VALUE competidor_a;
 			VALUE fitness_a;
-			VALUE indice_a;
+			int indice_a;
 			
 			VALUE competidor_b;
 			VALUE fitness_b;
-			VALUE indice_b;
+			int indice_b;
+			int individuo;
 			
 			cuenta--;
 			
 			//Selección del primer individuo al azar
-			indice_loco = INT2NUM(rb_genrand_ulong_limited(RARRAY_LEN(lista_soluciones) - 1));
-			indice_loco = rb_ary_entry(numeros_disponibles, NUM2INT(indice_loco));
-			indice_a = indice_loco;
-			rb_ary_delete(numeros_disponibles, indice_loco);
+			indice_loco = rb_genrand_ulong_limited(RARRAY_LEN(numeros_disponibles) - 1);
+			individuo = NUM2INT(rb_ary_entry(numeros_disponibles, indice_loco));
+			indice_a = individuo;
+			rb_ary_delete(numeros_disponibles, INT2NUM(individuo));
 			
 			//Selección del segundo individuo al azar
-			indice_loco = INT2NUM(rb_genrand_ulong_limited(RARRAY_LEN(lista_soluciones) - 1));
-			indice_loco = rb_ary_entry(numeros_disponibles, NUM2INT(indice_loco));
-			indice_b = indice_loco;
-			rb_ary_delete(numeros_disponibles, indice_loco);
+			indice_loco = rb_genrand_ulong_limited(RARRAY_LEN(numeros_disponibles) - 1);
+			individuo = NUM2INT(rb_ary_entry(numeros_disponibles, indice_loco));
+			indice_b = individuo;
+			rb_ary_delete(numeros_disponibles, INT2NUM(individuo));
 			
 			//Carga del competidor A
-			competidor_a = rb_ary_entry(lista_soluciones, NUM2INT(indice_a));
+			competidor_a = rb_ary_entry(lista_soluciones, indice_a);
 			fitness_a = rb_hash_aref(fitness_soluciones, competidor_a);
 			
 			//Carga del competidor B
-			competidor_b = rb_ary_entry(lista_soluciones, NUM2INT(indice_b));
+			
+			//Apuestate que el error esta en indice_b			
+			competidor_b = rb_ary_entry(lista_soluciones, indice_b);
 			fitness_b = rb_hash_aref(fitness_soluciones, competidor_b);
 			
 			//Comprobando que el fitness sea correcto para A y B
@@ -147,12 +151,12 @@ VALUE phub_operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE f
 			if(NUM2DBL(fitness_a) <= NUM2DBL(fitness_b))
 			{
 				rb_ary_push(lista_seleccionados, competidor_a);
-				rb_ary_push(numeros_disponibles, indice_b);
+				rb_ary_push(numeros_disponibles, INT2NUM(indice_b));
 			}
 			else
 			{
 				rb_ary_push(lista_seleccionados, competidor_b);
-				rb_ary_push(numeros_disponibles, indice_a);
+				rb_ary_push(numeros_disponibles, INT2NUM(indice_a));
 			}
 		}
 	}
