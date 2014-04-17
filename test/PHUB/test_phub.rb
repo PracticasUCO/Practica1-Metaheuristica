@@ -89,5 +89,16 @@ describe PHUBPrivate do
 				seleccionados.length.must_equal ganadores
 			end
 		end
+		
+		it "Si se intentan seleccionar el mismo número de aspirantes que soluciones se devuelve una copia de las soluciones" do
+			seleccionados = @t.torneo(@lista, @costes, 50)
+			seleccionados.must_equal @lista
+		end
+		
+		it "Si se seleccionan más aspirantes que concursantes habra soluciones repetidas" do
+			seleccionados = @t.torneo(@lista, @costes, 125)
+			
+			seleccionados.length.must_equal 125
+		end
 	end
 end
