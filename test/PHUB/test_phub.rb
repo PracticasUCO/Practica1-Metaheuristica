@@ -99,5 +99,32 @@ describe PHUBPrivate do
 			
 			seleccionados.length.must_equal 125
 		end
+		
+		it "Siempre gana aquella solución con mejor fitness" do
+			coste_a = nil
+			coste_b = nil
+			
+			while coste_a == coste_b
+				*, coste_a, solucion_a = @t.generar_solucion_aleatoria
+				*, coste_b, solucion_b = @t.generar_solucion_aleatoria
+			
+				if coste_b < coste_a
+					mejor_solucion = solucion_b
+				else
+					mejor_solucion = solucion_a
+				end
+			end
+			
+			lista = Array.new
+			costes = Hash.new
+			
+			lista << solucion_a << solucion_b
+			costes[solucion_a] = coste_a
+			costes[solucion_b] = coste_b
+			
+			seleccionado = @t.torneo(lista, costes, 1)
+			
+			seleccionado[0].must_equal mejor_solucion			
+		end
 	end
 end
