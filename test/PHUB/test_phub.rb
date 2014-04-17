@@ -66,7 +66,6 @@ describe PHUBPrivate do
 	
 	describe "Cuando se realiza un torneo" do
 		before do
-			@t = PHUBPrivate.new("instancias/P3/CPH/phub_100_10_1.txt")
 			@lista = Array.new
 			@costes = Hash.new
 			
