@@ -80,7 +80,7 @@ describe PHUBPrivate do
 		
 		it "Si se seleccionan menos soluciones que el número de aspirantes no puede haber soluciones repetidas" do
 			30.times do
-				ganadores = rand(50)
+				ganadores = rand(48) + 2
 				
 				seleccionados = @t.torneo(@lista, @costes, ganadores)
 				
