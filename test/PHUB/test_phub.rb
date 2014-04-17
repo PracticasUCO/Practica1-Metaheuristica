@@ -11,7 +11,7 @@ end
 
 describe PHUBPrivate do
 	before do
-		@t = PHUBPrivate.new("instancias/P1/CPH/phub_50_5_1.txt")
+		@t = PHUBPrivate.new("instancias/P3/CPH/phub_100_10_1.txt")
 	end
 	
 	describe "Cuando se llama a random_number" do
@@ -61,6 +61,33 @@ describe PHUBPrivate do
 			a, * = @t.separar_nodos(solucion)
 			
 			a.length.must_equal @t.numero_concentradores
+		end
+	end
+	
+	describe "Cuando se realiza un torneo" do
+		before do
+			@t = PHUBPrivate.new("instancias/P3/CPH/phub_100_10_1.txt")
+			@lista = Array.new
+			@costes = Hash.new
+			
+			50.times do
+				*, coste, solucion = @t.generar_solucion_aleatoria
+				
+				@lista << solucion
+				@costes[solucion] = coste
+			end
+		end
+		
+		it "Si se seleccionan menos soluciones que el número de aspirantes no puede haber soluciones repetidas" do
+			30.times do
+				ganadores = rand(50)
+				
+				seleccionados = @t.torneo(@lista, @costes, ganadores)
+				
+				seleccionados.uniq!
+				
+				seleccionados.length.must_equal ganadores
+			end
 		end
 	end
 end
