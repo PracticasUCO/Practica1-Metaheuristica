@@ -1,6 +1,7 @@
 #include <ruby.h>
 #include <stdlib.h>
 #include "c_phub.h"
+#include "../CapacitedPHubNode/c_basic_phub_node.h"
 
 /*
 Genera un valor aleatorio entre 0 y 1
@@ -376,42 +377,251 @@ soluciones hijas como resultado.
 */
 VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
 {
+	VALUE lista_nodos = rb_iv_get(self, "@nodos");
+	
 	VALUE conjunto_a;
 	VALUE conjunto_b;
 	
 	VALUE concentradores_a;
-	VALUE clientes_a;
-	
 	VALUE concentradores_b;
-	VALUE clientes_b;
 	
-	unsigned long int len_c_a; //Número de concentradores en A
-	unsigned long int len_c_b; //Número de concentradores en B
-	unsigned long int particion_a; //Partición de cruce en A
-	unsigned long int particion_b; //Partición de cruce en B
+	VALUE lista_concentradores_a; //Hash que indica que nodos son concentradores en hijoA
+	VALUE lista_concentradores_b; //Hash que indica que nodos son concentradores en hijoB
+	VALUE lista_clientes_a;
+	VALUE lista_clientes_b;
+	
+	VALUE hijo_a;
+	VALUE hijo_b;
 	
 	VALUE empaquetado;
 	
+	unsigned long int particion_a; //Lugar por donde se partira a A
+	unsigned long int particion_b; //Lugar por donde se partira a B
+	
+	unsigned long int defectos_a = 0; //Numero de nodos que no se enlazaron correctamente
+	unsigned long int defectos_b = 0; //Numero de nodos que no se enlazaron correctamente
+	
+	unsigned long int i; //Auxiliar
+	
 	solucion_a = rb_check_array_type(solucion_a);
 	solucion_b = rb_check_array_type(solucion_b);
+	lista_nodos = rb_check_array_type(lista_nodos);
 	
-	// Separamos los clientes de los concentradores
+	//Inicialización de variables
 	conjunto_a = phub_separar_nodos(self, solucion_a);
 	conjunto_b = phub_separar_nodos(self, solucion_b);
 	
-	// Cogemos el conjunto de concentradores y clientes
 	concentradores_a = rb_ary_entry(conjunto_a, 0);
-	clientes_a = rb_ary_entry(conjunto_a, 1);
-	
 	concentradores_b = rb_ary_entry(conjunto_b, 0);
-	clientes_b = rb_ary_entry(conjunto_b, 1);
 	
-	// Se establecen los limites y las particiones a cruzar
-	len_c_a = RARRAY_LEN(concentradores_a);
-	len_c_b = RARRAY_LEN(concentradores_b);
+	empaquetado = rb_ary_new();
 	
-	particion_a = rb_genrand_ulong_limited(len_c_a - 2) + 1;
-	particion_b = rb_genrand_ulong_limited(len_c_b - 2) + 1;
+	// Probar si esto es necesario
+	concentradores_a = rb_ary_dup(concentradores_a);
+	concentradores_b = rb_ary_dup(concentradores_b);
+	
+	lista_concentradores_a = rb_hash_new();
+	lista_concentradores_b = rb_hash_new();
+	
+	lista_clientes_a = rb_hash_new();
+	lista_clientes_b = rb_hash_new();
+	
+	hijo_a = rb_ary_new();
+	hijo_b = rb_ary_new();
+	
+	//Se seleccionan las particiones de los genes
+	particion_a = rb_genrand_ulong_limited(RARRAY_LEN(concentradores_a) - 2) + 1;
+	particion_b = rb_genrand_ulong_limited(RARRAY_LEN(concentradores_b) - 2) + 1;
+	
+	//Cruce de los nodos concentradores.
+
+	for(i = 0; i < RARRAY_LEN(concentradores_a); i++)
+	{
+		VALUE nodo = rb_ary_entry(concentradores_a, i);
+		
+		//Desconexion
+		//rb_funcall(nodo, rb_intern("desconectar"), 0);
+		
+		if(i < particion_a)
+		{
+			rb_ary_push(hijo_a, nodo);
+			rb_hash_aset(lista_concentradores_a, nodo, Qtrue);
+		}
+		else
+		{
+			rb_ary_push(hijo_b, nodo);
+			rb_hash_aset(lista_concentradores_b, nodo, Qtrue);
+		}
+	}
+	
+	for(i = 0; i < RARRAY_LEN(concentradores_b); i++)
+	{
+		VALUE nodo = rb_ary_entry(concentradores_b, i);
+		
+		//Desconexion
+		//rb_funcall(nodo, rb_intern("desconectar"), 0);
+		
+		if(i < particion_b)
+		{
+			if(rb_hash_aref(lista_concentradores_b, nodo) == Qtrue)
+			{
+				defectos_b++;
+			}
+			else
+			{
+				rb_hash_aset(lista_concentradores_b, nodo, Qtrue);
+				rb_ary_push(hijo_b, nodo);
+			}
+		}
+		else
+		{
+			if(rb_hash_aref(lista_concentradores_a, nodo) == Qtrue)
+			{
+				defectos_a++;
+			}
+			else
+			{
+				rb_hash_aset(lista_concentradores_a, nodo, Qtrue);
+				rb_ary_push(hijo_a, nodo);
+			}
+		}
+	}
+	
+	//Eliminación de conexiones imposibles
+	for(i = 0; i < RARRAY_LEN(hijo_a); i++)
+	{
+		VALUE concentrador_a = rb_ary_entry(hijo_a, i);
+		VALUE concentrador_b = rb_ary_entry(hijo_b, i);
+		
+		VALUE conectados_a = rb_iv_get(concentrador_a, "@connected");
+		VALUE conectados_b = rb_iv_get(concentrador_b, "@connected");
+		int j;
+		
+		for(j = 0; j < RARRAY_LEN(conectados_a); j++)
+		{
+			VALUE cliente_a = rb_ary_entry(conectados_a, j);
+			
+			if(rb_hash_aref(lista_concentradores_a, cliente_a) == Qtrue)
+			{
+				rb_ary_delete(conectados_a, cliente_a);
+				rb_funcall(cliente_a, rb_intern("desconectar"), 0);
+			}
+			else
+			{
+				rb_ary_push(hijo_a, cliente_a);
+				rb_hash_aset(lista_clientes_a, cliente_a, Qtrue);
+			}
+		}
+		
+		rb_iv_set(concentrador_a, "@connected", conectados_a);
+		
+		for(j = 0; j < RARRAY_LEN(conectados_b); j++)
+		{
+			VALUE cliente_b = rb_ary_entry(conectados_b, j);
+			
+			if(rb_hash_aref(lista_concentradores_b, cliente_b) == Qtrue)
+			{
+				rb_ary_delete(conectados_b, cliente_b);
+				rb_funcall(cliente_b, rb_intern("desconectar"), 0);
+			}
+			else
+			{
+				rb_ary_push(hijo_b, cliente_b);
+				rb_hash_aset(lista_clientes_b, cliente_b, Qtrue);
+			}
+		}
+		
+		rb_iv_set(concentrador_b, "@connected", conectados_b);
+	}
+	
+	//Control sobre el resto de clientes no conectados
+	for(i = 0; i < RARRAY_LEN(lista_nodos); i++)
+	{
+		VALUE nodo_final = rb_ary_entry(lista_nodos, i);
+		
+		if((rb_hash_aref(lista_concentradores_a, nodo_final) != Qtrue) && (rb_hash_aref(lista_clientes_a, nodo_final) != Qtrue))
+		{
+			//Cliente no existente por ahora, hay que conectarlo a algun nodo
+			VALUE connected = rb_iv_get(nodo_final, "@connected");
+			VALUE demanda = rb_iv_get(nodo_final, "@demanda");
+			VALUE reserva;
+			int j;
+			rb_ary_clear(connected);
+			
+			for(j = 0; j < RARRAY_LEN(hijo_a); j++)
+			{
+				VALUE concentrador = rb_ary_entry(hijo_a, j);
+				VALUE conectados_concentrador;
+				
+				if(rb_hash_aref(lista_concentradores_a, concentrador) != Qtrue)
+				{
+					continue;
+				}
+				
+				reserva = rb_iv_get(concentrador, "@reserva");
+				
+				if(NUM2DBL(reserva) >= NUM2DBL(demanda))
+				{
+					reserva = DBL2NUM(NUM2DBL(reserva) - NUM2DBL(demanda));
+					conectados_concentrador = rb_iv_get(concentrador, "@connected");
+					
+					rb_ary_push(conectados_concentrador, nodo_final);
+					rb_ary_push(connected, concentrador);
+					
+					rb_iv_set(concentrador, "@connected", conectados_concentrador);
+					rb_iv_set(nodo_final, "@connected", connected);
+					break;
+				}
+			}
+			
+			rb_ary_push(hijo_a, nodo_final);
+		}
+		
+		if((rb_hash_aref(lista_concentradores_b, nodo_final) != Qtrue) && (rb_hash_aref(lista_clientes_b, nodo_final) != Qtrue))
+		{
+			//Cliente no existente por ahora, hay que conectarlo a algun nodo
+			VALUE connected = rb_iv_get(nodo_final, "@connected");
+			VALUE demanda = rb_iv_get(nodo_final, "@demanda");
+			VALUE reserva;
+			int j;
+			rb_ary_clear(connected);
+			
+			for(j = 0; j < RARRAY_LEN(hijo_b); j++)
+			{
+				VALUE concentrador = rb_ary_entry(hijo_b, j);
+				VALUE conectados_concentrador;
+				
+				if(rb_hash_aref(lista_concentradores_b, concentrador) != Qtrue)
+				{
+					continue;
+				}
+				
+				reserva = rb_iv_get(concentrador, "@reserva");
+				
+				if(NUM2DBL(reserva) >= NUM2DBL(demanda))
+				{
+					reserva = DBL2NUM(NUM2DBL(reserva) - NUM2DBL(demanda));
+					conectados_concentrador = rb_iv_get(concentrador, "@connected");
+					
+					rb_ary_push(conectados_concentrador, nodo_final);
+					rb_ary_push(connected, concentrador);
+					
+					rb_iv_set(concentrador, "@connected", conectados_concentrador);
+					rb_iv_set(nodo_final, "@connected", connected);
+					break;
+				}
+			}
+			
+			rb_ary_push(hijo_b, nodo_final);
+		}
+	}
+	
+	//Empaquetado de la solución
+	rb_ary_push(empaquetado, hijo_a);
+	rb_ary_push(empaquetado, hijo_b);
+	
+	//Solución final
+	return empaquetado;
 }
 
 void Init_c_phub()
@@ -424,4 +634,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "torneo_injusto", phub_operador_seleccion_torneo_injusto, 3);
 	rb_define_private_method(class_phub, "ruleta", phub_operador_seleccion_ruleta, 3);
 	rb_define_private_method(class_phub, "seleccion", phub_operador_seleccion, 4);
+	rb_define_private_method(class_phub, "cruce", phub_operador_cruce, 2);
 }
