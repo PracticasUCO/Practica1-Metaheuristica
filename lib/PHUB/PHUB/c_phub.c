@@ -27,6 +27,11 @@ VALUE phub_separar_nodos(VALUE self, VALUE solucion)
 	
 	Check_Type(solucion, T_ARRAY);
 	
+	if(RARRAY_LEN(solucion) == 0)
+	{
+		rb_raise(rb_eTypeError, "No se puede procesar una solución vacía.\n");
+	}
+	
 	concentradores = rb_ary_new();
 	clientes = rb_ary_new();
 	empaquetado = rb_ary_new();
