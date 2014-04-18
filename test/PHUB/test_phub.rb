@@ -290,6 +290,9 @@ describe PHUBPrivate do
 			
 			repeticiones = Hash.new(0)
 			
+			lista << best_solution
+			costes[best_solution] = best_fitness
+			
 			24.times do
 				*, coste, solucion = @t.generar_solucion_aleatoria
 				costes[solucion] = coste
