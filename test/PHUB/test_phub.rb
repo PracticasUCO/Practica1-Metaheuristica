@@ -301,15 +301,19 @@ describe PHUBPrivate do
 				end
 			end
 			
-			seleccionados = @t.ruleta(lista, costes, 1000)
+			seleccionados = @t.ruleta(lista, costes, 10000)
 			
 			seleccionados.each do |s|
 				repeticiones[s] += 1
 			end
 			
 			repeticiones.keys.each do |key|
-				continue if key == best_solution
-				continue if repeticiones[key] == best_solution
+				next if key == best_solution
+				next if repeticiones[key] == best_solution
+				
+				if costes[key] / costes[best_solution] < 1.125
+					next
+				end
 			
 				repeticiones[key].must_be :<, repeticiones[best_solution]
 			end
