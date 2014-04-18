@@ -177,9 +177,9 @@ describe PHUBPrivate do
 		end
 		
 		it "Los argumentos del metodo PHUB#torneo_injusto son un array, una tabla de hash y un número entero" do
-			@t.torneo_injusto(3, Hash.new, 2).must_raise TypeError
-			@t.torneo_injusto(Array.new, Array.new, 3).must_raise TypeError
-			@t.torneo_injusto(Array.new, Hash.new, 1.2).must_raise TypeError
+			proc {@t.torneo_injusto(3, Hash.new, 2)}.must_raise TypeError
+			proc {@t.torneo_injusto(Array.new, Array.new, 3)}.must_raise TypeError
+			proc {@t.torneo_injusto(Array.new, Hash.new, 1.2)}.must_raise TypeError
 		end
 		
 		it "La longitud de la lista de miembros seleccionados tiene el tamaño solicitado" do
