@@ -320,16 +320,23 @@ describe PHUBPrivate do
 	end
 	
 	describe "Cuando se hace un cruce entre dos soluciones" do
+		it "Los padres no sufren alteraciones" do
+			elemento_a_backup = @elemento_a.dup
+			elemento_b_backup = @elemento_b.dup
+			
+			hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
+			
+			@elemento_a.must_equal elemento_a_backup
+			@elemento_b.must_equal elemento_b_backup
+		end
+		
 		it "Se deben de recibir dos soluciones diferentes" do
 			hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
 			
 			hijo_a.must_be_instance_of Array
 			hijo_b.must_be_instance_of Array
 			
-			hijo_a.wont_equal @elemento_a, "El hijo no puede ser exactamente igual al padre"
-			hijo_a.wont_equal @elemento_b, "El hijo no puede ser exactamente igual al padre"
-			hijo_b.wont_equal @elemento_a, "El hijo no puede ser exactamente igual al padre"
-			hijo_b.wont_equal @elemento_b, "El hijo no puede ser exactamente igual al padre"
+			hijo_a.wont_equal hijo_b
 		end
 		
 		it "Las soluciones son diferentes a los padres" do

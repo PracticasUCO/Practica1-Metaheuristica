@@ -414,9 +414,9 @@ VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
 	
 	unsigned long int i; //Auxiliar
 	
-	solucion_a = rb_check_array_type(solucion_a);
-	solucion_b = rb_check_array_type(solucion_b);
-	lista_nodos = rb_check_array_type(lista_nodos);
+	Check_Type(solucion_a, T_ARRAY);
+	Check_Type(solucion_b, T_ARRAY);
+	Check_Type(lista_nodos, T_ARRAY);
 	
 	//Inicialización de variables
 	conjunto_a = phub_separar_nodos(self, solucion_a);
