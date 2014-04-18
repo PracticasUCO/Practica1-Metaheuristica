@@ -214,5 +214,26 @@ describe PHUBPrivate do
 			
 			seleccionados.length.must_equal 600
 		end
+		
+		it "No se puede pasar una lista de soluciones vacia" do
+			proc {@t.torneo_injusto(Array.new, @costes, 2)}.must_raise TypeError
+		end
+		
+		it "No se puede pasar una tabla de costes vacia" do
+			proc {@t.torneo_injusto(@costes, Hash.new, 3)}.must_raise TypeError
+		end
+		
+		it "El número de costes de la tabla de Hash debe de coincidir con las soluciones pasadas" do
+			*, coste_a, solucion_a = @t.generar_solucion_aleatoria
+			*, coste_b, solucion_b = @t.generar_solucion_aleatoria
+			
+			lista = Array.new
+			lista << solucion_a << solucion_b
+			
+			costes = Hash.new
+			costes[solucion_a] = coste_a
+			
+			proc {@t.torneo_injusto(lista, costes, 1)}.must_raise TypeError
+		end
 	end
 end
