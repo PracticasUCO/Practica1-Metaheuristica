@@ -6,7 +6,7 @@ require 'minitest/autorun'
 # Esta clase servirá para probar los métodos privados
 # de la clase PHUB
 class PHUBPrivate < PHUB::PHUB
-	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion
+	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion, :cruce
 end
 
 describe PHUBPrivate do
@@ -321,6 +321,15 @@ describe PHUBPrivate do
 	
 	describe "Cuando se hace un cruce entre dos soluciones" do
 		it "Se deben de recibir dos soluciones diferentes" do
+			hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
+			
+			hijo_a.must_be_instance_of Array
+			hijo_b.must_be_instance_of Array
+			
+			hijo_a.wont_equal @elemento_a, "El hijo no puede ser exactamente igual al padre"
+			hijo_a.wont_equal @elemento_b, "El hijo no puede ser exactamente igual al padre"
+			hijo_b.wont_equal @elemento_a, "El hijo no puede ser exactamente igual al padre"
+			hijo_b.wont_equal @elemento_b, "El hijo no puede ser exactamente igual al padre"
 		end
 		
 		it "Las soluciones son diferentes a los padres" do
