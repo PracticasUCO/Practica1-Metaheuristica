@@ -127,4 +127,65 @@ describe PHUBPrivate do
 			seleccionado[0].must_equal mejor_solucion			
 		end
 	end
+	
+	describe "Cuando se realiza un torneo injusto" do
+		before do
+			@lista = Array.new
+			@costes = Hash.new
+			
+			50.times do
+				*, coste, solucion = @t.generar_solucion_aleatoria
+				
+				@lista << solucion
+				@costes[solucion] = coste
+			end
+		end
+		
+		it "Pueden aparecer soluciones repetidas" do
+			seleccionados = @t.torneo_injusto(@lista, @costes, 125)
+			
+			seleccionados.uniq!
+			
+			seleccionados.length.must_be :<, 125
+		end
+		
+		it "Siempre se escoge a la solución de menor fitness" do
+			coste_a = nil
+			coste_b = nil
+			
+			while coste_a == coste_b
+				*, coste_a, solucion_a = @t.generar_solucion_aleatoria
+				*, coste_b, solucion_b = @t.generar_solucion_aleatoria
+			
+				if coste_b < coste_a
+					mejor_solucion = solucion_b
+				else
+					mejor_solucion = solucion_a
+				end
+			end
+			
+			lista = Array.new
+			costes = Hash.new
+			
+			lista << solucion_a << solucion_b
+			costes[solucion_a] = coste_a
+			costes[solucion_b] = coste_b
+			
+			seleccionado = @t.torneo(lista, costes, 1)
+			
+			seleccionado[0].must_equal mejor_solucion
+		end
+		
+		it "Los argumentos del metodo PHUB#torneo_injusto son un array, una tabla de hash y un número entero" do
+			@t.torneo_injusto(3, Hash.new, 2).must_raise TypeError
+			@t.torneo_injusto(Array.new, Array.new, 3).must_raise TypeError
+			@t.torneo_injusto(Array.new, Hash.new, 1.2).must_raise TypeError
+		end
+		
+		it "La longitud de la lista de miembros seleccionados tiene el tamaño solicitado" do
+			seleccionados = @t.torneo_injusto(@lista, @costes, 600)
+			
+			seleccionados.length.must_equal 600
+		end
+	end
 end
