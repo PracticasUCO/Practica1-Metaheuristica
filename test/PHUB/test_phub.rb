@@ -340,6 +340,12 @@ describe PHUBPrivate do
 		end
 		
 		it "Las soluciones son diferentes a los padres" do
+			hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
+			
+			hijo_a.wont_equal @elemento_a
+			hijo_a.wont_equal @elemento_b
+			hijo_b.wont_equal @elemento_a
+			hijo_b.wont_equal @elemento_b
 		end
 		
 		it "Los parametros de entrada son dos Arrays" do
