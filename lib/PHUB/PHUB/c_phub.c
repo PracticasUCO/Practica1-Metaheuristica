@@ -503,46 +503,51 @@ VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
 	{
 		VALUE concentrador_a = rb_ary_entry(hijo_a, i);
 		VALUE concentrador_b = rb_ary_entry(hijo_b, i);
-		
+
 		VALUE conectados_a = rb_iv_get(concentrador_a, "@connected");
 		VALUE conectados_b = rb_iv_get(concentrador_b, "@connected");
 		unsigned long int j;
 		
-		for(j = 0; j < (unsigned long int) RARRAY_LEN(conectados_a); j++)
+		if(TYPE(conectados_a) == T_ARRAY) //Si el nodo tenia conexiones
 		{
-			VALUE cliente_a = rb_ary_entry(conectados_a, j);
+			for(j = 0; j < (unsigned long int) RARRAY_LEN(conectados_a); j++)
+			{
+				VALUE cliente_a = rb_ary_entry(conectados_a, j);
 			
-			if(rb_hash_aref(lista_concentradores_a, cliente_a) == Qtrue)
-			{
-				rb_ary_delete(conectados_a, cliente_a);
-				rb_funcall(cliente_a, rb_intern("desconectar"), 0);
+				if(rb_hash_aref(lista_concentradores_a, cliente_a) == Qtrue)
+				{
+					rb_ary_delete(conectados_a, cliente_a);
+					rb_funcall(cliente_a, rb_intern("desconectar"), 0);
+				}
+				else
+				{
+					rb_ary_push(hijo_a, cliente_a);
+					rb_hash_aset(lista_clientes_a, cliente_a, Qtrue);
+				}
 			}
-			else
-			{
-				rb_ary_push(hijo_a, cliente_a);
-				rb_hash_aset(lista_clientes_a, cliente_a, Qtrue);
-			}
+		
+			rb_iv_set(concentrador_a, "@connected", conectados_a);
 		}
 		
-		rb_iv_set(concentrador_a, "@connected", conectados_a);
-		
-		for(j = 0; j < (unsigned long int) RARRAY_LEN(conectados_b); j++)
+		if(TYPE(conectados_b) == T_ARRAY) //Si el nodo tenia conexiones
 		{
-			VALUE cliente_b = rb_ary_entry(conectados_b, j);
+			for(j = 0; j < (unsigned long int) RARRAY_LEN(conectados_b); j++)
+			{
+				VALUE cliente_b = rb_ary_entry(conectados_b, j);
 			
-			if(rb_hash_aref(lista_concentradores_b, cliente_b) == Qtrue)
-			{
-				rb_ary_delete(conectados_b, cliente_b);
-				rb_funcall(cliente_b, rb_intern("desconectar"), 0);
+				if(rb_hash_aref(lista_concentradores_b, cliente_b) == Qtrue)
+				{
+					rb_ary_delete(conectados_b, cliente_b);
+					rb_funcall(cliente_b, rb_intern("desconectar"), 0);
+				}
+				else
+				{
+					rb_ary_push(hijo_b, cliente_b);
+					rb_hash_aset(lista_clientes_b, cliente_b, Qtrue);
+				}
 			}
-			else
-			{
-				rb_ary_push(hijo_b, cliente_b);
-				rb_hash_aset(lista_clientes_b, cliente_b, Qtrue);
-			}
+			rb_iv_set(concentrador_b, "@connected", conectados_b);
 		}
-		
-		rb_iv_set(concentrador_b, "@connected", conectados_b);
 	}
 	
 	//Control sobre el resto de clientes no conectados
