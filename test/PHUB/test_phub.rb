@@ -12,6 +12,15 @@ end
 describe PHUBPrivate do
 	before do
 		@t = PHUBPrivate.new("instancias/P3/CPH/phub_100_10_1.txt")
+		@lista = Array.new
+		@costes = Hash.new
+		
+		50.times do
+			*, coste, solucion = @t.generar_solucion_aleatoria
+			
+			@lista << solucion
+			@costes[solucion] = coste
+		end
 	end
 	
 	describe "Cuando se llama a random_number" do
@@ -73,18 +82,6 @@ describe PHUBPrivate do
 	end
 	
 	describe "Cuando se realiza un torneo" do
-		before do
-			@lista = Array.new
-			@costes = Hash.new
-			
-			50.times do
-				*, coste, solucion = @t.generar_solucion_aleatoria
-				
-				@lista << solucion
-				@costes[solucion] = coste
-			end
-		end
-		
 		it "Si se seleccionan menos soluciones que el número de aspirantes no puede haber soluciones repetidas" do
 			30.times do
 				ganadores = rand(48) + 2
@@ -169,18 +166,6 @@ describe PHUBPrivate do
 	end
 	
 	describe "Cuando se realiza un torneo injusto" do
-		before do
-			@lista = Array.new
-			@costes = Hash.new
-			
-			50.times do
-				*, coste, solucion = @t.generar_solucion_aleatoria
-				
-				@lista << solucion
-				@costes[solucion] = coste
-			end
-		end
-		
 		it "Pueden aparecer soluciones repetidas" do
 			seleccionados = @t.torneo_injusto(@lista, @costes, 125)
 			
@@ -253,6 +238,80 @@ describe PHUBPrivate do
 			end
 			
 			proc {@t.torneo_injusto(lista, costes, 1)}.must_raise TypeError
+		end
+	end
+	
+	describe "Cuando se hace una selección por medio de la ruleta" do
+		it "Pueden aparecer soluciones repetidas" do
+			seleccionados = @t.ruleta(@lista, @costes, 150)
+			
+			seleccionados.uniq!
+			
+			seleccionados.length.must_be :<, 150
+		end
+		
+		it "Los parametros de entrada son un array, una tabla de hash y un número entero" do
+			proc {@t.ruleta(@costes, @costes, 3)}.must_raise TypeError
+			proc {@t.ruleta(@lista, @lista, 3)}.must_raise TypeError
+			proc {@t.ruleta(@lista, @costes, 1.3)}.must_raise TypeError
+		end
+		
+		it "No puede recibir una lista de soluciones vacía" do
+			proc {@t.ruleta(Array.new, @costes, 3)}.must_raise TypeError
+		end
+		
+		it "El número de elementos de la tabla de hash debe coincidir con el número de soluciones" do
+			lista = Array.new
+			costes = Hash.new
+			
+			10.times do
+				*, coste, solucion = @t.generar_solucion_aleatoria
+				lista << solucion
+				costes[solucion] = coste
+			end
+			
+			10.times do
+				*, solucion = @t.generar_solucion_aleatoria
+				lista << solucion
+			end
+			
+			proc {@t.ruleta(lista, costes, 5)}.must_raise TypeError
+		end
+		
+		it "Aquellas soluciones con mejor fitness se seleccionan con más frecuencia" do
+
+			*, coste, solucion = @t.generar_solucion_aleatoria
+			
+			best_fitness = coste
+			best_solution = solucion
+			
+			lista = Array.new
+			costes = Hash.new
+			
+			repeticiones = Hash.new(0)
+			
+			24.times do
+				*, coste, solucion = @t.generar_solucion_aleatoria
+				costes[solucion] = coste
+				lista << solucion
+				
+				if coste < best_fitness
+					best_fitness = coste
+					best_solution = solucion
+				end
+			end
+			
+			seleccionados = @t.ruleta(lista, costes, 1000)
+			
+			seleccionados.each do |s|
+				repeticiones[s] += 1
+			end
+			
+		repeticiones.keys.each do |key|
+			continue if key == best_solucion
+			continue if repeticiones[key] == best_solution
+			
+			repeticiones[key].must_be :<, repeticiones[best_solution]
 		end
 	end
 end
