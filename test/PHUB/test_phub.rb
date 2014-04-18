@@ -308,7 +308,7 @@ describe PHUBPrivate do
 			end
 			
 			repeticiones.keys.each do |key|
-				continue if key == best_solucion
+				continue if key == best_solution
 				continue if repeticiones[key] == best_solution
 			
 				repeticiones[key].must_be :<, repeticiones[best_solution]
