@@ -72,8 +72,8 @@ VALUE phub_operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE f
 {
 	VALUE lista_seleccionados;
 
-	lista_soluciones = rb_check_array_type(lista_soluciones);
-	fitness_soluciones = rb_check_hash_type(fitness_soluciones);
+	Check_Type(lista_soluciones, T_ARRAY);
+	Check_Type(fitness_soluciones, T_HASH);
 	
 	if(TYPE(n_elementos) != T_FIXNUM)
 	{
