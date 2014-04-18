@@ -280,9 +280,9 @@ describe PHUBPrivate do
 		
 		it "Aquellas soluciones con mejor fitness se seleccionan con más frecuencia" do
 
-			*, coste, solucion = @t.generar_solucion_aleatoria
+			*, solucion = @t.generar_solucion_aleatoria
 			
-			best_fitness = coste
+			best_fitness = 5
 			best_solution = solucion
 			
 			lista = Array.new
@@ -293,15 +293,11 @@ describe PHUBPrivate do
 			lista << best_solution
 			costes[best_solution] = best_fitness
 			
-			24.times do
-				*, coste, solucion = @t.generar_solucion_aleatoria
-				costes[solucion] = coste
+			24.times.with_index do |index|
+				*, solucion = @t.generar_solucion_aleatoria
+				costes[solucion] = (15*index) + 15
 				lista << solucion
 				
-				if coste < best_fitness
-					best_fitness = coste
-					best_solution = solucion
-				end
 			end
 			
 			seleccionados = @t.ruleta(lista, costes, 10000)
@@ -309,17 +305,14 @@ describe PHUBPrivate do
 			seleccionados.each do |s|
 				repeticiones[s] += 1
 			end
-			
+
 			repeticiones.keys.each do |key|
 				next if key == best_solution
 				next if repeticiones[key] == best_solution
 				
-				if costes[key] / costes[best_solution] < 1.25
-					next
-				end
-			
 				repeticiones[key].must_be :<, repeticiones[best_solution]
 			end
+
 		end
 	end
 end
