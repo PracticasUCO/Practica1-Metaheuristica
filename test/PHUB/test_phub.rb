@@ -151,6 +151,11 @@ describe PHUBPrivate do
 			costes = Hash.new
 			costes[solucion_a] = coste_a
 			
+			30.times do
+				*, solucion = @t.generar_solucion_aleatoria
+				lista << solucion
+			end
+			
 			proc {@t.torneo(lista, costes, 1)}.must_raise TypeError
 		end
 	end
@@ -232,6 +237,12 @@ describe PHUBPrivate do
 			
 			costes = Hash.new
 			costes[solucion_a] = coste_a
+			costes[solucion_b] = coste_b
+			
+			30.times do
+				*, solucion = @t.generar_solucion_aleatoria
+				lista << solucion
+			end
 			
 			proc {@t.torneo_injusto(lista, costes, 1)}.must_raise TypeError
 		end
