@@ -15,8 +15,8 @@ describe PHUBPrivate do
 		@lista = Array.new
 		@costes = Hash.new
 		
-		@elemento_a = @t.generar_solucion_aleatoria
-		@elemento_b = @t.generar_solucion_aleatoria
+		*, @coste_a, @elemento_a = @t.generar_solucion_aleatoria
+		*, @coste_b, @elemento_b = @t.generar_solucion_aleatoria
 		
 		50.times do
 			*, coste, solucion = @t.generar_solucion_aleatoria
