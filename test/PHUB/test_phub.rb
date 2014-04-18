@@ -314,7 +314,7 @@ describe PHUBPrivate do
 				next if key == best_solution
 				next if repeticiones[key] == best_solution
 				
-				if costes[key] / costes[best_solution] < 1.125
+				if costes[key] / costes[best_solution] < 1.25
 					next
 				end
 			
