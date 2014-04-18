@@ -137,9 +137,7 @@ VALUE phub_operador_seleccion_torneo(VALUE self, VALUE lista_soluciones, VALUE f
 			competidor_a = rb_ary_entry(lista_soluciones, indice_a);
 			fitness_a = rb_hash_aref(fitness_soluciones, competidor_a);
 			
-			//Carga del competidor B
-			
-			//Apuestate que el error esta en indice_b			
+			//Carga del competidor B		
 			competidor_b = rb_ary_entry(lista_soluciones, indice_b);
 			fitness_b = rb_hash_aref(fitness_soluciones, competidor_b);
 			
