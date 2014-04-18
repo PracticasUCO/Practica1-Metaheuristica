@@ -353,6 +353,16 @@ describe PHUBPrivate do
 			proc {@t.cruce(@elemento_a, 3)}.must_raise TypeError
 		end
 		
+		it "No se puede introduccir Arrays vacíos" do
+			proc {@t.cruce(Array.new, @elemento_b)}.must_raise TypeError
+			proc {@t.cruce(@elementoa, Array.new)}.must_raise TypeError
+		end
+		
+		it "Los vectores de entrada deben de ser vectores solución" do
+			proc {@t.cruce([1,2,3], @elemento_b)}.must_raise TypeError
+			proc {@t.cruce(@elemento_a, [1,2,3])}.must_raise TypeError
+		end
+		
 		it "El número de concentradores de las soluciones hijas es igual al de los padres" do
 		end
 		
