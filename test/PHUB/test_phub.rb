@@ -364,12 +364,67 @@ describe PHUBPrivate do
 		end
 		
 		it "El número de concentradores de las soluciones hijas es igual al de los padres" do
+			concentradores_a = 0
+			concentradores_b = 0
+			
+			hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
+			
+			hijo_a.each do |nodo|
+				if nodo.tipo == :concentrador
+					concentradores_a += 1
+				end
+			end
+			
+			hijo_b.each do |nodo|
+				if nodo.tipo == :concentrador
+					concentradores_b += 1
+				end
+			end
+			
+			concentradores_a.must_equal @t.numero_concentradores
+			concentradores_b.must_equal @t.numero_concentradores
 		end
 		
 		it "La longitud de las soluciones hijas es igual al de los padres" do
+			hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
+			
+			hijo_a.length.must_equal @elemento_a.length
+			hijo_a.length.must_equal @elemento_b.length
+			hijo_b.length.must_equal @elemento_a.length
+			hijo_b.length.must_equal @elemento_b.length
 		end
 		
 		it "No existen nodos desconectados si pueden conectarse a algún concentrador" do
+			hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
+			
+			hijo_a.each do |nodo|
+				next if nodo.tipo == :concentrador
+				
+				if nodo.connected != nil and nodo.connected.length != 0
+					next
+				end
+				
+				hijo_a.each do |candidato|
+					next if candidato.tipo != :concentrador
+					
+					nodo.demanda.must_be :>, candidato.reserva
+				end
+			end
+			
+			hijo_b.each do |nodo|
+				next if nodo.tipo == :concentrador
+				
+				if nodo.connected != nil and nodo.connected.length != 0
+					next
+				end
+				
+				hijo_b.each do |candidato|
+					next if candidato.tipo != :concentrador
+					
+					nodo.demanda.must_be :>, candidato.reserva
+				end
+			end
+			
 		end
 	end
 end
