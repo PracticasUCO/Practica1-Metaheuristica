@@ -25,6 +25,8 @@ VALUE phub_separar_nodos(VALUE self, VALUE solucion)
 	VALUE sym_concentrador = ID2SYM(rb_intern("concentrador"));
 	int i; //Auxiliar
 	
+	Check_Type(solucion, T_ARRAY);
+	
 	concentradores = rb_ary_new();
 	clientes = rb_ary_new();
 	empaquetado = rb_ary_new();
