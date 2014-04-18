@@ -349,6 +349,8 @@ describe PHUBPrivate do
 		end
 		
 		it "Los parametros de entrada son dos Arrays" do
+			proc {@t.cruce(2, @elemento_b)}.must_raise TypeError
+			proc {@t.cruce(@elemento_a, 3)}.must_raise TypeError
 		end
 		
 		it "El número de concentradores de las soluciones hijas es igual al de los padres" do
