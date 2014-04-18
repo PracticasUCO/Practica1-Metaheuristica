@@ -15,6 +15,9 @@ describe PHUBPrivate do
 		@lista = Array.new
 		@costes = Hash.new
 		
+		@elemento_a = @t.generar_solucion_aleatoria
+		@elemento_b = @t.generar_solucion_aleatoria
+		
 		50.times do
 			*, coste, solucion = @t.generar_solucion_aleatoria
 			
@@ -313,6 +316,26 @@ describe PHUBPrivate do
 				repeticiones[key].must_be :<, repeticiones[best_solution]
 			end
 
+		end
+	end
+	
+	describe "Cuando se hace un cruce entre dos soluciones" do
+		it "Se deben de recibir dos soluciones diferentes" do
+		end
+		
+		it "Las soluciones son diferentes a los padres" do
+		end
+		
+		it "Los parametros de entrada son dos Arrays" do
+		end
+		
+		it "El número de concentradores de las soluciones hijas es igual al de los padres" do
+		end
+		
+		it "La longitud de las soluciones hijas es igual al de los padres" do
+		end
+		
+		it "No existen nodos desconectados si pueden conectarse a algún concentrador" do
 		end
 	end
 end
