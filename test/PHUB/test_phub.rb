@@ -62,6 +62,14 @@ describe PHUBPrivate do
 			
 			a.length.must_equal @t.numero_concentradores
 		end
+		
+		it "Recibe un Array" do
+			proc {@t.separar_nodos(125)}.must_raise TypeError
+		end
+		
+		it "El Array de entrada no puede estar vacio" do
+			proc {@t.separar_nodos(Array.new)}.must_raise TypeError
+		end
 	end
 	
 	describe "Cuando se realiza un torneo" do
