@@ -272,7 +272,7 @@ VALUE phub_operador_seleccion_ruleta(VALUE self, VALUE lista_soluciones, VALUE f
 	int i;
 	
 	Check_Type(lista_soluciones, T_ARRAY);
-	Check_Type(fitness_soluciones, T_ARRAY);
+	Check_Type(fitness_soluciones, T_HASH);
 	
 	if(TYPE(n_elementos) != T_FIXNUM)
 	{
