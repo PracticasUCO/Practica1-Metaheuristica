@@ -7,7 +7,7 @@ require 'minitest/autorun'
 # de la clase PHUB
 class PHUBPrivate < PHUB::PHUB
 	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion, :get_connections
-	public :get_types, :desconectar_solucion, :set_historical_connections
+	public :get_types, :desconectar_solucion, :set_historical_connections, :merge
 end
 
 describe PHUBPrivate do
@@ -414,6 +414,41 @@ describe PHUBPrivate do
 		
 		it "El array no puede ser nulo" do
 			proc {@t.set_historical_connections(Array.new, Hash.new)}.must_raise TypeError
+		end
+	end
+	
+	describe "El metodo PHUB#merge" do
+		it "Recibe dos arrays" do
+			proc {@t.merge(Array.new, Array.new)}.must_be_silent
+			proc {@t.merge("Crazy string appear", Array.new)}.must_raise TypeError
+			proc {@t.merge(Array.new, "Crazy string appear")}.must_raise TypeError
+		end
+		
+		it "Devuelve la union de los dos arrays" do
+			one = [1,2,3]
+			two = [4,5,6]
+			
+			r = @t.merge(one, two)
+			
+			one.each do |value|
+				r.include?(value).must_equal true
+			end
+			
+			two.each do |value|
+				r.include?(value).must_equal true
+			end	
+		end
+		
+		it "Los arrays pasados como argumento no se alteran" do
+			one = [1,2,3]
+			two = [4,5,6]
+			one_backup = one.dup
+			two_backup = two.dup
+			
+			@t.merge(one, two)
+			
+			one.must_equal one_backup
+			two.must_equal two_backup
 		end
 	end
 	

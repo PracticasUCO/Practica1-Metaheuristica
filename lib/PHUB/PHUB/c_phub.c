@@ -531,6 +531,100 @@ VALUE phub_set_historical_connections(VALUE self, VALUE solucion, VALUE historic
 	return Qnil;
 }
 
+/*
+Une dos soluciones en una. Devuelve el resultado.
+*/
+VALUE phub_merge(VALUE self, VALUE solucion_a, VALUE solucion_b)
+{
+	VALUE resultado = rb_ary_new();
+	VALUE mayor;
+	VALUE menor;
+	int i;
+	
+	Check_Type(solucion_a, T_ARRAY);
+	Check_Type(solucion_b, T_ARRAY);
+	
+	if(RARRAY_LEN(solucion_a) >= RARRAY_LEN(solucion_b))
+	{
+		mayor = solucion_a;
+		menor = solucion_b;
+	}
+	else
+	{
+		mayor = solucion_b;
+		menor = solucion_a;
+	}
+	
+	for(i = 0; i < RARRAY_LEN(menor); i++)
+	{
+		VALUE item_mayor = rb_ary_entry(mayor, i);
+		VALUE item_menor = rb_ary_entry(menor, i);
+		
+		rb_ary_push(resultado, item_mayor);
+		rb_ary_push(resultado, item_menor);
+	}
+	
+	for(i = RARRAY_LEN(menor); i < RARRAY_LEN(mayor); i++)
+	{
+		VALUE item = rb_ary_entry(mayor, i);
+		
+		rb_ary_push(resultado, item);
+	}
+	
+	return resultado;
+}
+
+/*
+Conecta los nodos clientes desconectados a los concentradores que puedan
+mantenerlos.
+*/
+/*VALUE phub_set_random_connections(VALUE self, VALUE solucion)
+{
+	VALUE conjuto;
+	VALUE concentradores;
+	VALUE clientes;
+	long int i;
+	Check_Type(solucion, T_ARRAY);
+	
+	conjunto = phub_separar_nodos(solucion);
+	
+	concentradores = rb_ary_entry(conjunto, 0);
+	clientes = rb_ary_entry(conjunto, 1);
+	
+	for(i = 0; i < RARRAY_LEN(clientes); i++)
+	{
+		VALUE cliente = rb_ary_entry(clientes, i);
+		VALUE number_concentrador = rb_ary_new();
+		long int j;
+		long int numero_afortunado;
+		
+		if(method_esta_conectado(cliente) == Qtrue)
+		{
+			continue;
+		}
+		
+		for(j = 0; j < RARRAY_LEN(concentradores); j++)
+		{
+			VALUE concentrador = rb_ary_entry(concentradores, j);
+			
+			if(method_se_puede_conectar(cliente, concentrador) == Qtrue)
+			{
+				rb_ary_push(number_concentrador, INT2NUM(j));
+			}
+		}
+		
+		if(RARRAY_LEN(number_concentrador) > 0)
+		{
+			VALUE concentrador_afortunado;
+			numero_afortunado = rb_genrand_ulong_limited(RARRAY_LEN(numero_concentrador) - 1);
+			concentrador_afornutado = rb_ary_entry(concentradores, numero_afortunado);
+			
+			method_conectar_a(cliente, concentrador_afortunado);
+			method_conectar_a(concentrador_afortunado, cliente);
+		}
+	}
+}*/
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
@@ -546,4 +640,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "get_types", phub_get_types, 1);
 	rb_define_private_method(class_phub, "desconectar_solucion", desconectar_solucion, 1);
 	rb_define_private_method(class_phub, "set_historical_connections", phub_set_historical_connections, 2);
+	rb_define_private_method(class_phub, "merge", phub_merge, 2);
 }

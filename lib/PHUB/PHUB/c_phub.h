@@ -22,3 +22,4 @@ VALUE phub_get_types(VALUE self, VALUE solucion);
 VALUE phub_set_historical_connections(VALUE self, VALUE solucion, VALUE historical);
 VALUE desconectar_solucion(VALUE self, VALUE solucion);
 VALUE phub_set_random_connections(VALUE self, VALUE solucion);
+VALUE phub_merge(VALUE self, VALUE solucion_a, VALUE solucion_b);
