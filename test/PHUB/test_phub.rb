@@ -375,15 +375,23 @@ describe PHUBPrivate do
 		
 		it "La tabla de hash contiene el tipo de todos los nodos de la solución argumento" do
 			tabla = @t.get_types(@elemento_a)
+			cc = 0
+			cl = 0
 			
 			@elemento_a.each do |nodo|
 				if nodo.tipo == :concentrador
-					tabla[nodo].must_equal true
+					if tabla[nodo] != true
+						cc += 1
+					end
 				else
-					tabla[nodo].must_equal false
+					if tabla[nodo] != false
+						cl += 1
+					end
 				end
 			end
-			
+
+			cc.must_equal 0, "Hay #{cc} concentradores clasificados como clientes"
+			cl.must_equal 0, "Hay #{cl} clientes clasificados como concentradores"
 		end
 	end
 	
