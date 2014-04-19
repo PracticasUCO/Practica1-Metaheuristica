@@ -6,7 +6,7 @@ require 'minitest/autorun'
 # Esta clase servirá para probar los métodos privados
 # de la clase PHUB
 class PHUBPrivate < PHUB::PHUB
-	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion, :cruce
+	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion, :get_connections
 end
 
 describe PHUBPrivate do
@@ -321,6 +321,7 @@ describe PHUBPrivate do
 	
 	describe "El método PHUB#get_connections" do
 		it "Devolver una tabla de hash" do
+			
 		end
 		
 		it "Recibe como parametro un array" do
