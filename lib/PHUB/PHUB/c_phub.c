@@ -454,6 +454,38 @@ VALUE phub_get_types(VALUE self, VALUE solucion)
 	return types;
 }
 
+/*
+Desconecta completamente una solución
+*/
+VALUE desconectar_solucion(VALUE self, VALUE solucion)
+{
+	long int i;
+	
+	Check_Type(solucion, T_ARRAY);
+	
+	for(i = 0; i < RARRAY_LEN(solucion); i++)
+	{
+		VALUE node = rb_ary_entry(solucion, i);
+		
+		rb_funcall(node, rb_intern("desconectar"), 0);
+	}
+}
+
+/*
+Conecta los nodos de la +solucion+ a los nodos concentradores que sea necesario según
+la información que haya en +historical+. +historical+ se trata de una tabla de hash
+que tiene como llave un nodo y devuelve un Array con los nodos a los que estaba
+conectado dicho nodo.
+
+Los nodos que no puedan conectarse se dejan sin conectar.
+*/
+VALUE phub_set_historical_connections(VALUE self, VALUE solucion, VALUE historical)
+{
+	VALUE types = phub_get_types(self, solucion);
+	
+	
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
@@ -467,4 +499,5 @@ void Init_c_phub()
 	//rb_define_private_method(class_phub, "cruce", phub_operador_cruce, 2);
 	rb_define_private_method(class_phub, "get_connections", phub_get_connections, 1);
 	rb_define_private_method(class_phub, "get_types", phub_get_types, 1);
+	rb_define_private_method(class_phub, "desconectar_solucion", desconectar_solucion, 1);
 }
