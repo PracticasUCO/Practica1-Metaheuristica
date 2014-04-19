@@ -339,10 +339,8 @@ describe PHUBPrivate do
 		it "La tabla de hash devuelve las conexiones de dichos nodos" do
 			tabla = @t.get_connections(@elemento_a)
 			
-			@elemento_a.each do |concentrador|
-				next if concentrador.tipo != :concentrador
-				
-				tabla[concentrador].must_equal concentrador.conectado_a()
+			@elemento_a.each do |nodo|
+				tabla[nodo].must_equal nodo.conectado_a()
 			end
 			
 		end
