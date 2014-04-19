@@ -533,4 +533,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "get_connections", phub_get_connections, 1);
 	rb_define_private_method(class_phub, "get_types", phub_get_types, 1);
 	rb_define_private_method(class_phub, "desconectar_solucion", desconectar_solucion, 1);
+	rb_define_private_method(class_phub, "set_historical_connections", phub_set_historical_connections, 2);
 }
