@@ -7,7 +7,7 @@ require 'minitest/autorun'
 # de la clase PHUB
 class PHUBPrivate < PHUB::PHUB
 	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion, :get_connections
-	public :get_types
+	public :get_types, :desconectar_solucion
 end
 
 describe PHUBPrivate do
@@ -18,6 +18,7 @@ describe PHUBPrivate do
 		
 		*, @coste_a, @elemento_a = @t.generar_solucion_aleatoria
 		*, @coste_b, @elemento_b = @t.generar_solucion_aleatoria
+		*, @coste_c, @elemento_c = @t.generar_solucion_aleatoria
 		
 		50.times do
 			*, coste, solucion = @t.generar_solucion_aleatoria
@@ -380,6 +381,27 @@ describe PHUBPrivate do
 
 			cc.must_equal 0, "Hay #{cc} concentradores clasificados como clientes"
 			cl.must_equal 0, "Hay #{cl} clientes clasificados como concentradores"
+		end
+	end
+	
+	describe "Cuando se llama al método PHUB#desconectar_solucion" do
+		it "Se le pasa como argumento un array" do
+			proc {@t.desconectar_solucion(@elemento_c)}.must_be_silent
+			proc {@t.desconectar_solucion(Hash.new)}.must_raise TypeError
+		end
+		
+		it "El array no puede ser nulo" do
+			proc {@t.desconectar_solucion(Array.new)}.must_raise TypeError
+		end
+		
+		it "Todos los nodos del array quedan desconectados" do
+			backup = @elemento_c.dup
+			@t.desconectar_solucion(backup)
+			
+			backup.each do |nodo|
+				nodo.conectado_a().length.must_equal 0
+			end
+			
 		end
 	end
 	
