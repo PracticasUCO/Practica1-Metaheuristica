@@ -427,6 +427,41 @@ VALUE phub_get_connections(VALUE self, VALUE solucion)
 	return table;
 }
 
+/*
+Devuelve una tabla de hash con todos los nodos del vector solución como llave.
+La tabla indica si estos nodos estan actuando como concentradores o como
+clientes. Si actuan como concentradores devuelve true y en caso
+contrario false
+*/
+VALUE phub_get_types(VALUE self, VALUE solucion)
+{
+	VALUE types = rb_hash_new();
+	int i;
+	
+	Check_Type(solucion, T_ARRAY);
+	
+	if(RARRAY_LEN(solucion) == 0)
+	{
+		rb_raise(rb_eTypeError, "No se pueden clasificar nodos en una solución vacía.\n");
+	}
+	
+	for(i = 0; i < RARRAY_LEN(solucion); i++)
+	{
+		VALUE nodo = rb_ary_entry(solucion, i);
+		
+		if(ID2SYM(rb_funcall(nodo, rb_intern("tipo"), 0)) == ID2SYM(rb_intern(":cliente")))
+		{
+			rb_hash_aset(types, nodo, Qfalse);
+		}
+		else
+		{
+			rb_hash_aset(types, nodo, Qtrue);
+		}
+	}
+	
+	return types;
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
@@ -439,4 +474,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "seleccion", phub_operador_seleccion, 4);
 	//rb_define_private_method(class_phub, "cruce", phub_operador_cruce, 2);
 	rb_define_private_method(class_phub, "get_connections", phub_get_connections, 1);
+	rb_define_private_method(class_phub, "get_types", phub_get_types, 1);
 }
