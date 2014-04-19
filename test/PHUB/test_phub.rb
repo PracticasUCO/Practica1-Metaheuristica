@@ -319,6 +319,20 @@ describe PHUBPrivate do
 		end
 	end
 	
+	describe "El método PHUB#get_connections" do
+		it "Devolver una tabla de hash" do
+		end
+		
+		it "Recibe como parametro un array" do
+		end
+		
+		it "Los nodos de la tabla de hash se corresponden a los concentradores del array solicitado" do
+		end
+		
+		it "La tabla de hash devuelve las conexiones de dichos nodos" do
+		end
+	end
+	
 	#describe "Cuando se hace un cruce entre dos soluciones" do
 	#	it "Los padres no sufren alteraciones" do
 	#		elemento_a_backup = @elemento_a.dup
