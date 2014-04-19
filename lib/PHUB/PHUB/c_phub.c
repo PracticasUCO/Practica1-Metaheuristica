@@ -578,15 +578,15 @@ VALUE phub_merge(VALUE self, VALUE solucion_a, VALUE solucion_b)
 Conecta los nodos clientes desconectados a los concentradores que puedan
 mantenerlos.
 */
-/*VALUE phub_set_random_connections(VALUE self, VALUE solucion)
+VALUE phub_set_random_connections(VALUE self, VALUE solucion)
 {
-	VALUE conjuto;
+	VALUE conjunto;
 	VALUE concentradores;
 	VALUE clientes;
 	long int i;
 	Check_Type(solucion, T_ARRAY);
 	
-	conjunto = phub_separar_nodos(solucion);
+	conjunto = phub_separar_nodos(self, solucion);
 	
 	concentradores = rb_ary_entry(conjunto, 0);
 	clientes = rb_ary_entry(conjunto, 1);
@@ -616,14 +616,19 @@ mantenerlos.
 		if(RARRAY_LEN(number_concentrador) > 0)
 		{
 			VALUE concentrador_afortunado;
-			numero_afortunado = rb_genrand_ulong_limited(RARRAY_LEN(numero_concentrador) - 1);
-			concentrador_afornutado = rb_ary_entry(concentradores, numero_afortunado);
+			numero_afortunado = rb_genrand_ulong_limited(RARRAY_LEN(number_concentrador) - 1);
+			concentrador_afortunado = rb_ary_entry(concentradores, NUM2INT(numero_afortunado));
 			
 			method_conectar_a(cliente, concentrador_afortunado);
 			method_conectar_a(concentrador_afortunado, cliente);
+			
+			rb_ary_store(clientes, i, cliente);
+			rb_ary_store(concentradores, j, NUM2INT(numero_afortunado));
 		}
 	}
-}*/
+	
+	return phub_merge(self, clientes, concentradores);
+}
 
 void Init_c_phub()
 {
