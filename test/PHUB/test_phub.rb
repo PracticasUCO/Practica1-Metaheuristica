@@ -7,7 +7,7 @@ require 'minitest/autorun'
 # de la clase PHUB
 class PHUBPrivate < PHUB::PHUB
 	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion, :get_connections
-	public :get_types, :desconectar_solucion
+	public :get_types, :desconectar_solucion, :set_historical_connections
 end
 
 describe PHUBPrivate do
@@ -402,6 +402,18 @@ describe PHUBPrivate do
 				nodo.conectado_a().length.must_equal 0
 			end
 			
+		end
+	end
+	
+	describe "Cuando se llama al método PHUB#set_historical_connections" do
+		it "Recibe dos argumentos, un array y una tabla de hash" do
+			proc {@t.set_historical_connections(@elemento_c, Hash.new)}.must_be_silent
+			proc {@t.set_historical_connections(1, Hash.new)}.must_raise TypeError
+			proc {@t.set_historical_connections(@elemento_c, "crazy string appear")}.must_raise TypeError
+		end
+		
+		it "El array no puede ser nulo" do
+			proc {@t.set_historical_connections(Array.new, Hash.new)}.must_raise TypeError
 		end
 	end
 	
