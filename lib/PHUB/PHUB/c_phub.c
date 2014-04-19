@@ -630,6 +630,99 @@ VALUE phub_set_random_connections(VALUE self, VALUE solucion)
 	return phub_merge(self, clientes, concentradores);
 }
 
+/*
+Devuelve el cruce entre los concentradores de +solucion_a+ y +solucion_b+. Tenga
+en cuenta que devuelve dos vectores en lugar de uno.
+
+Tambien desconecta todos los nodos en dichas soluciones
+*/
+VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b)
+{
+	VALUE conjunto_a;
+	VALUE conjunto_b;
+	
+	VALUE concentradores_a;
+	VALUE concentradores_b;
+	
+	VALUE mezcla_a;
+	VALUE mezcla_b;
+	
+	VALUE empaquetado;
+	
+	unsigned long int particion_a;
+	unsigned long int particion_b;
+	
+	unsigned long int i;
+	
+	Check_Type(solucion_a, T_ARRAY);
+	Check_Type(solucion_b, T_ARRAY);
+	
+	if(RARRAY_LEN(solucion_a) == 0)
+	{
+		rb_raise(rb_eTypeError, "No se puede mezclar una solucion vacía.\n");
+	}
+	
+	if(RARRAY_LEN(solucion_b) == 0)
+	{
+		rb_raise(rb_eTypeError, "No se puede mezclar una solución vacía\n");
+	}
+	
+	//Desconexion de las soluciones
+	desconectar_solucion(solucion_a);
+	desconectar_solucion(solucion_b);
+	
+	//Separación de los clientes y concentradores
+	conjunto_a = phub_separar_nodos(solucion_a);
+	conjunto_b = phub_separar_nodos(solucion_b);
+	
+	concentradores_a = rb_ary_entry(conjunto_a, 0);
+	concentradores_b = rb_ary_entry(conjunto_b, 0);
+	
+	//Elección de los limites de las particiones
+	particion_a = rb_genrand_ulong_limited(RARRAY_LEN(concentradores_a) - 2) + 1;
+	particion_b = rb_genrand_ulong_limited(RARRAY_LEN(concentradores_b) - 2) + 1;
+	
+	//Preparando las soluciones
+	mezcla_a = rb_ary_new();
+	mezcla_b = rb_ary_new();
+	
+	//Mezclando
+	for(i = 0; i < (unsigned long int) RARRAY_LEN(concentradores_a); i++)
+	{
+		VALUE concentrador = rb_ary_entry(concentradores_a, i);
+		
+		if(i < particion_a)
+		{
+			rb_ary_push(mezcla_a, concentrador);
+		}
+		else
+		{
+			rb_ary_push(mezcla_b, concentrador);
+		}
+	}
+	
+	for(i = 0; i < (unsigned long int) RARRAY_LEN(concentradores_b); i++)
+	{
+		VALUE concentrador = rb_ary_entry(concentradores_b, i);
+		
+		if(i < particion_b)
+		{
+			rb_ary_push(mezcla_b, concentrador);
+		}
+		else
+		{
+			rb_ary_push(mezcla_a, concentrador);
+		}
+	}
+	
+	//Construyendo solucion
+	empaquetado = rb_ary_new();
+	rb_ary_push(empaquetado, mezcla_a);
+	rb_ary_push(empaquetado, mezcla_b);
+	
+	return empaquetado;
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
@@ -647,4 +740,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "set_historical_connections", phub_set_historical_connections, 2);
 	rb_define_private_method(class_phub, "merge", phub_merge, 2);
 	rb_define_private_method(class_phub, "set_random_connections", phub_set_random_connections, 1);
+	rb_define_private_method(class_phub, "mezclar_concentradores", phub_mezclar_concentradores, 2);
 }
