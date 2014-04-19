@@ -469,6 +469,8 @@ VALUE desconectar_solucion(VALUE self, VALUE solucion)
 		
 		rb_funcall(node, rb_intern("desconectar"), 0);
 	}
+	
+	return Qnil;
 }
 
 /*
@@ -481,9 +483,40 @@ Los nodos que no puedan conectarse se dejan sin conectar.
 */
 VALUE phub_set_historical_connections(VALUE self, VALUE solucion, VALUE historical)
 {
-	VALUE types = phub_get_types(self, solucion);
+	VALUE types;
+	long int i;
 	
+	Check_Type(solucion, T_ARRAY);
+	Check_Type(historical, T_HASH);
 	
+	if(RARRAY_LEN(solucion) == 0)
+	{
+		rb_raise(rb_eTypeError, "No se pueden establecer conexiones en una solución nula.\n");
+	}
+	
+	types = phub_get_types(self, solucion);
+	desconectar_solucion(self, solucion);
+	
+	for(i = 0; i < RARRAY_LEN(solucion); i++)
+	{
+		VALUE nodo = rb_ary_entry(solucion, i);
+		VALUE concentrador_destino;
+		
+		if(rb_hash_aref(types, nodo) == Qtrue) //El nodo es un concentrador
+		{
+			continue;
+		}
+		
+		//El nodo es un cliente
+		concentrador_destino = rb_hash_aref(historical, nodo);
+		if(method_se_puede_conectar(nodo, concentrador_destino) == Qtrue)
+		{
+			method_conectar_a(nodo, concentrador_destino);
+			method_conectar_a(concentrador_destino, nodo);
+		}
+	}
+	
+	return Qnil;
 }
 
 void Init_c_phub()
