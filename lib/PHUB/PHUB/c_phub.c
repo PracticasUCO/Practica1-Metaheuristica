@@ -519,6 +519,8 @@ VALUE phub_set_historical_connections(VALUE self, VALUE solucion, VALUE historic
 		
 		//El nodo es un cliente
 		concentrador_destino = rb_hash_aref(historical, nodo);
+		concentrador_destino = rb_ary_entry(concentrador_destino, 0);
+		
 		if(method_se_puede_conectar(nodo, concentrador_destino) == Qtrue)
 		{
 			method_conectar_a(nodo, concentrador_destino);
