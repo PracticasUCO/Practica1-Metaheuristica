@@ -668,12 +668,12 @@ VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b
 	}
 	
 	//Desconexion de las soluciones
-	desconectar_solucion(solucion_a);
-	desconectar_solucion(solucion_b);
+	desconectar_solucion(self, solucion_a);
+	desconectar_solucion(self, solucion_b);
 	
 	//Separación de los clientes y concentradores
-	conjunto_a = phub_separar_nodos(solucion_a);
-	conjunto_b = phub_separar_nodos(solucion_b);
+	conjunto_a = phub_separar_nodos(self, solucion_a);
+	conjunto_b = phub_separar_nodos(self, solucion_b);
 	
 	concentradores_a = rb_ary_entry(conjunto_a, 0);
 	concentradores_b = rb_ary_entry(conjunto_b, 0);

@@ -8,6 +8,7 @@ require 'minitest/autorun'
 class PHUBPrivate < PHUB::PHUB
 	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion, :get_connections
 	public :get_types, :desconectar_solucion, :set_historical_connections, :merge, :set_random_connections
+	public :mezclar_concentradores
 end
 
 describe PHUBPrivate do
@@ -488,6 +489,14 @@ describe PHUBPrivate do
 				end
 			end
 			
+		end
+	end
+	
+	describe "En el método PHUB#mezclar_concentradores" do
+		it "Recibe dos argumentos de tipo Array" do
+			proc {@t.mezclar_concentradores(@elemento_a, @elemento_b)}.must_be_silent
+			proc {@t.mezclar_concentradores(2, @elemento_b)}.must_raise TypeError
+			proc {@t.mezclar_concentradores(@elemento_a, 2)}.must_raise TypeError
 		end
 	end
 	
