@@ -7,7 +7,7 @@ require 'minitest/autorun'
 # de la clase PHUB
 class PHUBPrivate < PHUB::PHUB
 	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion, :get_connections
-	public :get_types, :desconectar_solucion, :set_historical_connections, :merge
+	public :get_types, :desconectar_solucion, :set_historical_connections, :merge, :set_random_connections
 end
 
 describe PHUBPrivate do
@@ -19,6 +19,9 @@ describe PHUBPrivate do
 		*, @coste_a, @elemento_a = @t.generar_solucion_aleatoria
 		*, @coste_b, @elemento_b = @t.generar_solucion_aleatoria
 		*, @coste_c, @elemento_c = @t.generar_solucion_aleatoria
+		*, @coste_d, @elemento_d = @t.generar_solucion_aleatoria
+		
+		@t.desconectar_solucion(@elemento_d)
 		
 		50.times do
 			*, coste, solucion = @t.generar_solucion_aleatoria
@@ -449,6 +452,42 @@ describe PHUBPrivate do
 			
 			one.must_equal one_backup
 			two.must_equal two_backup
+		end
+	end
+	
+	describe "El método PHUB#set_random_connections" do
+		it "Recibe como argumento un array" do
+			proc {@t.set_random_connections(@elemento_c)}.must_be_silent
+			proc {@t.set_random_connections(Hash.new)}.must_raise TypeError
+		end
+		
+		it "El array que recibe no puede ser nulo" do
+			proc {@t.set_random_connections(Array.new)}.must_raise TypeError
+		end
+		
+		it "No cambia el argumento" do
+			backup = @elemento_d.dup
+			r = @t.set_random_connections(@elemento_d)
+			
+			backup.must_equal @elemento_d
+		end
+		
+		it "Se deja el menor numero de nodos sin conectar" do
+			r = @t.set_random_connections(@elemento_d)
+			
+			r.each do |nodo|
+				next if nodo.tipo == :concentrador
+				
+				if nodo.conectado_a().length == 0
+					r.each do |concentrador|
+						next if nodo.tipo != :concentrador
+						
+						nodo.demanda.must_be :>, concentrador.reserva, "El nodo #{nodo.id} (nodo.demanda) puede conectarse a #{concentrador.id} (concentrador.reserva)"
+					end
+					
+				end
+			end
+			
 		end
 	end
 	
