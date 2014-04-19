@@ -393,6 +393,11 @@ VALUE phub_get_connections(VALUE self, VALUE solucion)
 	
 	Check_Type(solucion, T_ARRAY);
 	
+	if(RARRAY_LEN(solucion) == 0)
+	{
+		rb_raise(rb_eTypeError, "No se puden procesar una solución vacía\n");
+	}
+	
 	for(i = 0; i < RARRAY_LEN(solucion); i++)
 	{
 		VALUE nodo = rb_ary_entry(solucion, i);

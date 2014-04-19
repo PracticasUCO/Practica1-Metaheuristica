@@ -321,16 +321,39 @@ describe PHUBPrivate do
 	
 	describe "El método PHUB#get_connections" do
 		it "Devolver una tabla de hash" do
+			tabla = @t.get_connections(@elemento_a)
 			
+			tabla.must_be_kind_of Hash
 		end
 		
 		it "Recibe como parametro un array" do
+			proc {@t.get_connections(@elemento_a)}.must_be_silent
+			proc {@t.get_connections(Hash.new)}.must_raise TypeError	
+		end
+		
+		it "No permite como entrada arrays vacíos" do
+			proc {@t.get_connections(Array.new)}.must_raise TypeError
 		end
 		
 		it "Los nodos de la tabla de hash se corresponden a los concentradores del array solicitado" do
+			tabla = @t.get_connections(@elemento_a)
+			
+			tabla.keys.each do |key|
+				@elemento_a.include?(key).must_equal true
+				key.tipo.must_equal :concentrador
+			end
+			
 		end
 		
 		it "La tabla de hash devuelve las conexiones de dichos nodos" do
+			tabla = @t.get_connections(@elemento_a)
+			
+			@elemento_a.each do |concentrador|
+				next if concentrador.tipo != :concentrador
+				
+				tabla[concentrador].must_equal concentrador.conectado_a()
+			end
+			
 		end
 	end
 	
