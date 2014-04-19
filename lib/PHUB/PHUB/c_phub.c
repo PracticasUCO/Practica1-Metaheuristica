@@ -386,7 +386,7 @@ VALUE phub_operador_seleccion(VALUE self, VALUE sym_seleccion, VALUE lista_soluc
 Devuelve una tabla de hash que indica los nodos a los que estaba conectado
 cada concentrador de la solución
 */
-VALUE phub_get_conexiones(VALUE self, VALUE solucion)
+VALUE phub_get_connections(VALUE self, VALUE solucion);
 {
 	VALUE table = rb_hash_new();
 	long i;
@@ -433,4 +433,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "ruleta", phub_operador_seleccion_ruleta, 3);
 	rb_define_private_method(class_phub, "seleccion", phub_operador_seleccion, 4);
 	rb_define_private_method(class_phub, "cruce", phub_operador_cruce, 2);
+	rb_define_private_method(class_phub, "get_connections", phub_get_connections, 1);
 }
