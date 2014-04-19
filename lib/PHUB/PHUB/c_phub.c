@@ -449,7 +449,7 @@ VALUE phub_get_types(VALUE self, VALUE solucion)
 	{
 		VALUE nodo = rb_ary_entry(solucion, i);
 		
-		if(ID2SYM(rb_funcall(nodo, rb_intern("tipo"), 0)) == ID2SYM(rb_intern(":cliente")))
+		if(rb_funcall(nodo, rb_intern("tipo"), 0) == ID2SYM(rb_intern("cliente")))
 		{
 			rb_hash_aset(types, nodo, Qfalse);
 		}
