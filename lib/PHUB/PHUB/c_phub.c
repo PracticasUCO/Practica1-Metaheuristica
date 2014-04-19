@@ -646,4 +646,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "desconectar_solucion", desconectar_solucion, 1);
 	rb_define_private_method(class_phub, "set_historical_connections", phub_set_historical_connections, 2);
 	rb_define_private_method(class_phub, "merge", phub_merge, 2);
+	rb_define_private_method(class_phub, "set_random_connections", phub_set_random_connections, 1);
 }
