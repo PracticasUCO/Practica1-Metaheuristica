@@ -384,7 +384,7 @@ VALUE phub_operador_seleccion(VALUE self, VALUE sym_seleccion, VALUE lista_soluc
 
 /*
 Devuelve una tabla de hash que indica los nodos a los que estaba conectado
-cada concentrador de la solución
+a cada nodo.
 */
 VALUE phub_get_connections(VALUE self, VALUE solucion)
 {
@@ -401,27 +401,19 @@ VALUE phub_get_connections(VALUE self, VALUE solucion)
 	for(i = 0; i < RARRAY_LEN(solucion); i++)
 	{
 		VALUE nodo = rb_ary_entry(solucion, i);
-		
-		if(rb_funcall(nodo, rb_intern("tipo"), 0) == ID2SYM(rb_intern("cliente")))
+		VALUE connected = rb_iv_get(nodo, "@connected");
+			
+		//Comprobar si es necesario
+		if(TYPE(connected) == T_ARRAY)
 		{
-			continue;
+			connected = rb_ary_dup(connected);
 		}
 		else
 		{
-			VALUE connected = rb_iv_get(nodo, "@connected");
-			
-			//Comprobar si es necesario
-			if(TYPE(connected) == T_ARRAY)
-			{
-				connected = rb_ary_dup(connected);
-			}
-			else
-			{
-				connected = rb_ary_new();
-			}
-			
-			rb_hash_aset(table, nodo, connected);
+			connected = rb_ary_new();
 		}
+		rb_hash_aset(table, nodo, connected);
+	
 	}
 	
 	return table;

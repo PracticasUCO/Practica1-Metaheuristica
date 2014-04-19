@@ -336,16 +336,6 @@ describe PHUBPrivate do
 			proc {@t.get_connections(Array.new)}.must_raise TypeError
 		end
 		
-		it "Los nodos de la tabla de hash se corresponden a los concentradores del array solicitado" do
-			tabla = @t.get_connections(@elemento_a)
-			
-			tabla.keys.each do |key|
-				@elemento_a.include?(key).must_equal true
-				key.tipo.must_equal :concentrador
-			end
-			
-		end
-		
 		it "La tabla de hash devuelve las conexiones de dichos nodos" do
 			tabla = @t.get_connections(@elemento_a)
 			
