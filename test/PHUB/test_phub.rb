@@ -7,6 +7,7 @@ require 'minitest/autorun'
 # de la clase PHUB
 class PHUBPrivate < PHUB::PHUB
 	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion, :get_connections
+	public :get_types
 end
 
 describe PHUBPrivate do
@@ -352,6 +353,35 @@ describe PHUBPrivate do
 				next if concentrador.tipo != :concentrador
 				
 				tabla[concentrador].must_equal concentrador.conectado_a()
+			end
+			
+		end
+	end
+	
+	describe "El método PHUB#get_types" do
+		it "Recibe un Array como argumento" do
+			proc {@t.get_types(@elemento_a)}.must_be_silent
+			proc {@t.get_types("string comming")}.must_raise TypeError
+		end
+		
+		it "El Array de entrada no puede estar vacío" do
+			proc {@t.get_types(Array.new)}.must_raise TypeError
+		end
+		
+		it "Devuelve una tabla de Hash" do
+			tabla = @t.get_types(@elemento_a)
+			tabla.must_be_kind_of Hash
+		end
+		
+		it "La tabla de hash contiene el tipo de todos los nodos de la solución argumento" do
+			tabla = @t.get_types(@elemento_a)
+			
+			@elemento_a.each do |nodo|
+				if nodo.tipo == :concentrador
+					tabla[nodo].must_equal true
+				else
+					tabla[nodo].must_equal false
+				end
 			end
 			
 		end
