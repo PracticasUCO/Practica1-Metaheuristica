@@ -382,29 +382,6 @@ VALUE phub_operador_seleccion(VALUE self, VALUE sym_seleccion, VALUE lista_soluc
 	}
 }
 
-/*
-Realiza el cruce entre +solucion_a+ y +solucion_b+ devolviendo dos
-soluciones hijas como resultado.
-*/
-VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
-{
-	VALUE lista_nodos = rb_iv_get(self, "@nodos");
-	
-	VALUE conjunto_a;
-	VALUE conjunto_b;
-	
-	VALUE concentradores_a;
-	VALUE concentradores_b;
-	
-
-	//Empaquetado de la solución
-	rb_ary_push(empaquetado, hijo_a);
-	rb_ary_push(empaquetado, hijo_b);
-	
-	//Solución final
-	return empaquetado;
-}
-
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
