@@ -119,10 +119,18 @@ module PHUB
 			raise TypeError, "Value solo puede ser un Symbol con los valores :cliente o :concentrador" unless value.kind_of? Symbol
 			raise TypeError, "El tipo debe de ser :cliente o :concentrador" unless value.=== :cliente or value.=== :concentrador
 			
-			desconectar # Desconectamos al nodo de la red
 			
-			@tipo = value
-			@reserva = @capacidad_servicio
+			if value != tipo
+				desconectar # Desconectamos al nodo de la red
+			
+				@tipo = value
+				@reserva = @capacidad_servicio
+			end
+		end
+		
+		# Alias de tipo=
+		def set_tipo(value)
+			tipo = value
 		end
 		
 		# Devuelve el tipo de nodo, este valor se corresponde a :cliente o :concentrador

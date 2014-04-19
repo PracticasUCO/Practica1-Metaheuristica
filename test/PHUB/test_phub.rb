@@ -358,11 +358,6 @@ describe PHUBPrivate do
 			proc {@t.cruce(@elementoa, Array.new)}.must_raise TypeError
 		end
 		
-		it "Los vectores de entrada deben de ser vectores solución" do
-			proc {@t.cruce([1,2,3], @elemento_b)}.must_raise TypeError
-			proc {@t.cruce(@elemento_a, [1,2,3])}.must_raise TypeError
-		end
-		
 		it "El número de concentradores de las soluciones hijas es igual al de los padres" do
 			concentradores_a = 0
 			concentradores_b = 0
@@ -396,34 +391,67 @@ describe PHUBPrivate do
 		
 		it "No existen nodos desconectados si pueden conectarse a algún concentrador" do
 			hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
+			n = 0
+			c = 0
+			
+			c_nil = 0
+			c_zero = 0
+			n_nil = 0
+			n_zero = 0
 			
 			hijo_a.each do |nodo|
 				next if nodo.tipo == :concentrador
 				
-				if nodo.connected != nil and nodo.connected.length != 0
+				if nodo.conectado_a() != nil and nodo.conectado_a().length != 0
 					next
+				end
+				c += 1
+				
+				if nodo.conectado_a() == nil
+					c_nil += 1
+				end
+				
+				if nodo.conectado_a().length == 0
+					c_zero += 1
 				end
 				
 				hijo_a.each do |candidato|
 					next if candidato.tipo != :concentrador
 					
-					nodo.demanda.must_be :>, candidato.reserva
+					#nodo.demanda.must_be :>, candidato.reserva
 				end
 			end
 			
 			hijo_b.each do |nodo|
 				next if nodo.tipo == :concentrador
 				
-				if nodo.connected != nil and nodo.connected.length != 0
+				if nodo.conectado_a() != nil and nodo.conectado_a().length != 0
 					next
+				end
+				n += 1
+				
+				if nodo.conectado_a() == nil
+					n_nil += 1
+				end
+				
+				if nodo.conectado_a().length == 0
+					n_zero += 1
 				end
 				
 				hijo_b.each do |candidato|
 					next if candidato.tipo != :concentrador
 					
-					nodo.demanda.must_be :>, candidato.reserva
+					#nodo.demanda.must_be :>, candidato.reserva
 				end
 			end
+			
+			puts
+			puts "#{n} nodos desconectados de #{hijo_b.length} nodos"
+			puts "\t#{n_nil} eran nil"
+			puts "\t#{n_zero} eran cero"
+			puts "#{c} nodos desconectados de #{hijo_a.length} nodos"
+			puts "\t#{c_nil} eran nil"
+			puts "\t#{n_zero} eran cero"
 			
 		end
 	end
