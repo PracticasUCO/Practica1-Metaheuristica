@@ -22,6 +22,12 @@ tmp
 *.so
 *.o
 
+# Ignora el archivo seed
+# El archivo seed lo estoy usando para guardar semillas
+# que hacen que el fichero de test falle, especialmente cuando
+# estos errores no son faciles de detectar.
+seed
+
 # YARD artifacts
 .yardoc
 _yardoc
