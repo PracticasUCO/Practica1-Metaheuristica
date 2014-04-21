@@ -198,7 +198,7 @@ VALUE method_tsp_busqueda_local_first_improvement(VALUE self, VALUE solucion, VA
 	
 	for(l = 0; l < NUM2INT(limite); l++)
 	{
-		for(i = 1; i < RARRAY_LEN(solucion) - 1; i++)
+		for(i = 0; i < RARRAY_LEN(solucion); i++)
 		{
 			for(j = i + 1; j < RARRAY_LEN(solucion) - 1; j++)
 			{
@@ -272,7 +272,7 @@ VALUE method_tsp_busqueda_local_best_improvement(VALUE self, VALUE solucion, VAL
 
 	for(l = 0; l < NUM2INT(limite); l++)
 	{
-		for(i = 1; i < RARRAY_LEN(solucion) - 1; i++)
+		for(i = 0; i < RARRAY_LEN(solucion); i++)
 		{
 			for(j = i + 1; j < RARRAY_LEN(solucion) - 1; j++)
 			{
@@ -345,7 +345,7 @@ VALUE method_tsp_busqueda_local_enfriamiento_simulado(VALUE self, VALUE solucion
 
 	while(NUM2DBL(method_temperatura(es)) > NUM2DBL(temperatura_minima))
 	{
-		for(i = 1; i < RARRAY_LEN(solucion) - 1; i++)
+		for(i = 0; i < RARRAY_LEN(solucion); i++)
 		{
 			VALUE item = rb_ary_entry(solucion, i);
 
