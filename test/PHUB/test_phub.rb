@@ -498,6 +498,42 @@ describe PHUBPrivate do
 			proc {@t.mezclar_concentradores(2, @elemento_b)}.must_raise TypeError
 			proc {@t.mezclar_concentradores(@elemento_a, 2)}.must_raise TypeError
 		end
+		
+		it "Ninguno de los array de entrada puede estar vacío" do
+			proc {@t.mezclar_concentradores(Array.new, @elemento_b)}.must_raise TypeError
+			proc {@t.mezclar_concentradores(@elemento_b, Array.new)}.must_raise TypeError
+		end
+		
+		it "Todos los nodos de las soluciones devueltas son concentradores" do
+			a, b = @t.mezclar_concentradores(@elemento_a, @elemento_b)
+			
+			a.each do |node|
+				node.tipo.must_equal :concentrador
+			end
+			
+			b.each do |node|
+				node.tipo.must_equal :concentrador
+			end
+			
+		end
+		
+		it "Devuelve dos soluciones, cada una con el mismo número de nodos" do
+			50.times do
+				hijo_a, hijo_b = @t.mezclar_concentradores(@elemento_a, @elemento_b)
+
+				hijo_a.length.must_equal hijo_b.length
+			end
+		end
+		
+		it "La longitud de cada uno de los hijos es igual al número de concentradores inicial" do
+			50.times do
+				concentradores, * = @t.separar_nodos(@elemento_a)
+				hijo_a, hijo_b = @t.mezclar_concentradores(@elemento_a, @elemento_b)
+			
+				hijo_a.length.must_equal concentradores.length
+				hijo_b.length.must_equal concentradores.length 
+			end
+		end
 	end
 	
 	#describe "Cuando se hace un cruce entre dos soluciones" do
