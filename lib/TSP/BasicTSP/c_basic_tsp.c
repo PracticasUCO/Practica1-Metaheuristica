@@ -78,10 +78,15 @@ Recibe como parámetro un Array con las ciudades que se van a visitar
 VALUE method_btsp_coste_solucion(VALUE self, VALUE ciudades)
 {
 	VALUE caminos = rb_iv_get(self, "@caminos");
+	VALUE primero;
+	VALUE ultimo;
 	double coste = 0.0;
 	int i;
 
 	ciudades = rb_check_array_type(ciudades);
+	
+	primero = rb_ary_entry(ciudades, 0);
+	ultimo = rb_ary_entry(ciudades, -1);
 
 	for(i = 0; (i + 1) < RARRAY_LEN(ciudades); i++)
 	{
@@ -90,7 +95,7 @@ VALUE method_btsp_coste_solucion(VALUE self, VALUE ciudades)
 		coste += NUM2DBL(rb_ary_entry(rb_ary_entry(caminos, NUM2INT(node_a)), NUM2INT(node_b)));
 	}
 
-	coste += NUM2DBL(rb_ary_entry(rb_ary_entry(caminos, -1), 0));
+	coste += NUM2DBL(rb_ary_entry(rb_ary_entry(caminos, NUM2INT(ultimo)), NUM2INT(primero)));
 
 	return DBL2NUM(coste);
 }
