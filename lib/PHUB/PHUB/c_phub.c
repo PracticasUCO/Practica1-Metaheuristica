@@ -724,10 +724,31 @@ VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b
 }
 
 /*
-Se devuelve una tabla de hash con
+Se devuelve una tabla de hash con las soluciones de +conjunto_soluciones+ como
+llave y la tabla devuelve el valor de dichas soluciones
 */
 VALUE phub_evaluar_conjunto_soluciones(VALUE self, VALUE conjunto_soluciones)
 {
+	VALUE costes;
+	int i;
+	
+	Check_Type(conjunto_soluciones, T_ARRAY);
+	
+	if(RARRAY_LEN(conjunto_soluciones) == 0)
+	{
+		rb_raise(rb_eTypeError, "El conjunto de soluciones de entrada no puede estar vacío\n");
+	}
+	
+	costes = rb_hash_new();
+	
+	for(i = 0; i < RARRAY_LEN(conjunto_soluciones); i++)
+	{
+		VALUE solucion = rb_ary_entry(conjunto_soluciones, i);
+		VALUE coste = rb_funcall(self, rb_intern("funcion_objetivo"), 1, solucion);
+		rb_hash_aset(costes, solucion, coste);
+	}
+	
+	return costes;
 }
 
 void Init_c_phub()
@@ -748,4 +769,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "merge", phub_merge, 2);
 	rb_define_private_method(class_phub, "set_random_connections", phub_set_random_connections, 1);
 	rb_define_private_method(class_phub, "mezclar_concentradores", phub_mezclar_concentradores, 2);
+	rb_define_private_method(class_phub, "evaluar_conjunto_soluciones", phub_evaluar_conjunto_soluciones, 1);
 }
