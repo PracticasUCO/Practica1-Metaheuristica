@@ -8,7 +8,7 @@ require 'minitest/autorun'
 class PHUBPrivate < PHUB::PHUB
 	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion, :get_connections
 	public :get_types, :desconectar_solucion, :set_historical_connections, :merge, :set_random_connections
-	public :mezclar_concentradores, :evaluar_conjunto_soluciones, :funcion_objetivo
+	public :mezclar_concentradores, :evaluar_conjunto_soluciones, :funcion_objetivo, :get_nodes
 end
 
 describe PHUBPrivate do
@@ -576,6 +576,61 @@ describe PHUBPrivate do
 			costes[elemento_dos].must_equal coste_dos
 			costes[elemento_tres].must_equal coste_tres
 			costes[elemento_cuatro].must_equal coste_cuatro
+		end
+	end
+	
+	describe "En el método PHUB#get_nodes" do
+		it "Recibe un argumento de tipo Array" do
+			proc {@t.get_nodes(@elemento_a)}.must_be_silent
+			proc {@t.get_nodes("Crazy string appear")}.must_raise TypeError
+		end
+		
+		it "El array no puede estar vacío" do
+			proc {@t.get_nodes(Array.new)}.must_raise TypeError
+		end
+		
+		it "Devuelve una tabla de hash" do
+			r = @t.get_nodes(@elemento_a)
+			
+			r.must_be_kind_of Hash
+		end
+		
+		it "La tabla de hash contiene todos los nodos presentes en la solucion a true" do
+			r = @t.get_nodes(@elemento_a)
+			
+			@elemento_a.each do |node|
+				r[node].must_equal true
+			end
+		end
+		
+		it "La tabla de hash tiene tantas llaves como nodos posibles" do
+			r = @t.get_nodes(@elemento_a)
+			r.keys.length.must_equal @elemento_a.length
+			
+			concentradores, clientes = @t.separar_nodos(@elemento_a)
+			
+			r = @t.get_nodes(concentradores)
+			r.keys.length.must_equal @elemento_a.length
+			
+			r = @t.get_nodes(clientes)
+			r.keys.length.must_equal @elemento_a.length
+		end
+		
+		it "La tabla de hash tiene los nodos no presentes en la solución a false" do
+			concentradores, clientes = @t.separar_nodos(@elemento_a)
+			
+			r = @t.get_nodes(concentradores)
+			
+			clientes.each do |node|
+				r[node].must_equal false
+			end
+			
+			r = @t.get_nodes(clientes)
+			
+			concentradores.each do |node|
+				r[node].must_equal false
+			end
+			
 		end
 	end
 	
