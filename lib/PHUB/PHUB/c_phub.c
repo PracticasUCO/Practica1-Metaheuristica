@@ -808,7 +808,7 @@ VALUE phub_add_clients(VALUE self, VALUE solucion)
 		
 		if(rb_hash_aref(nodos_solucion, item) == Qfalse)
 		{
-			rb_funcall(item, "set_tipo", 1, ID2SYM(rb_intern("cliente")));
+			rb_funcall(item, rb_intern("set_tipo"), 1, ID2SYM(rb_intern("cliente")));
 			
 			rb_ary_push(solucion, item);
 		}
