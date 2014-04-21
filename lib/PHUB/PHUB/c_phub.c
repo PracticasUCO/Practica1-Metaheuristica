@@ -679,8 +679,8 @@ VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b
 	concentradores_b = rb_ary_entry(conjunto_b, 0);
 	
 	//Elección de los limites de las particiones
-	particion_a = rb_genrand_ulong_limited(RARRAY_LEN(concentradores_a) - 2) + 1;
-	particion_b = rb_genrand_ulong_limited(RARRAY_LEN(concentradores_b) - 2) + 1;
+	particion_a = RARRAY_LEN(concentradores_a) / 2;
+	particion_b = particion_a;
 	
 	//Preparando las soluciones
 	mezcla_a = rb_ary_new();
@@ -707,11 +707,11 @@ VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b
 		
 		if(i < particion_b)
 		{
-			rb_ary_push(mezcla_b, concentrador);
+			rb_ary_push(mezcla_a, concentrador);
 		}
 		else
 		{
-			rb_ary_push(mezcla_a, concentrador);
+			rb_ary_push(mezcla_b, concentrador);
 		}
 	}
 	
