@@ -723,6 +723,13 @@ VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b
 	return empaquetado;
 }
 
+/*
+Se devuelve una tabla de hash con
+*/
+VALUE phub_evaluar_conjunto_soluciones(VALUE self, VALUE conjunto_soluciones)
+{
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
