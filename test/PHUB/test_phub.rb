@@ -8,7 +8,7 @@ require 'minitest/autorun'
 class PHUBPrivate < PHUB::PHUB
 	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion, :get_connections
 	public :get_types, :desconectar_solucion, :set_historical_connections, :merge, :set_random_connections
-	public :mezclar_concentradores
+	public :mezclar_concentradores, :evaluar_conjunto_soluciones, :funcion_objetivo
 end
 
 describe PHUBPrivate do
@@ -533,6 +533,49 @@ describe PHUBPrivate do
 				hijo_a.length.must_equal concentradores.length
 				hijo_b.length.must_equal concentradores.length 
 			end
+		end
+	end
+	
+	describe "El método PHUB#evaluar_conjunto_soluciones" do
+		it "Recibe un argumento de tipo Array" do
+			lista = Array.new
+			lista << @elemento_a << @elemento_b << @elemento_c << @elemento_d
+			proc {@t.evaluar_conjunto_soluciones(lista)}.must_be_silent
+			proc {@t.evaluar_conjunto_soluciones("Crazy string appear")}.must_raise TypeError
+		end
+		
+		it "El Array de entrada no puede estar vacío" do
+			proc {@t.evaluar_conjunto_soluciones(Array.new)}.must_raise TypeError
+		end
+		
+		it "Devuelve una tabla de hash" do
+			lista = Array.new
+			lista << @elemento_a << @elemento_b << @elemento_c << @elemento_d
+			costes = @t.evaluar_conjunto_soluciones(lista)
+			
+			costes.must_be_kind_of Hash
+		end
+		
+		it "La tabla de hash que devuelve debe de contenter los costes de las soluciones" do
+			*, coste_uno, elemento_uno = @t.generar_solucion_aleatoria
+			*, coste_dos, elemento_dos = @t.generar_solucion_aleatoria
+			*, coste_tres, elemento_tres = @t.generar_solucion_aleatoria
+			*, coste_cuatro, elemento_cuatro = @t.generar_solucion_aleatoria
+			
+			# Detecte un error en la funcion objetivo, no es exactamente correcto la primera vez
+			coste_uno = @t.funcion_objetivo(elemento_uno)
+			coste_dos = @t.funcion_objetivo(elemento_dos)
+			coste_tres = @t.funcion_objetivo(elemento_tres)
+			coste_custro = @t.funcion_objetivo(elemento_cuatro)
+			
+			lista = Array.new
+			lista << elemento_uno << elemento_dos << elemento_tres << elemento_cuatro
+			costes = @t.evaluar_conjunto_soluciones(lista)
+			
+			costes[elemento_uno].must_equal coste_uno
+			costes[elemento_dos].must_equal coste_dos
+			costes[elemento_tres].must_equal coste_tres
+			costes[elemento_cuatro].must_equal coste_cuatro
 		end
 	end
 	
