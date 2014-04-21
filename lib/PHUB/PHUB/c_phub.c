@@ -777,6 +777,8 @@ VALUE phub_get_nodes(VALUE self, VALUE solucion)
 	
 	for(i = 0; i < RARRAY_LEN(lista_nodos); i++)
 	{
+		VALUE nodo = rb_ary_entry(lista_nodos, i);
+		
 		if(TYPE(rb_hash_aref(hash, nodo)) != T_TRUE)
 		{
 			rb_hash_aset(hash, nodo, Qfalse);
