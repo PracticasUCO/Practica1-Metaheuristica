@@ -788,6 +788,34 @@ VALUE phub_get_nodes(VALUE self, VALUE solucion)
 	return hash;
 }
 
+/*
+Añade los clientes necesarios a la solucion hasta que
+tenga todos los nodos posibles
+*/
+VALUE phub_add_clients(VALUE self, VALUE solucion)
+{
+	VALUE lista_nodos = rb_iv_get(self, "@nodos");
+	VALUE nodos_solucion;
+	long int i;
+	
+	Check_Type(solucion, T_ARRAY);
+	
+	nodos_solucion = phub_get_nodes(self, solucion);
+	
+	for(i = 0; i < RARRAY_LEN(lista_nodos); i++)
+	{
+		VALUE item = rb_ary_entry(lista_nodos, i);
+		
+		if(rb_hash_aref(nodos_solucion, item) == Qfalse)
+		{
+			rb_funcall(item, "set_tipo", 1, ID2SYM(rb_intern("cliente")));
+			
+			rb_ary_push(solucion, item);
+		}
+	}
+	return solucion;
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
