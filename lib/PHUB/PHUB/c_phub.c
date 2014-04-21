@@ -805,4 +805,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "set_random_connections", phub_set_random_connections, 1);
 	rb_define_private_method(class_phub, "mezclar_concentradores", phub_mezclar_concentradores, 2);
 	rb_define_private_method(class_phub, "evaluar_conjunto_soluciones", phub_evaluar_conjunto_soluciones, 1);
+	rb_define_private_method(class_phub, "get_nodes", phub_get_nodes, 1);
 }
