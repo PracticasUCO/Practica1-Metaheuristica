@@ -751,6 +751,41 @@ VALUE phub_evaluar_conjunto_soluciones(VALUE self, VALUE conjunto_soluciones)
 	return costes;
 }
 
+/*
+Devuelve una tabla de hash con los nodos que estan incluidos en
+la solucion. Los nodos incluidos aparecen como true y el resto
+como false
+*/
+VALUE phub_get_nodes(VALUE self, VALUE solucion)
+{
+	VALUE hash = rb_hash_new();
+	VALUE lista_nodos = rb_iv_get(self, "@nodos");
+	long int i;
+	
+	Check_Type(solucion, T_ARRAY);
+	
+	if(RARRAY_LEN(solucion) == 0)
+	{
+		rb_raise(rb_eTypeError, "No se puede procesar una solución vacía.\n");
+	}
+	
+	for(i = 0; i < RARRAY_LEN(solucion); i++)
+	{
+		VALUE nodo = rb_ary_entry(solucion, i);
+		rb_hash_aset(hash, nodo, Qtrue);
+	}
+	
+	for(i = 0; i < RARRAY_LEN(lista_nodos); i++)
+	{
+		if(TYPE(rb_hash_aref(hash, nodo)) != T_TRUE)
+		{
+			rb_hash_aset(hash, nodo, Qfalse);
+		}
+	}
+	
+	return hash;
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
