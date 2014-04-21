@@ -8,7 +8,7 @@ require 'minitest/autorun'
 class PHUBPrivate < PHUB::PHUB
 	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion, :get_connections
 	public :get_types, :desconectar_solucion, :set_historical_connections, :merge, :set_random_connections
-	public :mezclar_concentradores, :evaluar_conjunto_soluciones, :funcion_objetivo, :get_nodes
+	public :mezclar_concentradores, :evaluar_conjunto_soluciones, :funcion_objetivo, :get_nodes, :add_clients
 end
 
 describe PHUBPrivate do
@@ -631,6 +631,34 @@ describe PHUBPrivate do
 				r[node].must_equal false
 			end
 			
+		end
+	end
+	
+	describe "El método PHUB#add_clients" do
+		it "Recibe un argumento de tipo Array" do
+			proc {@t.add_clients(@elemento_a)}.must_be_silent
+			proc {@t.add_clients(3)}.must_raise TypeError
+		end
+		
+		it "La solucion de vuelta tiene la longitud igual al número total de nodos" do
+			@t.add_clients(@elemento_a)
+			@elemento_a.length.must_equal @elemento_b.length
+			
+			concentradores, clientes = @t.separar_nodos(@elemento_a)
+			@t.add_clients(concentradores)
+			concentradores.length.must_equal @elemento_a.length
+		end
+		
+		it "Todos los nodos añadidos son clientes" do
+			concentradores, clientes = @t.separar_nodos(@elemento_a)
+			lista_concentradores = @t.get_nodes(concentradores)
+			@t.add_clients(concentradores)
+			
+			concentradores.each do |c|
+				next if lista_concentradores[c] == true
+				
+				c.tipo.must_equal :cliente
+			end
 		end
 	end
 	
