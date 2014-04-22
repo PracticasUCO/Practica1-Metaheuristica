@@ -585,10 +585,6 @@ describe PHUBPrivate do
 			proc {@t.get_nodes("Crazy string appear")}.must_raise TypeError
 		end
 		
-		it "El array no puede estar vacío" do
-			proc {@t.get_nodes(Array.new)}.must_raise TypeError
-		end
-		
 		it "Devuelve una tabla de hash" do
 			r = @t.get_nodes(@elemento_a)
 			
