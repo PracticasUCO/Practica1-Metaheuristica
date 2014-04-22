@@ -811,6 +811,65 @@ VALUE phub_add_clients(VALUE self, VALUE solucion)
 	return solucion;
 }
 
+/*
+	Realiza el cruce entre dos soluciones. El resultado son dos soluciones hijas,
+	diferentes a los padres.
+*/
+VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
+{
+	VALUE historical_connections_a;
+	VALUE historical_connections_b;
+	VALUE hijo_a;
+	VALUE hijo_b;
+	VALUE empaquetado;
+	
+	VALUE auxiliar;
+	
+	Check_Type(solucion_a, T_ARRAY);
+	Check_Type(solucion_b, T_ARRAY);
+	
+	if(RARRAY_LEN(solucion_a) == 0)
+	{
+		rb_raise(rb_eTypeError, "solucion_a no puede tener cero nodos.\n");
+	}
+	
+	if(RARRAY_LEN(solucion_b) == 0)
+	{
+		rb_raise(rb_eTypeError, "solucion_b no puede tener cero nodos-\n");
+	}
+	
+	//Se establecen las conexiones historicas
+	historical_connections_a = phub_get_connections(self, solucion_a);
+	historical_connections_b = phub_get_connections(self, solucion_b);
+	
+	//Se mezclan los concentradores y se desempaquetan en los vectores
+	//hijo_a y hijo_b
+	
+	//Auxiliar contiene un array con las dos mezclas de concentradores
+	auxiliar = phub_mezclar_concentradores(self, solucion_a, solucion_b);
+	hijo_a = rb_ary_entry(auxiliar, 0);
+	hijo_b = rb_ary_entry(auxiliar, 1);
+	
+	//Se rellena la solucion con los clientes que faltan
+	phub_add_clients(self, hijo_a);
+	phub_add_clients(self, hijo_b);
+	
+	//Se añaden las conexiones historicas
+	phub_set_historical_connections(self, hijo_a, historical_connections_a);
+	phub_set_historical_connections(self, hijo_b, historical_connections_b);
+	
+	//Se rellenan las conexiones restantes de forma aleatoria
+	phub_set_random_connections(self, hijo_a);
+	phub_set_random_connections(self, hijo_b);
+	
+	//Se construye la solucion final y se devuelve
+	empaquetado = rb_ary_new();
+	rb_ary_push(empaquetado, hijo_a);
+	rb_ary_push(empaquetado, hijo_b);
+	
+	return empaquetado;
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
@@ -821,7 +880,7 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "torneo_injusto", phub_operador_seleccion_torneo_injusto, 3);
 	rb_define_private_method(class_phub, "ruleta", phub_operador_seleccion_ruleta, 3);
 	rb_define_private_method(class_phub, "seleccion", phub_operador_seleccion, 4);
-	//rb_define_private_method(class_phub, "cruce", phub_operador_cruce, 2);
+	rb_define_private_method(class_phub, "cruce", phub_operador_cruce, 2);
 	rb_define_private_method(class_phub, "get_connections", phub_get_connections, 1);
 	rb_define_private_method(class_phub, "get_types", phub_get_types, 1);
 	rb_define_private_method(class_phub, "desconectar_solucion", desconectar_solucion, 1);
