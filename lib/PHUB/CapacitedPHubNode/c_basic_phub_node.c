@@ -74,7 +74,9 @@ VALUE method_se_puede_conectar(VALUE self, VALUE otro)
 
 	if(!rb_obj_is_kind_of(otro, CBasicPHubNode))
 	{
-		rb_raise(rb_eTypeError, "otro debe de ser un CapacitedPHubNode");
+		VALUE tipo = rb_funcall(otro, rb_intern("class"), 0);
+		tipo = rb_funcall(tipo, rb_intern("name"), 0);
+		rb_raise(rb_eTypeError, "otro debe de ser un CapacitedPHubNode actual: %s\n", StringValueCStr(tipo));
 	}
 	
 	mi_tipo = rb_funcall(self, get_tipo, 0);
