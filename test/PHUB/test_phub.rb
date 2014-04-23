@@ -1,6 +1,7 @@
 #! /usr/bin/env ruby
 
 require_relative '../../lib/PHUB/PHUB/PHUB'
+require_relative '../../lib/PHUB/CapacitedPHubNode/CapacitedPHubNode'
 require 'minitest/autorun'
 
 # Esta clase servirá para probar los métodos privados
@@ -9,6 +10,7 @@ class PHUBPrivate < PHUB::PHUB
 	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion, :get_connections
 	public :get_types, :desconectar_solucion, :set_historical_connections, :merge, :set_random_connections
 	public :mezclar_concentradores, :evaluar_conjunto_soluciones, :funcion_objetivo, :get_nodes, :add_clients
+	public :cruce
 end
 
 describe PHUBPrivate do
@@ -429,30 +431,25 @@ describe PHUBPrivate do
 		end
 		
 		it "Devuelve la union de los dos arrays" do
-			one = [1,2,3]
-			two = [4,5,6]
+			r = @t.merge(@elemento_a, @elemento_b)
 			
-			r = @t.merge(one, two)
-			
-			one.each do |value|
+			@elemento_a.each do |value|
 				r.include?(value).must_equal true
 			end
 			
-			two.each do |value|
+			@elemento_b.each do |value|
 				r.include?(value).must_equal true
 			end	
 		end
 		
 		it "Los arrays pasados como argumento no se alteran" do
-			one = [1,2,3]
-			two = [4,5,6]
-			one_backup = one.dup
-			two_backup = two.dup
+			a_backup = @elemento_a.dup
+			b_backup = @elemento_b.dup
 			
-			@t.merge(one, two)
+			@t.merge(@elemento_a, @elemento_b)
 			
-			one.must_equal one_backup
-			two.must_equal two_backup
+			@elemento_a.must_equal a_backup
+			@elemento_b.must_equal b_backup
 		end
 	end
 	
@@ -650,6 +647,13 @@ describe PHUBPrivate do
 			lista_concentradores = @t.get_nodes(concentradores)
 			@t.add_clients(concentradores)
 			
+			r = Array.new
+			@t.add_clients(concentradores)
+			
+			r.each do |c|
+				c.tipo.must_equal :cliente
+			end
+			
 			concentradores.each do |c|
 				next if lista_concentradores[c] == true
 				
@@ -658,139 +662,112 @@ describe PHUBPrivate do
 		end
 	end
 	
-	#describe "Cuando se hace un cruce entre dos soluciones" do
-	#	it "Los padres no sufren alteraciones" do
-	#		elemento_a_backup = @elemento_a.dup
-	#		elemento_b_backup = @elemento_b.dup
-	#		
-	#		hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
-	#		
-	#		@elemento_a.must_equal elemento_a_backup
-	#		@elemento_b.must_equal elemento_b_backup
-	#	end
-	#	
-	#	it "Se deben de recibir dos soluciones diferentes" do
-	#		hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
-	#		
-	#		hijo_a.must_be_instance_of Array
-	#		hijo_b.must_be_instance_of Array
-	#		
-	#		hijo_a.wont_equal hijo_b
-	#	end
-	#	
-	#	it "Las soluciones son diferentes a los padres" do
-	#		hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
-	#		
-	#		hijo_a.wont_equal @elemento_a
-	#		hijo_a.wont_equal @elemento_b
-	#		hijo_b.wont_equal @elemento_a
-	#		hijo_b.wont_equal @elemento_b
-	#	end
-	#	
-	#	it "Los parametros de entrada son dos Arrays" do
-	#		proc {@t.cruce(2, @elemento_b)}.must_raise TypeError
-	#		proc {@t.cruce(@elemento_a, 3)}.must_raise TypeError
-	#	end
-	#	
-	#	it "No se puede introduccir Arrays vacíos" do
-	#		proc {@t.cruce(Array.new, @elemento_b)}.must_raise TypeError
-	#		proc {@t.cruce(@elementoa, Array.new)}.must_raise TypeError
-	#	end
-	#	
-	#	it "El número de concentradores de las soluciones hijas es igual al de los padres" do
-	#		concentradores_a = 0
-	#		concentradores_b = 0
-	#		
-	#		hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
-	#		
-	#		hijo_a.each do |nodo|
-	#			if nodo.tipo == :concentrador
-	#				concentradores_a += 1
-	#			end
-	#		end
-	#		
-	#		hijo_b.each do |nodo|
-	#			if nodo.tipo == :concentrador
-	#				concentradores_b += 1
-	#			end
-	#		end
-	#		
-	#		concentradores_a.must_equal @t.numero_concentradores
-	#		concentradores_b.must_equal @t.numero_concentradores
-	#	end
-	#	
-	#	it "La longitud de las soluciones hijas es igual al de los padres" do
-	#		hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
-	#		
-	#		hijo_a.length.must_equal @elemento_a.length
-	#		hijo_a.length.must_equal @elemento_b.length
-	#		hijo_b.length.must_equal @elemento_a.length
-	#		hijo_b.length.must_equal @elemento_b.length
-	#	end
-	#	
-	#	it "No existen nodos desconectados si pueden conectarse a algún concentrador" do
-	#		hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
-	#		n = 0
-	#		c = 0
-	#		
-	#		c_nil = 0
-	#		c_zero = 0
-	#		n_nil = 0
-	#		n_zero = 0
-	#		
-	#		hijo_a.each do |nodo|
-	#			next if nodo.tipo == :concentrador
-	#			
-	#			if nodo.conectado_a() != nil and nodo.conectado_a().length != 0
-	#				next
-	#			end
-	#			c += 1
-	#			
-	#			if nodo.conectado_a() == nil
-	#				c_nil += 1
-	#			end
-	#			
-	#			if nodo.conectado_a().length == 0
-	#				c_zero += 1
-	#			end
-	#			
-	#			hijo_a.each do |candidato|
-	#				next if candidato.tipo != :concentrador
-	#				
-	#				#nodo.demanda.must_be :>, candidato.reserva
-	#			end
-	#		end
-	#		
-	#		hijo_b.each do |nodo|
-	#			next if nodo.tipo == :concentrador
-	#			
-	#			if nodo.conectado_a() != nil and nodo.conectado_a().length != 0
-	#				next
-	#			end
-	#			n += 1
-	#			
-	#			if nodo.conectado_a() == nil
-	#				n_nil += 1
-	#			end
-	#			
-	#			if nodo.conectado_a().length == 0
-	#				n_zero += 1
-	#			end
-	#			
-	#			hijo_b.each do |candidato|
-	#				next if candidato.tipo != :concentrador
-	#				
-	#				#nodo.demanda.must_be :>, candidato.reserva
-	#			end
-	#		end
-	#		
-	#		puts "#{n} nodos desconectados de #{hijo_b.length} nodos"
-	#		puts "\t#{n_nil} eran nil"
-	#		puts "\t#{n_zero} eran cero"
-	#		puts "#{c} nodos desconectados de #{hijo_a.length} nodos"
-	#		puts "\t#{c_nil} eran nil"
-	#		puts "\t#{n_zero} eran cero"
-	#		
-	#	end
-	#end
+	describe "Al cruzar dos soluciones" do
+		it "El método recibe dos parametros que son dos Arrays" do
+			proc {@t.cruce(@elemento_a, @elemento_b)}.must_be_silent
+			proc {@t.cruce("Crazy string appear", @elemento_b)}.must_raise TypeError
+			proc {@t.cruce(@elemento_a, "Crazy string appear")}.must_raise TypeError
+		end
+		
+		it "Los arrays de entrada no puede estar vacíos" do
+			proc {@t.cruce(Array.new, @elemento_b)}.must_raise TypeError
+			proc {@t.cruce(@elemento_a, Array.new)}.must_raise TypeError
+		end
+		
+		it "Genera dos soluciones hijas" do
+			hijos = @t.cruce(@elemento_a, @elemento_b)
+			
+			hijos.length.must_equal 2
+		end
+		
+		it "La longitud de los hijos debe de ser igual al numero de nodos totales" do
+			hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
+			
+			hijo_a.length.must_equal @t.nodos.length
+			hijo_b.length.must_equal @t.nodos.length
+		end
+		
+		it "Los hijos deben de tener el mismo número de nodos concentradores que los padres" do
+			hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
+			
+			concentradores_a, * = @t.separar_nodos(hijo_a)
+			concentradores_b, * = @t.separar_nodos(hijo_b)
+			
+			puts " a--> #{concentradores_a.length}"
+			puts " b --> #{concentradores_b.length}"
+			
+			puts "nodos padre a"
+			@elemento_a.each do |c|
+				puts "#{c.id}" if c.tipo == :concentrador
+			end
+			
+			puts "nodos padre b"
+			@elemento_b.each do |c|
+				puts "#{c.id}" if c.tipo == :concentrador
+			end
+			
+			puts "Concentradores del primer hijo"
+			concentradores_a.each do |c|
+				puts "#{c.id}"
+			end
+			
+			puts "Concentradores del segundo hijo"
+			concentradores_b.each do |c|
+				puts "#{c.id}"
+			end
+			
+			concentradores_a.length.must_equal @t.numero_concentradores
+			concentradores_b.length.must_equal @t.numero_concentradores
+		end
+		
+		it "No existen clientes desconectados si un concentrador puede darles servicio" do
+			hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
+			
+			hijo_a.each do |nodo|
+				next if nodo.tipo.eql? :concentrador
+				next if nodo.conectado_a().length != 0
+				
+				hijo_a.each do |candidato|
+					next if candidato.tipo.eql? :cliente
+					
+					nodo.demanda.must_be :>, candidato.reserva
+				end
+			end
+			
+			hijo_b.each do |nodo|
+				next if nodo.tipo.eql? :concentrador
+				next if nodo.conectado_a().length != 0
+				
+				hijo.b.each do |candidato|
+					next if candidato.tipo.eql? :cliente
+					
+					nodo.demanda.must_be :>, candidato.reserva
+				end
+			end
+		end
+		
+		it "Si un cliente esta conectado a un concentrador, dicho concentrador estara conectado a el" do
+			hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
+			
+			hijo_a.each do |nodo|
+				next if nodo.tipo.eql? :concentrador
+				next if nodo.conectado_a().length.eql? 0
+				
+				concentrador = nodo.conectado_a()
+				concentrador = concentrador[0]
+				
+				concentrador.conectado_a().include?(nodo).must_equal true
+			end
+			
+			hijo_b.each do |nodo|
+				next if nodo.tipo.eql? :concentrador
+				next if nodo.conectado_a().length.eql? 0
+				
+				concentrador = nodo.conectado_a()
+				concentrador = concentrador[0]
+				
+				concentrador.conectado_a().include?(nodo).must_equal true
+			end
+		end
+	end
 end
