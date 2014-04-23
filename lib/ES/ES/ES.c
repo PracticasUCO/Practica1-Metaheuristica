@@ -20,9 +20,9 @@ VALUE method_probabilidad(VALUE self)
 	VALUE valorInicio = rb_iv_get(self, "@temperatura_inicio");
 	VALUE valorTemperatura = rb_iv_get(self, "@temperatura");
 	//VALUE valorAleatorio = rb_funcall(rb_cObject, method_rand, 1, valorInicio);
-	double valorAleatorio = drand48();
+	double valorAleatorio = rb_genrand_real();
 	
-	if(valorAleatorio <= NUM2DBL(valorTemperatura))
+	if(valorAleatorio <= NUM2DBL(valorTemperatura) / NUM2DBL(valorInicio))
 	{
 		return Qtrue;
 	}
