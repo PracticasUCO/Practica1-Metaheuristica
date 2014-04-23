@@ -171,7 +171,7 @@ module PHUB
 		
 		# Se compara con otro método
 		def <=>(other)
-			self.id.<=> other.id
+			self.coordenadas.<=> other.coordenadas
 		end
 		
 		# Desconecta completamente el nodo
