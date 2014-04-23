@@ -688,36 +688,15 @@ describe PHUBPrivate do
 		end
 		
 		it "Los hijos deben de tener el mismo número de nodos concentradores que los padres" do
-			hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
+			hijo_a, hijo_b = @t.cruce(@elemento_c, @elemento_d)
 			
+			con_a, * = @t.separar_nodos(@elemento_c)
+			con_b, * = @t.separar_nodos(@elemento_d)
 			concentradores_a, * = @t.separar_nodos(hijo_a)
 			concentradores_b, * = @t.separar_nodos(hijo_b)
 			
-			puts " a--> #{concentradores_a.length}"
-			puts " b --> #{concentradores_b.length}"
-			
-			puts "nodos padre a"
-			@elemento_a.each do |c|
-				puts "#{c.id}" if c.tipo == :concentrador
-			end
-			
-			puts "nodos padre b"
-			@elemento_b.each do |c|
-				puts "#{c.id}" if c.tipo == :concentrador
-			end
-			
-			puts "Concentradores del primer hijo"
-			concentradores_a.each do |c|
-				puts "#{c.id}"
-			end
-			
-			puts "Concentradores del segundo hijo"
-			concentradores_b.each do |c|
-				puts "#{c.id}"
-			end
-			
-			concentradores_a.length.must_equal @t.numero_concentradores
-			concentradores_b.length.must_equal @t.numero_concentradores
+			concentradores_a.length.must_equal con_a.length
+			concentradores_b.length.must_equal con_b.length
 		end
 		
 		it "No existen clientes desconectados si un concentrador puede darles servicio" do
@@ -738,7 +717,7 @@ describe PHUBPrivate do
 				next if nodo.tipo.eql? :concentrador
 				next if nodo.conectado_a().length != 0
 				
-				hijo.b.each do |candidato|
+				hijo_b.each do |candidato|
 					next if candidato.tipo.eql? :cliente
 					
 					nodo.demanda.must_be :>, candidato.reserva
