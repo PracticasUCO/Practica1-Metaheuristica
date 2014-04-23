@@ -45,7 +45,7 @@ class TestES < MiniTest::Test
 			end
 		end
 
-		assert_operator(aciertos, :<, fracasos)
+		assert_operator(aciertos, :<, fracasos, "No puede haber tantos aciertos con una probabilidad de #{@t_basic.coeficiente}")
 	end
 
 	def test_valores_constructor
