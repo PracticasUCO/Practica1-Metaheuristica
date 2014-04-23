@@ -507,7 +507,7 @@ VALUE desconectar_solucion(VALUE self, VALUE solucion)
 		rb_funcall(node, rb_intern("desconectar"), 0);
 	}
 	
-	return Qnil;
+	return solucion;
 }
 
 /*
@@ -521,23 +521,27 @@ Los nodos que no puedan conectarse se dejan sin conectar.
 VALUE phub_set_historical_connections(VALUE self, VALUE solucion, VALUE historical)
 {
 	VALUE types;
+	VALUE backup;
 	long int i;
 	
 	Check_Type(solucion, T_ARRAY);
 	Check_Type(historical, T_HASH);
 	
-	if(RARRAY_LEN(solucion) == 0)
+	backup = rb_ary_dup(solucion);
+	
+	if(RARRAY_LEN(backup) == 0)
 	{
 		rb_raise(rb_eTypeError, "No se pueden establecer conexiones en una solución nula.\n");
 	}
 	
-	types = phub_get_types(self, solucion);
-	desconectar_solucion(self, solucion);
+	types = phub_get_types(self, backup);
+	desconectar_solucion(self, backup);
 	
-	for(i = 0; i < RARRAY_LEN(solucion); i++)
+	for(i = 0; i < RARRAY_LEN(backup); i++)
 	{
-		VALUE nodo = rb_ary_entry(solucion, i);
+		VALUE nodo = rb_ary_entry(backup, i);
 		VALUE concentrador_destino;
+		VALUE conectados;
 		
 		//Deteccion de errores
 		if(rb_obj_is_kind_of(nodo, CBasicPHubNode) == Qfalse)
@@ -558,18 +562,30 @@ VALUE phub_set_historical_connections(VALUE self, VALUE solucion, VALUE historic
 		}
 		
 		//El nodo es un cliente
-		concentrador_destino = rb_hash_aref(historical, nodo);
-		concentrador_destino = rb_ary_entry(concentrador_destino, 0);
+		conectados = rb_hash_aref(historical, nodo);
+		concentrador_destino = rb_ary_entry(conectados, 0);
+		
+		if(TYPE(concentrador_destino) == T_NIL)
+		{
+			continue;
+		}
+		
+		if(rb_obj_is_kind_of(concentrador_destino, CBasicPHubNode) == Qfalse)
+		{
+			VALUE error = rb_funcall(concentrador_destino, rb_intern("class"), 0);
+			error = rb_funcall(error, rb_intern("name"), 0);
+			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion: %s\n", StringValueCStr(error));
+		}
 		
 		if(method_se_puede_conectar(nodo, concentrador_destino) == Qtrue)
 		{
 			method_conectar_a(nodo, concentrador_destino);
 			method_conectar_a(concentrador_destino, nodo);
-			rb_ary_store(solucion, i, nodo);
+			rb_ary_store(backup, i, nodo);
 		}
 	}
-	
-	return solucion;
+
+	return backup;
 }
 
 /*
@@ -648,27 +664,32 @@ VALUE phub_set_random_connections(VALUE self, VALUE solucion)
 	VALUE tipos;
 	VALUE conexiones;
 	VALUE candidatos; //Concentradores candidatos si se diera el caso
+	VALUE backup;
 	long int i;
 	long int j;
 	long int rand_number;
+	long int cnt = 0;
+	
 	Check_Type(solucion, T_ARRAY);
 	
-	if(RARRAY_LEN(solucion) == 0)
+	backup = rb_ary_dup(solucion);
+	
+	if(RARRAY_LEN(backup) == 0)
 	{
 		rb_raise(rb_eTypeError, "No se pueden realizar conexiones en una solución vacía.\n");
 	}
 	
 	//Se comprueban las conexiones de cada nodo
-	conexiones = phub_get_connections(self, solucion);
+	conexiones = phub_get_connections(self, backup);
 	//Se clasifican los nodos
-	tipos = phub_get_types(self, solucion);
+	tipos = phub_get_types(self, backup);
 	
 	candidatos = rb_ary_new();
 	
 	//Se conectan los nodos de forma aleatoria
-	for(i = 0; i < RARRAY_LEN(solucion); i++)
+	for(i = 0; i < RARRAY_LEN(backup); i++)
 	{
-		VALUE nodo = rb_ary_entry(solucion, i);
+		VALUE nodo = rb_ary_entry(backup, i);
 		
 		//Comprobación de que se trata de un CapacitedPHubNode
 		if(rb_obj_is_kind_of(nodo, CBasicPHubNode) == Qfalse)
@@ -693,9 +714,9 @@ VALUE phub_set_random_connections(VALUE self, VALUE solucion)
 		
 		//Si has llegado hasta aquí es que no tienes conexiones activas
 		//Te buscare un concentrador
-		for(j = 0; j < RARRAY_LEN(solucion); j++)
+		for(j = 0; j < RARRAY_LEN(backup); j++)
 		{
-			VALUE concentrador = rb_ary_entry(solucion, j);
+			VALUE concentrador = rb_ary_entry(backup, j);
 			
 			//El concentrador debe ser también un CapacitedPHubNode
 			if(rb_obj_is_kind_of(concentrador, CBasicPHubNode) == Qfalse)
@@ -722,22 +743,23 @@ VALUE phub_set_random_connections(VALUE self, VALUE solucion)
 			VALUE indice_concentrador;
 			rand_number = rb_genrand_ulong_limited(RARRAY_LEN(candidatos) - 1);
 			indice_concentrador = rb_ary_entry(candidatos, rand_number);
-			concentrador_finalista = rb_ary_entry(solucion, NUM2INT(indice_concentrador));
+			concentrador_finalista = rb_ary_entry(backup, NUM2INT(indice_concentrador));
 			
 			//Se realiza la conexion entre los dos nodos
 			method_conectar_a(nodo, concentrador_finalista);
 			method_conectar_a(concentrador_finalista, nodo);
 			
 			//Se almacena el resultado
-			rb_ary_store(solucion, i, nodo);
-			rb_ary_store(solucion, NUM2INT(indice_concentrador), concentrador_finalista);
+			rb_ary_store(backup, i, nodo);
+			rb_ary_store(backup, NUM2INT(indice_concentrador), concentrador_finalista);
 			
 			//Se libera la memoria del vector de candidatos
 			rb_ary_clear(candidatos);
+			cnt++;
 		}
 	}
 	
-	return solucion;
+	return backup;
 }
 
 /*
@@ -811,10 +833,12 @@ VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b
 		
 		if(i < particion_a)
 		{
+			rb_funcall(concentrador, rb_intern("set_tipo"), 1, ID2SYM(rb_intern("concentrador")));
 			rb_ary_push(mezcla_a, concentrador);
 		}
 		else
 		{
+			rb_funcall(concentrador, rb_intern("set_tipo"), 1, ID2SYM(rb_intern("concentrador")));
 			rb_ary_push(mezcla_b, concentrador);
 		}
 	}
@@ -833,10 +857,12 @@ VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b
 		
 		if(i < particion_b)
 		{
+			rb_funcall(concentrador, rb_intern("set_tipo"), 1, ID2SYM(rb_intern("concentrador")));
 			rb_ary_push(mezcla_a, concentrador);
 		}
 		else
 		{
+			rb_funcall(concentrador, rb_intern("set_tipo"), 1, ID2SYM(rb_intern("concentrador")));
 			rb_ary_push(mezcla_b, concentrador);
 		}
 	}
@@ -918,45 +944,84 @@ VALUE phub_get_nodes(VALUE self, VALUE solucion)
 	return hash;
 }
 
+VALUE phub_get_coordenadas(VALUE self, VALUE solucion)
+{
+	VALUE lista = rb_hash_new();
+	long int i;
+	
+	for(i = 0; RARRAY_LEN(solucion); i++)
+	{
+		VALUE nodo = rb_ary_entry(solucion, i);
+		VALUE coordenadas = rb_iv_get(nodo, "@coordenadas");
+		rb_hash_aset(lista, coordenadas, Qtrue);
+	}
+	
+	return lista;
+}
+
+VALUE phub_convertir_a_concentradores(VALUE self, VALUE ary)
+{
+	long int i;
+	VALUE copia;
+	
+	Check_Type(ary, T_ARRAY);
+	
+	copia = rb_ary_dup(ary);
+	
+	for(i = 0; i < RARRAY_LEN(copia); i++)
+	{
+		VALUE nodo = rb_ary_entry(copia, i);
+		
+		if(rb_funcall(nodo, rb_intern("tipo"), 0) == ID2SYM(rb_intern("cliente")))
+		{
+			rb_funcall(nodo, rb_intern("tipo="), 1, ID2SYM(rb_intern("concentrador")));
+			rb_ary_store(copia, i, nodo);
+		}
+	}
+	
+	return copia;
+}
+
 /*
 Añade los clientes necesarios a la solucion hasta que
-tenga todos los nodos posibles
+tenga todos los nodos posibles.
 */
 VALUE phub_add_clients(VALUE self, VALUE solucion)
 {
 	VALUE lista_nodos = rb_iv_get(self, "@nodos");
-	VALUE nodos_solucion;
 	long int i;
-	
+	long int j;
 	Check_Type(solucion, T_ARRAY);
 	
-	nodos_solucion = phub_get_nodes(self, solucion);
+	i = RARRAY_LEN(lista_nodos) - RARRAY_LEN(solucion);
 	
-	for(i = 0; i < RARRAY_LEN(lista_nodos); i++)
+	j = 0;
+	
+	
+	while(i > 0)
 	{
-		VALUE item = rb_ary_entry(lista_nodos, i);
+		VALUE item = rb_ary_entry(lista_nodos, j);
+		j++;
 		
-		//Deteccion de errores
-		if(rb_obj_is_kind_of(item, CBasicPHubNode) == Qfalse)
+		if(j == RARRAY_LEN(lista_nodos))
 		{
-			VALUE error = rb_funcall(item, rb_intern("class"), 0);
-			error = rb_funcall(error, rb_intern("name"), 0);
-			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion: %s\n", StringValueCStr(error));
+			j = 0;
 		}
 		
-		if(rb_hash_aref(nodos_solucion, item) == Qfalse)
+		if(rb_ary_includes(solucion, item) == Qfalse)
 		{
-			rb_funcall(item, rb_intern("set_tipo"), 1, ID2SYM(rb_intern("cliente")));
-			
+			rb_funcall(item, rb_intern("tipo="), 1, ID2SYM(rb_intern("cliente")));
 			rb_ary_push(solucion, item);
-		}
-		
-		if(RARRAY_LEN(solucion) == RARRAY_LEN(lista_nodos))
-		{
-			break;
+			i--;
+			
+			if(rb_funcall(item, rb_intern("tipo"), 0) == ID2SYM(rb_intern("concentrador")))
+			{
+				fprintf(stderr, "He añadido un error en la solucion\n");
+				i++;
+			}
 		}
 	}
-
+	
 	return solucion;
 }
 
@@ -1007,6 +1072,7 @@ VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
 	hijo_a = phub_set_historical_connections(self, hijo_a, historical_connections_a);
 	hijo_b = phub_set_historical_connections(self, hijo_b, historical_connections_b);
 	
+	
 	//Se rellenan las conexiones restantes de forma aleatoria
 	hijo_a = phub_set_random_connections(self, hijo_a);
 	hijo_b = phub_set_random_connections(self, hijo_b);
@@ -1040,4 +1106,6 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "evaluar_conjunto_soluciones", phub_evaluar_conjunto_soluciones, 1);
 	rb_define_private_method(class_phub, "get_nodes", phub_get_nodes, 1);
 	rb_define_private_method(class_phub, "add_clients", phub_add_clients, 1);
+	rb_define_private_method(class_phub, "get_coordenadas", phub_get_coordenadas,1);
+	rb_define_private_method(class_phub, "convertir_a_concentradores", phub_convertir_a_concentradores, 1);
 }
