@@ -41,6 +41,14 @@ VALUE phub_separar_nodos(VALUE self, VALUE solucion)
 		VALUE item = rb_ary_entry(solucion, i);
 		VALUE tipo = rb_funcall(item, rb_intern("tipo"), 0);
 		
+		//Comprobación de errores
+		if(rb_obj_is_kind_of(item, CBasicPHubNode) == Qfalse)
+		{
+			VALUE error_detectado = rb_funcall(item, rb_intern("class"), 0);
+			error_detectado = rb_funcall(error_detectado, rb_intern("name"), 0);
+			rb_raise(rb_eTypeError, "La solución contiene nodos que no son CapacitedPHubNodes. Detectado %s\n", StringValueCStr(error_detectado));
+		}
+		
 		if(tipo == sym_concentrador)
 		{
 			rb_ary_push(concentradores, item);
@@ -402,6 +410,14 @@ VALUE phub_get_connections(VALUE self, VALUE solucion)
 	{
 		VALUE nodo = rb_ary_entry(solucion, i);
 		VALUE connected = rb_iv_get(nodo, "@connected");
+		
+		//Comprobacion del contenido de la solucion
+		if(rb_obj_is_kind_of(nodo, CBasicPHubNode) == Qfalse)
+		{
+			VALUE error = rb_funcall(nodo, rb_intern("class"), 0);
+			error = rb_funcall(error, rb_intern("name"), 0);
+			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion: %s\n", StringValueCStr(error));
+		}
 			
 		//Comprobar si es necesario
 		if(TYPE(connected) == T_ARRAY)
@@ -441,6 +457,14 @@ VALUE phub_get_types(VALUE self, VALUE solucion)
 	{
 		VALUE nodo = rb_ary_entry(solucion, i);
 		
+		//Comprobacion de errores
+		if(rb_obj_is_kind_of(nodo, CBasicPHubNode) == Qfalse)
+		{
+			VALUE error = rb_funcall(nodo, rb_intern("class"), 0);
+			error = rb_funcall(error, rb_intern("name"), 0);
+			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion: %s\n", StringValueCStr(error));
+		}
+		
 		if(rb_funcall(nodo, rb_intern("tipo"), 0) == ID2SYM(rb_intern("cliente")))
 		{
 			rb_hash_aset(types, nodo, Qfalse);
@@ -471,6 +495,14 @@ VALUE desconectar_solucion(VALUE self, VALUE solucion)
 	for(i = 0; i < RARRAY_LEN(solucion); i++)
 	{
 		VALUE node = rb_ary_entry(solucion, i);
+		
+		//Deteccion de errores
+		if(rb_obj_is_kind_of(node, CBasicPHubNode) == Qfalse)
+		{
+			VALUE error = rb_funcall(node, rb_intern("class"), 0);
+			error = rb_funcall(error, rb_intern("name"), 0);
+			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion: %s\n", StringValueCStr(error));
+		}
 		
 		rb_funcall(node, rb_intern("desconectar"), 0);
 	}
@@ -507,6 +539,14 @@ VALUE phub_set_historical_connections(VALUE self, VALUE solucion, VALUE historic
 		VALUE nodo = rb_ary_entry(solucion, i);
 		VALUE concentrador_destino;
 		
+		//Deteccion de errores
+		if(rb_obj_is_kind_of(nodo, CBasicPHubNode) == Qfalse)
+		{
+			VALUE error = rb_funcall(nodo, rb_intern("class"), 0);
+			error = rb_funcall(error, rb_intern("name"), 0);
+			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion: %s\n", StringValueCStr(error));
+		}
+		
 		if(rb_hash_aref(types, nodo) == Qtrue) //El nodo es un concentrador
 		{
 			continue;
@@ -525,10 +565,11 @@ VALUE phub_set_historical_connections(VALUE self, VALUE solucion, VALUE historic
 		{
 			method_conectar_a(nodo, concentrador_destino);
 			method_conectar_a(concentrador_destino, nodo);
+			rb_ary_store(solucion, i, nodo);
 		}
 	}
 	
-	return Qnil;
+	return solucion;
 }
 
 /*
@@ -560,6 +601,22 @@ VALUE phub_merge(VALUE self, VALUE solucion_a, VALUE solucion_b)
 		VALUE item_mayor = rb_ary_entry(mayor, i);
 		VALUE item_menor = rb_ary_entry(menor, i);
 		
+		//Deteccion de errores
+		if(rb_obj_is_kind_of(item_mayor, CBasicPHubNode) == Qfalse)
+		{
+			VALUE error = rb_funcall(item_mayor, rb_intern("class"), 0);
+			error = rb_funcall(error, rb_intern("name"), 0);
+			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion_a: %s\n", StringValueCStr(error));
+		}
+		
+		//Deteccion de errores
+		if(rb_obj_is_kind_of(item_menor, CBasicPHubNode) == Qfalse)
+		{
+			VALUE error = rb_funcall(item_menor, rb_intern("class"), 0);
+			error = rb_funcall(error, rb_intern("name"), 0);
+			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion_b: %s\n", StringValueCStr(error));
+		}
+		
 		rb_ary_push(resultado, item_mayor);
 		rb_ary_push(resultado, item_menor);
 	}
@@ -567,6 +624,14 @@ VALUE phub_merge(VALUE self, VALUE solucion_a, VALUE solucion_b)
 	for(i = RARRAY_LEN(menor); i < RARRAY_LEN(mayor); i++)
 	{
 		VALUE item = rb_ary_entry(mayor, i);
+		
+		//Deteccion de errores
+		if(rb_obj_is_kind_of(item, CBasicPHubNode) == Qfalse)
+		{
+			VALUE error = rb_funcall(item, rb_intern("class"), 0);
+			error = rb_funcall(error, rb_intern("name"), 0);
+			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion: %s\n", StringValueCStr(error));
+		}
 		
 		rb_ary_push(resultado, item);
 	}
@@ -580,54 +645,99 @@ mantenerlos.
 */
 VALUE phub_set_random_connections(VALUE self, VALUE solucion)
 {
-	VALUE conjunto;
-	VALUE concentradores;
-	VALUE clientes;
+	VALUE tipos;
+	VALUE conexiones;
+	VALUE candidatos; //Concentradores candidatos si se diera el caso
 	long int i;
+	long int j;
+	long int rand_number;
 	Check_Type(solucion, T_ARRAY);
 	
-	conjunto = phub_separar_nodos(self, solucion);
-	
-	concentradores = rb_ary_entry(conjunto, 0);
-	clientes = rb_ary_entry(conjunto, 1);
-	
-	for(i = 0; i < RARRAY_LEN(clientes); i++)
+	if(RARRAY_LEN(solucion) == 0)
 	{
-		VALUE cliente = rb_ary_entry(clientes, i);
-		VALUE number_concentrador = rb_ary_new();
-		long int j;
-		long int numero_afortunado;
+		rb_raise(rb_eTypeError, "No se pueden realizar conexiones en una solución vacía.\n");
+	}
+	
+	//Se comprueban las conexiones de cada nodo
+	conexiones = phub_get_connections(self, solucion);
+	//Se clasifican los nodos
+	tipos = phub_get_types(self, solucion);
+	
+	candidatos = rb_ary_new();
+	
+	//Se conectan los nodos de forma aleatoria
+	for(i = 0; i < RARRAY_LEN(solucion); i++)
+	{
+		VALUE nodo = rb_ary_entry(solucion, i);
 		
-		if(method_esta_conectado(cliente) == Qtrue)
+		//Comprobación de que se trata de un CapacitedPHubNode
+		if(rb_obj_is_kind_of(nodo, CBasicPHubNode) == Qfalse)
+		{
+			VALUE error = rb_funcall(nodo, rb_intern("class"), 0);
+			error = rb_funcall(error, rb_intern("name"), 0);
+			rb_raise(rb_eTypeError, "Detectado contenido erroneo en la solución: %s\n", StringValueCStr(error));
+		}
+		
+		//Comprobación de que no se trata de un concentrador
+		if(rb_hash_aref(tipos, nodo) == Qtrue)
 		{
 			continue;
 		}
 		
-		for(j = 0; j < RARRAY_LEN(concentradores); j++)
+		//Ya se que es un cliente de CapacitedPHubNode
+		//Ahora a comprobar si esta conectado
+		if(RARRAY_LEN(rb_hash_aref(conexiones, nodo)) != 0)
 		{
-			VALUE concentrador = rb_ary_entry(concentradores, j);
+			continue;
+		}
+		
+		//Si has llegado hasta aquí es que no tienes conexiones activas
+		//Te buscare un concentrador
+		for(j = 0; j < RARRAY_LEN(solucion); j++)
+		{
+			VALUE concentrador = rb_ary_entry(solucion, j);
 			
-			if(method_se_puede_conectar(cliente, concentrador) == Qtrue)
+			//El concentrador debe ser también un CapacitedPHubNode
+			if(rb_obj_is_kind_of(concentrador, CBasicPHubNode) == Qfalse)
 			{
-				rb_ary_push(number_concentrador, INT2NUM(j));
+				VALUE error = rb_funcall(concentrador, rb_intern("class"), 0);
+				error = rb_funcall(error, rb_intern("name"), 0);
+				rb_raise(rb_eTypeError, "Detectado contenido erroneo en la solución: %s\n", StringValueCStr(error));
+			}
+			
+			//Se comprueba si la conexion es posible
+			if(method_se_puede_conectar(nodo, concentrador) == Qtrue)
+			{
+				//Se puede por lo que lo añado su indice a lista
+				rb_ary_push(candidatos, INT2NUM(j));
 			}
 		}
 		
-		if(RARRAY_LEN(number_concentrador) > 0)
+		//Si la lista de candidatos es mayor que cero significa que
+		//el nodo puede conectarse, se escoge de manera aleatoria a
+		//quien
+		if(RARRAY_LEN(candidatos) > 0)
 		{
-			VALUE concentrador_afortunado;
-			numero_afortunado = rb_genrand_ulong_limited(RARRAY_LEN(number_concentrador) - 1);
-			concentrador_afortunado = rb_ary_entry(concentradores, NUM2INT(numero_afortunado));
+			VALUE concentrador_finalista;
+			VALUE indice_concentrador;
+			rand_number = rb_genrand_ulong_limited(RARRAY_LEN(candidatos) - 1);
+			indice_concentrador = rb_ary_entry(candidatos, rand_number);
+			concentrador_finalista = rb_ary_entry(solucion, NUM2INT(indice_concentrador));
 			
-			method_conectar_a(cliente, concentrador_afortunado);
-			method_conectar_a(concentrador_afortunado, cliente);
+			//Se realiza la conexion entre los dos nodos
+			method_conectar_a(nodo, concentrador_finalista);
+			method_conectar_a(concentrador_finalista, nodo);
 			
-			rb_ary_store(clientes, i, cliente);
-			rb_ary_store(concentradores, j, NUM2INT(numero_afortunado));
+			//Se almacena el resultado
+			rb_ary_store(solucion, i, nodo);
+			rb_ary_store(solucion, NUM2INT(indice_concentrador), concentrador_finalista);
+			
+			//Se libera la memoria del vector de candidatos
+			rb_ary_clear(candidatos);
 		}
 	}
 	
-	return phub_merge(self, clientes, concentradores);
+	return solucion;
 }
 
 /*
@@ -691,6 +801,14 @@ VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b
 	{
 		VALUE concentrador = rb_ary_entry(concentradores_a, i);
 		
+		//Deteccion de errores
+		if(rb_obj_is_kind_of(concentrador, CBasicPHubNode) == Qfalse)
+		{
+			VALUE error = rb_funcall(concentrador, rb_intern("class"), 0);
+			error = rb_funcall(error, rb_intern("name"), 0);
+			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion: %s\n", StringValueCStr(error));
+		}
+		
 		if(i < particion_a)
 		{
 			rb_ary_push(mezcla_a, concentrador);
@@ -704,6 +822,14 @@ VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b
 	for(i = 0; i < (unsigned long int) RARRAY_LEN(concentradores_b); i++)
 	{
 		VALUE concentrador = rb_ary_entry(concentradores_b, i);
+		
+		//Deteccion de errores
+		if(rb_obj_is_kind_of(concentrador, CBasicPHubNode) == Qfalse)
+		{
+			VALUE error = rb_funcall(concentrador, rb_intern("class"), 0);
+			error = rb_funcall(error, rb_intern("name"), 0);
+			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion: %s\n", StringValueCStr(error));
+		}
 		
 		if(i < particion_b)
 		{
@@ -767,6 +893,15 @@ VALUE phub_get_nodes(VALUE self, VALUE solucion)
 	for(i = 0; i < RARRAY_LEN(solucion); i++)
 	{
 		VALUE nodo = rb_ary_entry(solucion, i);
+		
+		//Deteccion de errores
+		if(rb_obj_is_kind_of(nodo, CBasicPHubNode) == Qfalse)
+		{
+			VALUE error = rb_funcall(nodo, rb_intern("class"), 0);
+			error = rb_funcall(error, rb_intern("name"), 0);
+			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion: %s\n", StringValueCStr(error));
+		}
+		
 		rb_hash_aset(hash, nodo, Qtrue);
 	}
 	
@@ -801,13 +936,27 @@ VALUE phub_add_clients(VALUE self, VALUE solucion)
 	{
 		VALUE item = rb_ary_entry(lista_nodos, i);
 		
+		//Deteccion de errores
+		if(rb_obj_is_kind_of(item, CBasicPHubNode) == Qfalse)
+		{
+			VALUE error = rb_funcall(item, rb_intern("class"), 0);
+			error = rb_funcall(error, rb_intern("name"), 0);
+			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion: %s\n", StringValueCStr(error));
+		}
+		
 		if(rb_hash_aref(nodos_solucion, item) == Qfalse)
 		{
 			rb_funcall(item, rb_intern("set_tipo"), 1, ID2SYM(rb_intern("cliente")));
 			
 			rb_ary_push(solucion, item);
 		}
+		
+		if(RARRAY_LEN(solucion) == RARRAY_LEN(lista_nodos))
+		{
+			break;
+		}
 	}
+
 	return solucion;
 }
 
@@ -851,16 +1000,16 @@ VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
 	hijo_b = rb_ary_entry(auxiliar, 1);
 	
 	//Se rellena la solucion con los clientes que faltan
-	phub_add_clients(self, hijo_a);
-	phub_add_clients(self, hijo_b);
+	hijo_a = phub_add_clients(self, hijo_a);
+	hijo_b = phub_add_clients(self, hijo_b);
 	
 	//Se añaden las conexiones historicas
-	phub_set_historical_connections(self, hijo_a, historical_connections_a);
-	phub_set_historical_connections(self, hijo_b, historical_connections_b);
+	hijo_a = phub_set_historical_connections(self, hijo_a, historical_connections_a);
+	hijo_b = phub_set_historical_connections(self, hijo_b, historical_connections_b);
 	
 	//Se rellenan las conexiones restantes de forma aleatoria
-	phub_set_random_connections(self, hijo_a);
-	phub_set_random_connections(self, hijo_b);
+	hijo_a = phub_set_random_connections(self, hijo_a);
+	hijo_b = phub_set_random_connections(self, hijo_b);
 	
 	//Se construye la solucion final y se devuelve
 	empaquetado = rb_ary_new();
