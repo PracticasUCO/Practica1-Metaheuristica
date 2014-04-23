@@ -27,3 +27,5 @@ VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b
 VALUE phub_evaluar_conjunto_soluciones(VALUE self, VALUE conjunto_soluciones);
 VALUE phub_get_nodes(VALUE self, VALUE solucion);
 VALUE phub_add_clients(VALUE self, VALUE solucion);
+VALUE phub_convertir_a_concentradores(VALUE self, VALUE ary);
+VALUE phub_get_coordenadas(VALUE self, VALUE solucion);
