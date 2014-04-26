@@ -1086,6 +1086,120 @@ VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
 	return empaquetado;
 }
 
+/*
+Realiza una mutación de la solucion actual. Se intercambiar de forma
+aleatoria ciertos nodos clientes por concentradores. La probabilidad de
+cambio es de 3/numero_concentradores si el número de concentradores es
+mayor que tres y 1/3 en caso contrario.
+*/
+VALUE phub_operador_mutacion(VALUE self, VALUE solucion)
+{
+	int numero_concentradores = NUM2INT(rb_iv_get(self, "@numero_concentradores"));
+	double probabilidad_mutacion;
+	unsigned int mutaciones = 0; //Numero de mutaciones ocurridas
+	VALUE mutacion;
+	VALUE separacion;
+	VALUE clientes;
+	VALUE concentradores;
+	VALUE lista_numeros; //Para restaurar el equilibrio con los clientes
+	double p; //Valor de probabilidad
+	long int i;
+	
+	Check_Type(solucion, T_ARRAY);
+	
+	if(RARRAY_LEN(solucion) == 0)
+	{
+		rb_raise(rb_eTypeError, "No se puede mutar una solución vacía\n");
+	}
+	
+	separacion = phub_separar_nodos(self, solucion);
+	concentradores = rb_ary_entry(separacion, 0);
+	clientes = rb_ary_entry(separacion, 1);
+	
+	if(RARRAY_LEN(concentradores) == 0)
+	{
+		rb_raise(rb_eTypeError, "No se puede mutar una solución sin concentradores\n");
+	}
+	
+	if(RARRAY_LEN(clientes) == 0)
+	{
+		rb_raise(rb_eTypeError, "No se puede mutar una solución sin clientes\n");
+	}
+	
+	//Se establece la probabilidad de mutacion de un nodo
+	//concreto
+	if(numero_concentradores > 3)
+	{
+		probabilidad_mutacion = 3.0 / (double) numero_concentradores;
+	}
+	else
+	{
+		probabilidad_mutacion = 0.5;
+	}
+	
+	//Se inician las mutaciones
+	do //Nos aseguramos que siempre se produzca al menos una mutación
+	{
+		for(i = 0; i < RARRAY_LEN(concentradores); i++)
+		{
+			VALUE item = rb_ary_entry(concentradores, i);
+			
+			p = rb_genrand_real();
+			
+			if(p <= probabilidad_mutacion)
+			{
+				mutaciones++;
+				rb_funcall(item, rb_intern("tipo="), 1, ID2SYM(rb_intern("cliente")));
+				rb_ary_store(concentradores, i, item);
+			}
+		}
+		
+	} while (mutaciones == 0);
+	
+	//Generamos una lista de numeros con todos los indices
+	//de los clientes
+	lista_numeros = rb_ary_new();
+	
+	for(i = 0; i < RARRAY_LEN(clientes); i++)
+	{
+		rb_ary_push(clientes, INT2NUM(i));
+	}
+	
+	//Se equilibra la solucion mutando clientes
+	//en la misma proporcion que las mutaciones producidas
+	//en los concentradores
+	do
+	{
+		int indice_lista;
+		int indice_seleccionado;
+		VALUE item;
+		
+		indice_lista = rb_genrand_ulong_limited(RARRAY_LEN(lista_numeros) - 1);
+		indice_seleccionado = NUM2INT(rb_ary_entry(lista_numeros, indice_lista));
+		
+		item = rb_ary_entry(clientes, indice_seleccionado);
+		
+		rb_funcall(item, rb_intern("tipo="), 1, ID2SYM(rb_intern("concentradores")));
+		rb_ary_store(clientes, indice_seleccionado, item);
+		
+		rb_ary_delete(lista_numeros, INT2NUM(indice_seleccionado));
+		mutaciones--;
+	}
+	while(mutaciones > 0);
+	
+	//Se mezclan ambos nodos en una misma solución
+	mutacion = phub_merge(self, clientes, concentradores);
+	
+	//El proceso de mutación ha desconectado ciertos nodos
+	//(el método tipo= se encargaba de ello), por lo que
+	//los nodos desconectados los reconectamos de forma
+	//aleatoria
+	mutacion = phub_set_random_connections(self, mutacion);
+	
+	//Devolvemos la solución mutada
+	return mutacion;
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
@@ -1109,4 +1223,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "add_clients", phub_add_clients, 1);
 	rb_define_private_method(class_phub, "get_coordenadas", phub_get_coordenadas,1);
 	rb_define_private_method(class_phub, "convertir_a_concentradores", phub_convertir_a_concentradores, 1);
+	rb_define_private_method(class_phub, "mutar", phub_operador_mutacion, 1);
 }
