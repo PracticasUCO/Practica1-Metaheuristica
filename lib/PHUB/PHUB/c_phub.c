@@ -1094,8 +1094,7 @@ mayor que tres y 1/3 en caso contrario.
 */
 VALUE phub_operador_mutacion(VALUE self, VALUE solucion)
 {
-	int numero_concentradores = NUM2INT(rb_iv_get(self, "@numero_concentradores"));
-	double probabilidad_mutacion;
+	double probabilidad_mutacion = 0.5;
 	unsigned int mutaciones = 0; //Numero de mutaciones ocurridas
 	VALUE mutacion;
 	VALUE separacion;
@@ -1126,18 +1125,6 @@ VALUE phub_operador_mutacion(VALUE self, VALUE solucion)
 		rb_raise(rb_eTypeError, "No se puede mutar una solución sin clientes\n");
 	}
 	
-	//Se establece la probabilidad de mutacion de un nodo
-	//concreto
-	if(numero_concentradores > 3)
-	{
-		probabilidad_mutacion = 3.0 / (double) numero_concentradores;
-	}
-	else
-	{
-		probabilidad_mutacion = 0.5;
-	}
-	
-	fprintf(stderr, "aaaaaaaaaaaaaaaaaaaaaA\n");
 	//Se inician las mutaciones
 	do //Nos aseguramos que siempre se produzca al menos una mutación
 	{
@@ -1146,7 +1133,7 @@ VALUE phub_operador_mutacion(VALUE self, VALUE solucion)
 			VALUE item = rb_ary_entry(concentradores, i);
 			
 			p = rb_genrand_real();
-			
+
 			if(p <= probabilidad_mutacion)
 			{
 				mutaciones++;
@@ -1157,8 +1144,6 @@ VALUE phub_operador_mutacion(VALUE self, VALUE solucion)
 		
 	} while (mutaciones == 0);
 	
-	fprintf(stderr, "BBBBBBBBBBBBBBBBBBBBBBBBBBB\n");
-	
 	//Generamos una lista de numeros con todos los indices
 	//de los clientes
 	lista_numeros = rb_ary_new();
@@ -1167,7 +1152,6 @@ VALUE phub_operador_mutacion(VALUE self, VALUE solucion)
 	{
 		rb_ary_push(lista_numeros, INT2NUM(i));
 	}
-	fprintf(stderr, "CCCCCCCCCCCCCCCCCCCCCCCCCCC\n");
 	
 	//Se equilibra la solucion mutando clientes
 	//en la misma proporcion que las mutaciones producidas
@@ -1183,14 +1167,13 @@ VALUE phub_operador_mutacion(VALUE self, VALUE solucion)
 		
 		item = rb_ary_entry(clientes, indice_seleccionado);
 		
-		rb_funcall(item, rb_intern("tipo="), 1, ID2SYM(rb_intern("concentradores")));
+		rb_funcall(item, rb_intern("tipo="), 1, ID2SYM(rb_intern("concentrador")));
 		rb_ary_store(clientes, indice_seleccionado, item);
 		
 		rb_ary_delete(lista_numeros, INT2NUM(indice_seleccionado));
 		mutaciones--;
 	}
 	while(mutaciones > 0);
-	fprintf(stderr, "DDDDDDDDDDDDDDDDDDDDDDDDDDDD\n");
 	
 	//Se mezclan ambos nodos en una misma solución
 	mutacion = phub_merge(self, clientes, concentradores);
