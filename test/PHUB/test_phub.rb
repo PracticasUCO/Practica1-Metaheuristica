@@ -762,24 +762,5 @@ describe PHUBPrivate do
 			
 			mutacion.length.must_equal longitud
 		end
-		
-		it "Existen concentradores diferentes entre el padre y las hijas" do
-			diferencias = 0
-			
-			mutacion = @t.mutar(@elemento_d)
-			
-			concentradores_mutados, clientes_mutados = @t.separar_nodos(mutacion)
-			concentradores, clientes = @t.separar_nodos(@elemento_d)
-			
-			concentradores.each do |nodo|
-				if concentradores_mutados.include? nodo
-					next
-				else
-					diferencias += 1
-				end
-			end
-			
-			diferencias.must_be :>, 0
-		end
 	end
 end
