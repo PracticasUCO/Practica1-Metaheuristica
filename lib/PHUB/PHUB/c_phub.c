@@ -991,12 +991,13 @@ VALUE phub_add_clients(VALUE self, VALUE solucion)
 	VALUE lista_nodos = rb_iv_get(self, "@nodos");
 	long int i;
 	long int j;
+	
 	Check_Type(solucion, T_ARRAY);
+	
 	
 	i = RARRAY_LEN(lista_nodos) - RARRAY_LEN(solucion);
 	
 	j = 0;
-	
 	
 	while(i > 0)
 	{
