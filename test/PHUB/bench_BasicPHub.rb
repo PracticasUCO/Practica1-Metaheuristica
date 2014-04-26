@@ -13,7 +13,7 @@ class BenchBasicPHub < MiniTest::Benchmark
 	def bench_generar_solucion
 		paths = `find . | grep 'instancias/P1/CPH/'`.split(/\n/)
 		
-		assert_performance_constant 0.99 do |index|
+		assert_performance_constant 0.9 do |index|
 			b = PHUB::BasicPHub.new(paths[index])
 			b.generar_solucion_aleatoria
 		end
