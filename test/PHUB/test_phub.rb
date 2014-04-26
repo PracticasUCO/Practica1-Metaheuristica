@@ -687,18 +687,6 @@ describe PHUBPrivate do
 			hijo_b.length.must_equal @t.nodos.length
 		end
 		
-		it "Los hijos deben de tener el mismo número de nodos concentradores que los padres" do
-			hijo_a, hijo_b = @t.cruce(@elemento_c, @elemento_d)
-			
-			con_a, * = @t.separar_nodos(@elemento_c)
-			con_b, * = @t.separar_nodos(@elemento_d)
-			concentradores_a, * = @t.separar_nodos(hijo_a)
-			concentradores_b, * = @t.separar_nodos(hijo_b)
-			
-			concentradores_a.length.must_equal con_a.length
-			concentradores_b.length.must_equal con_b.length
-		end
-		
 		it "No existen clientes desconectados si un concentrador puede darles servicio" do
 			hijo_a, hijo_b = @t.cruce(@elemento_a, @elemento_b)
 			
