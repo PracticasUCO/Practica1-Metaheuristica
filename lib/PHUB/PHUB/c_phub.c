@@ -1137,6 +1137,7 @@ VALUE phub_operador_mutacion(VALUE self, VALUE solucion)
 		probabilidad_mutacion = 0.5;
 	}
 	
+	fprintf(stderr, "aaaaaaaaaaaaaaaaaaaaaA\n");
 	//Se inician las mutaciones
 	do //Nos aseguramos que siempre se produzca al menos una mutación
 	{
@@ -1156,14 +1157,17 @@ VALUE phub_operador_mutacion(VALUE self, VALUE solucion)
 		
 	} while (mutaciones == 0);
 	
+	fprintf(stderr, "BBBBBBBBBBBBBBBBBBBBBBBBBBB\n");
+	
 	//Generamos una lista de numeros con todos los indices
 	//de los clientes
 	lista_numeros = rb_ary_new();
 	
 	for(i = 0; i < RARRAY_LEN(clientes); i++)
 	{
-		rb_ary_push(clientes, INT2NUM(i));
+		rb_ary_push(lista_numeros, INT2NUM(i));
 	}
+	fprintf(stderr, "CCCCCCCCCCCCCCCCCCCCCCCCCCC\n");
 	
 	//Se equilibra la solucion mutando clientes
 	//en la misma proporcion que las mutaciones producidas
@@ -1186,6 +1190,7 @@ VALUE phub_operador_mutacion(VALUE self, VALUE solucion)
 		mutaciones--;
 	}
 	while(mutaciones > 0);
+	fprintf(stderr, "DDDDDDDDDDDDDDDDDDDDDDDDDDDD\n");
 	
 	//Se mezclan ambos nodos en una misma solución
 	mutacion = phub_merge(self, clientes, concentradores);

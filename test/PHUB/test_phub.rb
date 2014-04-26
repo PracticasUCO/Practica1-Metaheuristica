@@ -10,7 +10,7 @@ class PHUBPrivate < PHUB::PHUB
 	public :random_number, :separar_nodos, :torneo, :torneo_injusto, :ruleta, :seleccion, :get_connections
 	public :get_types, :desconectar_solucion, :set_historical_connections, :merge, :set_random_connections
 	public :mezclar_concentradores, :evaluar_conjunto_soluciones, :funcion_objetivo, :get_nodes, :add_clients
-	public :cruce
+	public :cruce, :mutar
 end
 
 describe PHUBPrivate do
@@ -735,6 +735,51 @@ describe PHUBPrivate do
 				
 				concentrador.conectado_a().include?(nodo).must_equal true
 			end
+		end
+	end
+	
+	describe "Al mutar una solución" do
+		it "Recibe un argumento de tipo Array" do
+			proc {@t.mutar(@elemento_c)}.must_be_silent
+			proc {@t.mutar("String")}.must_raise TypeError
+		end
+		
+		it "El array recibido como argumento no puede estar vacío" do
+			proc {@t.mutar(Array.new)}.must_raise TypeError
+		end
+		
+		it "Las soluciones padre deben de quedar intactas" do
+			backup = @elemento_c.dup
+			mutacion = @t.mutar(@elemento_c)
+			
+			mutacion.wont_equal @elemento_c
+			backup.must_equal @elemento_c
+		end
+		
+		it "La longitud de las soluciones hijas debe de ser la misma" do
+			longitud = @elemento_c.length
+			mutacion = @t.mutar(@elemento_c)
+			
+			mutacion.length.must_equal longitud
+		end
+		
+		it "Existen concentradores diferentes entre el padre y las hijas" do
+			diferencias = 0
+			
+			mutacion = @t.mutar(@elemento_d)
+			
+			concentradores_mutados, clientes_mutados = @t.separar_nodos(mutacion)
+			concentradores, clientes = @t.separar_nodos(@elemento_d)
+			
+			concentradores.each do |nodo|
+				if concentradores_mutados.include? nodo
+					next
+				else
+					diferencias += 1
+				end
+			end
+			
+			diferencias.must_be :>, 0
 		end
 	end
 end
