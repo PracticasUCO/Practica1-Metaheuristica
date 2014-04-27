@@ -120,5 +120,6 @@ ARGV.each do |argumento|
 	puts "Valor minimo esperado: #{lower_coste * n_clientes_min}"
 	puts "Valor maximo esperado: #{upper_coste * n_clientes}"
 	puts "Se espera el centro entre: #{lower_coste * n_clientes_min} - #{upper_coste * n_clientes_max}"
+	puts ""
 	
 end
