@@ -117,6 +117,14 @@ VALUE method_esta_conectado(VALUE self)
 {
 	VALUE conexion = rb_iv_get(self, "@connected");
 	
+	if(TYPE(conexion) == T_NIL)
+	{
+		conexion = rb_ary_new();
+		rb_iv_set(self, "@connected", conexion);
+		
+		return Qfalse;
+	}
+	
 	if(RARRAY_LEN(conexion) > 0)
 	{
 		return Qtrue;
