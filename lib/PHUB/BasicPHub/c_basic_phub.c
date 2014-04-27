@@ -24,6 +24,7 @@ VALUE rb_funcion_objetivo(VALUE self, VALUE solucion)
 		VALUE nodo = rb_ary_entry(solucion, i);
 		VALUE type = rb_iv_get(nodo, "@tipo");	
 		VALUE c = ID2SYM(rb_intern("cliente"));
+		
 		if (type == c)
 		{
 			VALUE destino = rb_funcall(nodo, conectado_a_method, 0);
@@ -40,7 +41,6 @@ VALUE rb_funcion_objetivo(VALUE self, VALUE solucion)
 		}	
 	}
 
-	suma /= RARRAY_LEN(solucion);
 	return DBL2NUM(suma);
 }
 
