@@ -94,7 +94,7 @@ class TestBasicPHub < MiniTest::Test
 	def test_funcion_objetivo
 		*, coste, solucion = @t.generar_solucion_aleatoria
 		
-		assert_operator(coste, :<, 3500)
-		assert_operator(coste, :>, 600)
+		assert_operator(coste, :<, 2825)
+		assert_operator(coste, :>, 144)
 	end
 end
