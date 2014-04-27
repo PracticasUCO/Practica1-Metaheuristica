@@ -29,7 +29,7 @@ class TestBasicPHub < MiniTest::Test
 	end
 	
 	def test_conexiones_solucion_completo
-		paths = `find . | grep 'instancias/CPH/'`.split(/\n/)
+		paths = `find . | grep 'instancias/P1/CPH/'`.split(/\n/)
 		
 		paths.each do |path|
 			t = PHUB::BasicPHub.new(path)
@@ -89,5 +89,12 @@ class TestBasicPHub < MiniTest::Test
 		soluciones.uniq!
 		
 		assert_operator(soluciones.length, :>=, (0.75 * repeticiones))
+	end
+	
+	def test_funcion_objetivo
+		*, coste, solucion = @t.generar_solucion_aleatoria
+		
+		assert_operator(coste, :<, 3500)
+		assert_operator(coste, :>, 600)
 	end
 end
