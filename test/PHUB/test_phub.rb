@@ -32,6 +32,17 @@ describe PHUBPrivate do
 			@lista << solucion
 			@costes[solucion] = coste
 		end
+		
+		# Comprobación inicial de que todos los valores estan dentro de rango
+		@coste_a.must_be :>, 372
+		@coste_a.must_be :<, 6650
+		@coste_b.must_be :>, 372
+		@coste_b.must_be :<, 6650
+		@coste_c.must_be :>, 372
+		@coste_c.must_be :<, 6650
+		@coste_d.must_be :>, 372
+		@coste_d.must_be :<, 6650
+		
 	end
 	
 	describe "Cuando se llama a random_number" do
@@ -409,6 +420,14 @@ describe PHUBPrivate do
 			end
 			
 		end
+		
+		it "Su coste pasa a ser cero" do
+			backup = @elemento_c.dup
+			@t.desconectar_solucion(backup)
+			coste = @t.funcion_objetivo(backup)
+			
+			coste.must_equal 0
+		end
 	end
 	
 	describe "Cuando se llama al método PHUB#set_historical_connections" do
@@ -451,6 +470,15 @@ describe PHUBPrivate do
 			@elemento_a.must_equal a_backup
 			@elemento_b.must_equal b_backup
 		end
+		
+		it "El coste de la solucion no excede los limites" do
+			concentradores, clientes = @t.separar_nodos(@elemento_a)
+			s = @t.merge(concentradores, clientes)
+			coste = @t.funcion_objetivo(s)
+			
+			coste.must_be :>, 372
+			coste.must_be :<, 6650
+		end
 	end
 	
 	describe "El método PHUB#set_random_connections" do
@@ -486,6 +514,15 @@ describe PHUBPrivate do
 				end
 			end
 			
+		end
+		
+		it "El coste de la solucion esta dentro del rango permitido" do
+			@t.desconectar_solucion(@elemento_d)
+			r = @t.set_random_connections(@elemento_d)
+			coste = @t.funcion_objetivo(r)
+			
+			coste.must_be :>, 372
+			coste.must_be :<, 6650
 		end
 	end
 	
@@ -751,6 +788,8 @@ describe PHUBPrivate do
 		it "Las soluciones padre deben de quedar intactas" do
 			backup = @elemento_c.dup
 			mutacion = @t.mutar(@elemento_c)
+			
+			coste = @t.funcion_objetivo(mutacion)
 			
 			mutacion.wont_equal @elemento_c
 			backup.must_equal @elemento_c
