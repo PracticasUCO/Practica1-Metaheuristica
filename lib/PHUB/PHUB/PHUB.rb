@@ -17,6 +17,7 @@ module PHUB
 			@probability_crossing = 0.9
 			@probability_mutation = 0.15
 			@number_evaluations = @nodos.length * 100
+			@evaluaciones_sin_mejora = @nodos.length * 10
 		end
 		
 		# Ordena los elementos de una lista de soluciones según su fitness
@@ -153,7 +154,7 @@ module PHUB
 						evaluaciones_sin_mejora += 1
 					end
 					
-					if evaluaciones_sin_mejora == 500
+					if evaluaciones_sin_mejora == @evaluaciones_sin_mejora
 						evaluaciones_sin_mejora = 0
 						poblacion_actual, costes_poblacion = reiniciar_poblacion(poblacion_actual, mejor_individuo, mejor_coste)
 						puts "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
