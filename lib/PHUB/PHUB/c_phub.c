@@ -1217,6 +1217,23 @@ VALUE phub_diferencia_soluciones(VALUE self, VALUE solucionA, VALUE solucionB)
 	return resultado;
 }
 
+VALUE phub_convertir_a_clientes(VALUE self, VALUE solucion)
+{
+	VALUE backup;
+	long int i;
+	
+	backup = rb_ary_dup(solucion);
+	
+	for(i = 0; i < RARRAY_LEN(backup); i++)
+	{
+		VALUE nodo = rb_ary_entry(backup, i);
+		rb_funcall(nodo, rb_intern("tipo="), 1, ID2SYM(rb_intern("cliente")));
+		rb_ary_store(backup, i, nodo);
+	}
+	
+	return backup;
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
@@ -1242,4 +1259,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "convertir_a_concentradores", phub_convertir_a_concentradores, 1);
 	rb_define_private_method(class_phub, "mutar", phub_operador_mutacion, 1);
 	rb_define_private_method(class_phub, "diferencia_soluciones", phub_diferencia_soluciones, 2);
+	rb_define_private_method(class_phub, "convertir_a_clientes", phub_convertir_a_clientes, 1);
 }
