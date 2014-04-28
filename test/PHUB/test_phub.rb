@@ -578,10 +578,6 @@ describe PHUBPrivate do
 			proc {@t.evaluar_conjunto_soluciones("Crazy string appear")}.must_raise TypeError
 		end
 		
-		it "El Array de entrada no puede estar vacío" do
-			proc {@t.evaluar_conjunto_soluciones(Array.new)}.must_raise TypeError
-		end
-		
 		it "Devuelve una tabla de hash" do
 			lista = Array.new
 			lista << @elemento_a << @elemento_b << @elemento_c << @elemento_d
@@ -800,6 +796,12 @@ describe PHUBPrivate do
 			mutacion = @t.mutar(@elemento_c)
 			
 			mutacion.length.must_equal longitud
+		end
+	end
+	
+	describe "Algoritmo evolutivo estacionario" do
+		it "Pruebas especificas" do
+			@t.algoritmo_evolutivo_estacionario()
 		end
 	end
 end
