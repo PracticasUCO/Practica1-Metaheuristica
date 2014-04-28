@@ -776,13 +776,19 @@ VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b
 	VALUE concentradores_a;
 	VALUE concentradores_b;
 	
-	VALUE mezcla_a;
-	VALUE mezcla_b;
+	VALUE hijo_a;
+	VALUE hijo_b;
 	
 	VALUE empaquetado;
 	
-	unsigned long int particion_a;
-	unsigned long int particion_b;
+	VALUE busqueda_diferencias;
+	VALUE elementos_diferentes;
+	VALUE elementos_iguales;
+	VALUE diferentes_a;
+	VALUE diferentes_b;
+	
+	unsigned long int particion;
+	unsigned long int estado_p = 0;
 	
 	unsigned long int i;
 	
@@ -799,10 +805,6 @@ VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b
 		rb_raise(rb_eTypeError, "No se puede mezclar una solución vacía\n");
 	}
 	
-	//Desconexion de las soluciones
-	desconectar_solucion(self, solucion_a);
-	desconectar_solucion(self, solucion_b);
-	
 	//Separación de los clientes y concentradores
 	conjunto_a = phub_separar_nodos(self, solucion_a);
 	conjunto_b = phub_separar_nodos(self, solucion_b);
@@ -810,67 +812,97 @@ VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b
 	concentradores_a = rb_ary_entry(conjunto_a, 0);
 	concentradores_b = rb_ary_entry(conjunto_b, 0);
 	
-	//Elección de los limites de las particiones
-	particion_a = RARRAY_LEN(concentradores_a) / 2;
-	particion_b = particion_a;
+	busqueda_diferencias = phub_diferencia_soluciones(self, concentradores_a, concentradores_b);
+	elementos_iguales = rb_ary_entry(busqueda_diferencias, 0);
+	elementos_diferentes = rb_ary_entry(busqueda_diferencias, 1);
 	
-	//Preparando las soluciones
-	mezcla_a = rb_ary_new();
-	mezcla_b = rb_ary_new();
+	diferentes_a = phub_get_subconjunto(self, concentradores_a, elementos_diferentes);
+	diferentes_b = phub_get_subconjunto(self, concentradores_b, elementos_diferentes);
 	
-	//Mezclando
-	for(i = 0; i < (unsigned long int) RARRAY_LEN(concentradores_a); i++)
+	//Creacion inicial de los hijos
+	hijo_a = rb_ary_dup(solucion_a);
+	hijo_b = rb_ary_dup(solucion_b);
+	
+	//Desconexion de las soluciones
+	desconectar_solucion(self, hijo_a);
+	desconectar_solucion(self, hijo_b);
+	
+	//Seleccion de la particion
+	particion = RARRAY_LEN(elementos_diferentes) / 2;
+	
+	hijo_a = phub_convertir_a_clientes(self, hijo_a);
+	hijo_b = phub_convertir_a_clientes(self, hijo_b);
+	
+	//Cambiando estados
+	for(i = 0; i < RARRAY_LEN(hijo_a); i++)
 	{
-		VALUE concentrador = rb_ary_entry(concentradores_a, i);
+		VALUE nodo = rb_ary_entry(hijo_a, i);
 		
-		//Deteccion de errores
-		if(rb_obj_is_kind_of(concentrador, CBasicPHubNode) == Qfalse)
+		if(rb_ary_includes(elementos_iguales, nodo) == Qtrue)
 		{
-			VALUE error = rb_funcall(concentrador, rb_intern("class"), 0);
-			error = rb_funcall(error, rb_intern("name"), 0);
-			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion: %s\n", StringValueCStr(error));
+			rb_funcall(nodo, rb_intern("tipo="), 1, ID2SYM(rb_intern("concentrador")));
 		}
 		
-		if(i < particion_a)
+		if(rb_hash_aref(diferentes_a, nodo) == Qtrue)
 		{
-			rb_funcall(concentrador, rb_intern("set_tipo"), 1, ID2SYM(rb_intern("concentrador")));
-			rb_ary_push(mezcla_a, concentrador);
+			if(estado_p < particion)
+			{
+				rb_funcall(nodo, rb_intern("tipo="), 1, ID2SYM(rb_intern("concentrador")));
+			}
 		}
-		else
+		
+		if(rb_hash_aref(diferentes_b, nodo) == Qtrue)
 		{
-			rb_funcall(concentrador, rb_intern("set_tipo"), 1, ID2SYM(rb_intern("concentrador")));
-			rb_ary_push(mezcla_b, concentrador);
+			if(estado_p >= particion)
+			{
+				rb_funcall(nodo, rb_intern("tipo="), 1, ID2SYM(rb_intern("concentrador")));
+			}
 		}
+		
+		if((rb_hash_aref(diferentes_a, nodo) == Qtrue) || (rb_hash_aref(diferentes_b, nodo) == Qtrue))
+		{
+			estado_p++;
+		}
+		
+		rb_ary_store(hijo_a, i, nodo);
 	}
 	
-	for(i = 0; i < (unsigned long int) RARRAY_LEN(concentradores_b); i++)
+	for(i = 0; i < RARRAY_LEN(hijo_b); i++)
 	{
-		VALUE concentrador = rb_ary_entry(concentradores_b, i);
+		VALUE nodo = rb_ary_entry(hijo_b, i);
 		
-		//Deteccion de errores
-		if(rb_obj_is_kind_of(concentrador, CBasicPHubNode) == Qfalse)
+		if(rb_ary_includes(elementos_iguales, nodo) == Qtrue)
 		{
-			VALUE error = rb_funcall(concentrador, rb_intern("class"), 0);
-			error = rb_funcall(error, rb_intern("name"), 0);
-			rb_raise(rb_eTypeError, "Se ha detectado contenido erroneo en la solucion: %s\n", StringValueCStr(error));
+			rb_funcall(nodo, rb_intern("tipo="), 1, ID2SYM(rb_intern("concentrador")));
 		}
 		
-		if(i < particion_b)
+		if(rb_hash_aref(diferentes_a, nodo) == Qtrue)
 		{
-			rb_funcall(concentrador, rb_intern("set_tipo"), 1, ID2SYM(rb_intern("concentrador")));
-			rb_ary_push(mezcla_a, concentrador);
+			if(estado_p < particion)
+			{
+				rb_funcall(nodo, rb_intern("tipo="), 1, ID2SYM(rb_intern("concentrador")));
+			}
 		}
-		else
+		
+		if(rb_hash_aref(diferentes_b, nodo) == Qtrue)
 		{
-			rb_funcall(concentrador, rb_intern("set_tipo"), 1, ID2SYM(rb_intern("concentrador")));
-			rb_ary_push(mezcla_b, concentrador);
+			if(estado_p >= particion)
+			{
+				rb_funcall(nodo, rb_intern("tipo="), 1, ID2SYM(rb_intern("concentrador")));
+			}
 		}
+		
+		if((rb_hash_aref(diferentes_a, nodo) == Qtrue) || (rb_hash_aref(diferentes_b, nodo) == Qtrue))
+		{
+			estado_p++;
+		}
+		
+		rb_ary_store(hijo_b, i, nodo);
 	}
 	
-	//Construyendo solucion
 	empaquetado = rb_ary_new();
-	rb_ary_push(empaquetado, mezcla_a);
-	rb_ary_push(empaquetado, mezcla_b);
+	rb_ary_push(empaquetado, hijo_a);
+	rb_ary_push(empaquetado, hijo_b);
 	
 	return empaquetado;
 }
@@ -1066,13 +1098,12 @@ VALUE phub_operador_cruce(VALUE self, VALUE solucion_a, VALUE solucion_b)
 	hijo_b = rb_ary_entry(auxiliar, 1);
 	
 	//Se rellena la solucion con los clientes que faltan
-	hijo_a = phub_add_clients(self, hijo_a);
-	hijo_b = phub_add_clients(self, hijo_b);
+	//hijo_a = phub_add_clients(self, hijo_a);
+	//hijo_b = phub_add_clients(self, hijo_b);
 	
 	//Se añaden las conexiones historicas
 	hijo_a = phub_set_historical_connections(self, hijo_a, historical_connections_a);
 	hijo_b = phub_set_historical_connections(self, hijo_b, historical_connections_b);
-	
 	
 	//Se rellenan las conexiones restantes de forma aleatoria
 	hijo_a = phub_set_random_connections(self, hijo_a);
@@ -1234,6 +1265,21 @@ VALUE phub_convertir_a_clientes(VALUE self, VALUE solucion)
 	return backup;
 }
 
+VALUE phub_get_subconjunto(VALUE self, VALUE conjunto, VALUE subconjunto)
+{
+	long int i;
+	VALUE table = rb_hash_new();
+	
+	for(i = 0; i < RARRAY_LEN(conjunto); i++)
+	{
+		VALUE item = rb_ary_entry(conjunto, i);
+		VALUE estado = rb_ary_includes(subconjunto, item);
+		rb_hash_aset(table, item, estado);
+	}
+	
+	return table;
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
@@ -1260,4 +1306,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "mutar", phub_operador_mutacion, 1);
 	rb_define_private_method(class_phub, "diferencia_soluciones", phub_diferencia_soluciones, 2);
 	rb_define_private_method(class_phub, "convertir_a_clientes", phub_convertir_a_clientes, 1);
+	rb_define_private_method(class_phub, "get_subconjunto", phub_get_subconjunto, 2);
 }
