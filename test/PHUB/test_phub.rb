@@ -538,17 +538,17 @@ describe PHUBPrivate do
 			proc {@t.mezclar_concentradores(@elemento_b, Array.new)}.must_raise TypeError
 		end
 		
-		it "Todos los nodos de las soluciones devueltas son concentradores" do
+		it "Se respeta el numero de concentradores iniciales" do
 			a, b = @t.mezclar_concentradores(@elemento_a, @elemento_b)
 			
-			a.each do |node|
-				node.tipo.must_equal :concentrador
-			end
+			con_el_a, * = @t.separar_nodos(@elemento_a)
+			con_el_b, * = @t.separar_nodos(@elemento_b)
 			
-			b.each do |node|
-				node.tipo.must_equal :concentrador
-			end
+			con_a, * = @t.separar_nodos(a)
+			con_b, * = @t.separar_nodos(b)
 			
+			con_a.length.must_equal con_el_a.length
+			con_b.length.must_equal con_el_b.length
 		end
 		
 		it "Devuelve dos soluciones, cada una con el mismo número de nodos" do
@@ -559,13 +559,12 @@ describe PHUBPrivate do
 			end
 		end
 		
-		it "La longitud de cada uno de los hijos es igual al número de concentradores inicial" do
+		it "La longitud de cada uno de los hijos es igual a la solucion original" do
 			50.times do
-				concentradores, * = @t.separar_nodos(@elemento_a)
 				hijo_a, hijo_b = @t.mezclar_concentradores(@elemento_a, @elemento_b)
 			
-				hijo_a.length.must_equal concentradores.length
-				hijo_b.length.must_equal concentradores.length 
+				hijo_a.length.must_equal @elemento_a.length
+				hijo_b.length.must_equal @elemento_b.length 
 			end
 		end
 	end
