@@ -1188,6 +1188,35 @@ VALUE phub_operador_mutacion(VALUE self, VALUE solucion)
 	return mutacion;
 }
 
+VALUE phub_diferencia_soluciones(VALUE self, VALUE solucionA, VALUE solucionB)
+{
+	VALUE resultado;
+	long int i;
+	
+	VALUE iguales = rb_ary_new();
+	VALUE diferentes = rb_ary_new();
+	
+	for(i = 0; i < RARRAY_LEN(solucionA); i++)
+	{
+		VALUE nodo = rb_ary_entry(solucionA, i);
+		
+		if(rb_ary_includes(solucionB, nodo) == Qtrue)
+		{
+			rb_ary_push(iguales, nodo);
+		}
+		else
+		{
+			rb_ary_push(diferentes, nodo);
+		}
+	}
+	
+	resultado = rb_ary_new();
+	rb_ary_push(resultado, rb_ary_dup(iguales));
+	rb_ary_push(resultado, rb_ary_dup(diferentes));
+	
+	return resultado;
+}
+
 void Init_c_phub()
 {
 	phub_module = rb_define_module("PHUB");
@@ -1212,4 +1241,5 @@ void Init_c_phub()
 	rb_define_private_method(class_phub, "get_coordenadas", phub_get_coordenadas,1);
 	rb_define_private_method(class_phub, "convertir_a_concentradores", phub_convertir_a_concentradores, 1);
 	rb_define_private_method(class_phub, "mutar", phub_operador_mutacion, 1);
+	rb_define_private_method(class_phub, "diferencia_soluciones", phub_diferencia_soluciones, 2);
 }

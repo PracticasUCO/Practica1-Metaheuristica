@@ -29,3 +29,4 @@ VALUE phub_get_nodes(VALUE self, VALUE solucion);
 VALUE phub_add_clients(VALUE self, VALUE solucion);
 VALUE phub_convertir_a_concentradores(VALUE self, VALUE ary);
 VALUE phub_get_coordenadas(VALUE self, VALUE solucion);
+VALUE phub_diferencia_soluciones(VALUE self, VALUE solucionA, VALUE solucionB);
