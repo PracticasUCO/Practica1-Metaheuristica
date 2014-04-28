@@ -16,7 +16,7 @@ module PHUB
 			@initial_population = 50
 			@probability_crossing = 0.9
 			@probability_mutation = 0.15
-			@number_evaluations = @nodos.length * 3500
+			@number_evaluations = @nodos.length * 100
 		end
 		
 		# Ordena los elementos de una lista de soluciones según su fitness
@@ -73,6 +73,7 @@ module PHUB
 			
 			mejor_coste = costes_poblacion.values.sort![0]
 			mejor_individuo = costes_poblacion.invert[mejor_coste]
+			coste_inicial = mejor_coste
 			
 			# Inicio del algoritmo
 			
@@ -192,8 +193,10 @@ module PHUB
 			# Se genera la vision bonita de la solucion
 			pretty = pretty_solution(mejor_individuo)
 			
+			puts "Evolucion del coste: #{coste_inicial} --> #{mejor_coste}"
+			
 			#Se devuelve el resultado
-			return pretty, mejor_coste, mejor_solucion
+			return pretty, mejor_coste, mejor_individuo
 		end
 		
 		private :sort_by_fitness
