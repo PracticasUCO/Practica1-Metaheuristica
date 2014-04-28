@@ -35,12 +35,30 @@ module PHUB
 			return lista_soluciones.sort_by {|solucion| fitness_soluciones[solucion]}
 		end
 		
+		def reiniciar_poblacion(poblacion_actual, mejor_individuo, mejor_solucion)
+			nueva_poblacion = Array.new
+			lista_costes = Hash.new
+			
+			nueva_poblacion << mejor_individuo
+			lista_costes[mejor_individuo] = mejor_solucion
+			
+			(@initial_population - 1).times do
+				*, coste, solucion = generar_solucion_aleatoria()
+				nueva_poblacion << solucion
+				lista_costes[solucion] = coste
+			end
+			
+			return nueva_poblacion, lista_costes
+		end
+		
 		def algoritmo_evolutivo_estacionario()
 			poblacion_actual = Array.new
 			costes_poblacion = Hash.new
 			evaluaciones = 0
 			mejor_individuo = nil
 			mejor_coste = nil
+			
+			evaluaciones_sin_mejora = 0
 			
 			# Se rellena la población inicial
 			
@@ -61,6 +79,8 @@ module PHUB
 			while evaluaciones < @number_evaluations
 				individuoA, individuoB = ruleta(poblacion_actual, costes_poblacion, 2)
 				
+				puts "Mejor --> #{mejor_coste} Evaluaciones: #{(evaluaciones * 100 / @number_evaluations).to_f} %"
+				
 				# Si la probabilidad de cruce lo permite, cruzamos dos individuos al azar
 				if rand <= @probability_crossing
 					evaluaciones += 1
@@ -77,18 +97,32 @@ module PHUB
 					
 					if rand <= @probability_mutation
 						evaluaciones += 1
-						mutacionA = @t.mutar(hijoA)
+						mutacionA = mutar(hijoA)
 						conjunto << mutacionA
 						poblacion_actual << mutacionA
+						
+						if rand <= @probability_mutation
+							evaluaciones += 1
+							mutacionA2 = mutar(mutacionA)
+							conjunto << mutacionA2
+							poblacion_actual << mutacionA2
+						end
 					end
 					
 					# Si la probabilidad de mutacion lo permite, mutamos a un individuo
 					
 					if rand <= @probability_mutation
 						evaluaciones += 1
-						mutacionB = @t.mutar(hijoB)
+						mutacionB = mutar(hijoB)
 						conjunto << mutacionB
 						poblacion_actual << mutacionB
+						
+						if rand <= @probability_mutation
+							evaluaciones += 1
+							mutacionB2 = mutar(mutacionB)
+							conjunto << mutacionB2
+							poblacion_actual << mutacionB2
+						end
 					end
 					
 					conjunto << hijoA << hijoB
@@ -102,12 +136,32 @@ module PHUB
 					# Se evalua si existe un nuevo mejor miembro
 					# dentro de los nuevos individuos
 					
+					mejora = false
+					
 					conjunto.each do |nuevo_miembro|
 						if costes_poblacion[nuevo_miembro] < mejor_coste
-							mejor_coste = nuevo_mienbro
+							mejor_coste = costes_poblacion[nuevo_miembro]
 							mejor_individuo = nuevo_miembro
+							mejora = true
 						end
 					end
+					
+					if mejora == true
+						evaluaciones_sin_mejora = 0
+					else
+						evaluaciones_sin_mejora += 1
+					end
+					
+					if evaluaciones_sin_mejora == 500
+						evaluaciones_sin_mejora = 0
+						poblacion_actual, costes_poblacion = reiniciar_poblacion(poblacion_actual, mejor_individuo, mejor_coste)
+						puts "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+						puts "==============================================="
+						puts "poblacion reiniciada"
+						puts "==============================================="
+						puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+					end
+					
 				end
 				
 				# Se seleccionan T - 1 individuos para la poblacion siguiente
