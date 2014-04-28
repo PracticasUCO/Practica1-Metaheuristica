@@ -790,7 +790,7 @@ VALUE phub_mezclar_concentradores(VALUE self, VALUE solucion_a, VALUE solucion_b
 	unsigned long int particion;
 	unsigned long int estado_p = 0;
 	
-	unsigned long int i;
+	long int i;
 	
 	Check_Type(solucion_a, T_ARRAY);
 	Check_Type(solucion_b, T_ARRAY);
