@@ -16,8 +16,8 @@ module PHUB
 			@initial_population = 50
 			@probability_crossing = 0.9
 			@probability_mutation = 0.15
-			@number_evaluations = @nodos.length * 100
-			@evaluaciones_sin_mejora = @nodos.length * 10
+			@number_evaluations = @nodos.length * 10
+			@evaluaciones_sin_mejora = @nodos.length * 1
 		end
 		
 		# Ordena los elementos de una lista de soluciones según su fitness
