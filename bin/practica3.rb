@@ -107,25 +107,26 @@ ficheros.each do |file|
 	pretty_e, coste_e, solucion_e = phub.algoritmo_evolutivo_estacionario()
 	end_e_time = Time.new
 	
-	puts "\t Estacionario: #{coste_e}. Tiempo: #{(end_e_time - start_e_time) / 60} minutos"
+	puts "\t Estacionario: #{coste_e}. Tiempo: #{((end_e_time - start_e_time) / 60).to_i} minutos #{(end_e_time - start_e_time) % 60} segundos"
 	
 	start_g_time = Time.new
 	pretty_g, coste_g, solucion_g = phub.algoritmo_evolutivo_generacional()
 	end_g_time = Time.new
 	
-	puts "\t Generacional: #{coste_g}. Tiempo: #{(end_g_time - start_g_time)} minutos"
+	puts "\t Generacional: #{coste_g}. Tiempo: #{((end_g_time - start_g_time) / 60).to_i} minutos #{(end_g_time - start_g_time) % 60} segundos"
 	
 	tiempo_e = end_e_time - start_e_time
 	tiempo_g = end_g_time - start_g_time
 	
 	puts "\t Tiempo consumido: #{(tiempo_g + tiempo_e) / 60} minutos"
-	
+	puts ""
 	costes[file] = [coste_e, coste_g]
 	prettys[file] = [pretty_e, pretty_g]
 	tiempos[file] = [tiempo_e, tiempo_g]
 end
 
 if opt["show"]
+	suma = 0
 	ficheros.each do |file|
 		basename = File.basename file
 		
@@ -138,14 +139,21 @@ if opt["show"]
 		tiempo_e = tiempo[0]
 		tiempo_g = tiempo[1]
 		
+		suma += tiempo_e
+		suma += tiempo_g
+		
 		puts "Semilla utilizada: #{opt["seed"]}"
+		puts ""
 		puts "Lista de costes"
 		puts "=============================================="
 		puts "#{basename}"
-		puts "Estacionario: #{coste_e} en #{tiempo_e} segundos => #{tiempo_e.to_i/60} minutos #{tiempo_e % 60} segundos"
-		puts "Generacional: #{coste_g} en #{tiempo_g} segundos => #{tiempo_g.to_i/60} minutos #{tiempo_g % 60} segundos"
+		puts "Estacionario: #{coste_e} en #{(tiempo_e.to_i/60).to_i} minutos #{tiempo_e % 60} segundos"
+		puts "Generacional: #{coste_g} en #{(tiempo_g.to_i/60).to_i} minutos #{tiempo_g % 60} segundos"
 		puts ""
 	end
+	puts "=============================================="
+	puts "Tiempo total: #{(suma.to_i / 60).to_i} minutos #{suma.to_i % 60} segundos"
+	puts ""
 end
 
 if opt["save"]
