@@ -75,11 +75,48 @@ if opt["save"] and File.exists? opt["save"]
 		puts "Se sobreescribira el fichero #{basename}"
 		File.delete(opt["save"])
 		File.open(opt["save"], File::CREAT|File::APPEND|File::RDWR) {}
-	else
-		puts "Reinicie el programa usando otro nombre de fichero."
 	end
 end
 
 ficheros = cargar_ficheros(opt["dir"])
 
-ficheros.each do
+costes = Hash.new
+prettys = Hash.new
+tiempos = Hash.new
+
+ficheros.each do |file|
+	basename = File.basename file
+	
+	print "Procesando el fichero #{basename}... "
+	
+	begin
+		phub = PHUB::PHUB.new(file)
+	rescue TypeError => e
+		puts "No se corresponde a una instancia del PHUB."
+		next
+	rescue TypeError => e
+		puts "No se corresponde a una instancia del PHUB."
+		next
+	end
+	
+	start_e_time = Time.new
+	pretty_e, coste_e, solucion_e = phub.algoritmo_evolutivo_estacionario()
+	end_e_time = Time.new
+	
+	puts "\t Estacionario: #{coste_e}"
+	
+	start_g_time = Time.new
+	pretty_g, coste_g, solucion_g = phub.algoritmo_evolutivo_generacional()
+	end_e_time = Time.new
+	
+	puts "\t Generacional: #{coste_g}"
+	
+	tiempo_e = end_e_time - start_e_time
+	tiempo_g = end_g_time - start_g_time
+	
+	costes[file] = [coste_e, coste_g]
+	prettys[file] = [pretty_e, pretty_g]
+	tiempos[file] = [tiempo_e, tiempo_g]
+end
+
+
