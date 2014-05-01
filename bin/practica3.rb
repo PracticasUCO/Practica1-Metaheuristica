@@ -101,6 +101,8 @@ ficheros.each do |file|
 		next
 	end
 	
+	puts "lectura correcta, ejecutando algoritmos..."
+	
 	start_e_time = Time.new
 	pretty_e, coste_e, solucion_e = phub.algoritmo_evolutivo_estacionario()
 	end_e_time = Time.new
@@ -109,7 +111,7 @@ ficheros.each do |file|
 	
 	start_g_time = Time.new
 	pretty_g, coste_g, solucion_g = phub.algoritmo_evolutivo_generacional()
-	end_e_time = Time.new
+	end_g_time = Time.new
 	
 	puts "\t Generacional: #{coste_g}"
 	
@@ -126,7 +128,7 @@ if opt["show"]
 		basename = File.basename file
 		
 		coste = costes[file]
-		tiempo = tiempo[file]
+		tiempo = tiempos[file]
 		
 		coste_e = coste[0]
 		coste_g = coste[1]
@@ -134,6 +136,7 @@ if opt["show"]
 		tiempo_e = tiempo[0]
 		tiempo_g = tiempo[1]
 		
+		puts "Semilla utilizada: #{opt["seed"]}"
 		puts "Lista de costes"
 		puts "=============================================="
 		puts "#{basename}"
@@ -145,11 +148,13 @@ end
 
 if opt["save"]
 	File.open(opt["save"], File::CREAT|File::APPEND|File::RDWR) do |save|
+		save.puts "Semilla; #{opt["seed"]}"
+		
 		ficheros.each do |file|
 			basename = File.basename file
 			tipo = "CPH"
 			coste = costes[file]
-			tiempo = tiempo[file]
+			tiempo = tiempos[file]
 		
 			coste_e = coste[0]
 			coste_g = coste[1]
