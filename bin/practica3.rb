@@ -32,7 +32,7 @@ end
 opt["seed"] = srand(123)
 srand(opt["seed"])
 
-if opt["help"]	
+if opt["help"]
 	puts "Este programa busca una solución al problema del PHUB mediante el uso"
 	puts "de algoritmos evolutivos."
 	puts "Concretamente la busqueda se realiza mediante el algoritmo evolutivo"
@@ -78,6 +78,10 @@ unless File.ftype(opt["dir"]) == "directory"
 	puts "Opcion erronea: --dir #{opt["dir"]} --> #{tipo}"
 	puts "Debe de especificar un directorio."
 	exit(0)
+end
+
+unless opt["show"]
+	opt["show"] = false
 end
 
 if opt["save"] and File.exists? opt["save"]
