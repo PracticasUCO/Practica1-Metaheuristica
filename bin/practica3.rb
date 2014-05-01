@@ -119,4 +119,24 @@ ficheros.each do |file|
 	tiempos[file] = [tiempo_e, tiempo_g]
 end
 
-
+if opt["show"]
+	ficheros.each do |file|
+		basename = File.basename file
+		
+		coste = costes[file]
+		tiempo = tiempo[file]
+		
+		coste_e = coste[0]
+		coste_g = coste[1]
+		
+		tiempo_e = tiempo[0]
+		tiempo_g = tiempo[1]
+		
+		puts "Lista de costes"
+		puts "=============================================="
+		puts "#{basename}"
+		puts "Estacionario: #{coste_e} en #{tiempo_e} segundos"
+		puts "Generacional: #{coste_g} en #{tiempo_g} segundos"
+		puts ""
+	end
+end
