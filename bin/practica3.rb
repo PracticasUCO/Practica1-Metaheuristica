@@ -3,19 +3,6 @@
 require 'getopt/long'
 require_relative '../lib/PHUB/PHUB/PHUB'
 
-def mostrar_error_fichero_no_encontrado(fichero)
-	puts "El fichero introduccido no pudo abrirse. Compruebe si es correcto"
-	puts "Fichero: #{fichero}"
-	exit
-end
-
-def mostrar_error_fichero_incorrecto(fichero)
-	puts "El fichero no parece ser correcto. Compruebe el fichero antes de ejecutar"
-	puts "el programa"
-	puts "Fichero: #{fichero}"
-	exit
-end
-
 # Carga los ficheros del directorio y los devuelve en un Array
 def cargar_ficheros(directorio)
 	ficheros = `find #{directorio}`.chomp.split(/\n/)
@@ -94,3 +81,5 @@ if opt["save"] and File.exists? opt["save"]
 end
 
 ficheros = cargar_ficheros(opt["dir"])
+
+ficheros.each do
