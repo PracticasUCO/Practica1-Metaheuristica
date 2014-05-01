@@ -40,17 +40,17 @@ if opt["help"]
 	puts ""
 	puts "Ejecute este programa como ./practica3.rb [OPCIONES]"
 	puts "Las opciones de este programa son:"
-	puts "\t --help -h: Muestra esta ayuda."
+	puts "\t --help -h: Muestra esta ayuda.\n\n"
 	puts "\t --dir -d: Indica la carpeta donde se encuentran todos los ficheros"
-	puts "\t de instancias del PHUB"
+	puts "\t de instancias del PHUB\n\n"
 	puts "\t --threads -t: Indica el número de hilos que se usaran para procesar"
 	puts "\t cada instancia. Se recomienda utilizar un número igual al número de"
-	puts "\t nucleos del ordenador donde se este ejecutando."
+	puts "\t nucleos del ordenador donde se este ejecutando. Valor por defecto: 1\n\n"
 	puts "\t --save -s: Indica el lugar donde guardar el coste de la solución de"
-	puts "\t cada fichero procesado."
+	puts "\t cada fichero procesado.\n\n"
 	puts "\t --show: Cuando se especifica se muestra por pantalla la solución"
-	puts "\t generada y su coste."
-	puts "\t --hide-seed: No muestra la semilla generada"
+	puts "\t generada y su coste.\n\n"
+	puts "\t --hide-seed: No muestra la semilla generada. Valor por defecto: false\n\n"
 	exit(0)
 end
 
