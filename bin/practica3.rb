@@ -16,6 +16,12 @@ def mostrar_error_fichero_incorrecto(fichero)
 	exit
 end
 
+# Carga los ficheros del directorio y los devuelve en un Array
+def cargar_ficheros(directorio)
+	ficheros = `find #{directorio}`.chomp.split(/\n/)
+	ficheros.delete_if {|file| File.ftype(file) != "file"}
+end
+
 begin
 	opt = Getopt::Long.getopts(
 	["--help", "-h", Getopt::BOOLEAN],
@@ -101,3 +107,6 @@ if opt["save"] and File.exists? opt["save"]
 		puts "Reinicie el programa usando otro nombre de fichero."
 	end
 end
+
+ficheros = cargar_ficheros(opt["dir"])
+threads = Array.new
