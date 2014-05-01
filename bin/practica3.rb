@@ -20,6 +20,7 @@ end
 def cargar_ficheros(directorio)
 	ficheros = `find #{directorio}`.chomp.split(/\n/)
 	ficheros.delete_if {|file| File.ftype(file) != "file"}
+	return ficheros
 end
 
 begin
@@ -109,4 +110,3 @@ if opt["save"] and File.exists? opt["save"]
 end
 
 ficheros = cargar_ficheros(opt["dir"])
-threads = Array.new
