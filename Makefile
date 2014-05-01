@@ -10,9 +10,10 @@ DIR_BASIC_MMDP = "lib/MMDP/BasicMMDP/"
 DIR_MMDP = "lib/MMDP/MMDP"
 DIR_TSP = "lib/TSP/TSP"
 DIR_BASIC_TSP = "lib/TSP/BasicTSP"
+DIR_PHUB = "lib/PHUB/PHUB/"
 
 all: gemas
-gemas: gema_c_basic_cwp gema_c_capacited_phub gema_c_basic_phub gema_es gema_c_basic_mmdp gema_c_mmdp gema_c_basic_tsp gema_c_tsp
+gemas: gema_c_basic_cwp gema_c_capacited_phub gema_c_basic_phub gema_es gema_c_basic_mmdp gema_c_mmdp gema_c_basic_tsp gema_c_tsp gema_phub
 	@echo "Gemas compiladas correctamente"
 	
 gema_c_basic_cwp:
@@ -70,6 +71,13 @@ gema_c_tsp:
 	make;\
 	rm *.o;\
 	rm Makefile
+	
+gema_phub:
+	@cd $(DIR_PHUB);\
+	ruby extconf.rb;\
+	make;\
+	rm *.o;\
+	rm Makefile
 
 clean:
 	-cd $(DIR_BASIC_CWP); \
@@ -94,4 +102,7 @@ clean:
 	rm *.so;
 
 	-cd $(DIR_TSP);\
+	rm *.so;
+	
+	-cd $(DIR_PHUB);\
 	rm *.so;
