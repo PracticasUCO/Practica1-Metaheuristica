@@ -27,7 +27,6 @@ begin
 	opt = Getopt::Long.getopts(
 	["--help", "-h", Getopt::BOOLEAN],
 	["--dir", "-d", Getopt::REQUIRED],
-	["--threads", "-t", Getopt::REQUIRED],
 	["--save", "-s", Getopt::REQUIRED],
 	["--show", nil, Getopt::BOOLEAN],
 	["--hide-seed", nil, Getopt::BOOLEAN])
@@ -50,9 +49,6 @@ if opt["help"]
 	puts "\t --help -h: Muestra esta ayuda.\n\n"
 	puts "\t --dir -d: Indica la carpeta donde se encuentran todos los ficheros"
 	puts "\t de instancias del PHUB\n\n"
-	puts "\t --threads -t: Indica el número de hilos que se usaran para procesar"
-	puts "\t cada instancia. Se recomienda utilizar un número igual al número de"
-	puts "\t nucleos del ordenador donde se este ejecutando. Valor por defecto: 1\n\n"
 	puts "\t --save -s: Indica el lugar donde guardar el coste de la solución de"
 	puts "\t cada fichero procesado.\n\n"
 	puts "\t --show: Cuando se especifica se muestra por pantalla la solución"
@@ -66,18 +62,6 @@ unless opt["dir"]
 	puts "a procesar. Use la opción --dir para ello."
 	puts "Si necesita más ayuda use la opción  --help"
 	exit(0)
-end
-
-unless opt["threads"]
-	opt["threads"] = 1
-else
-	opt["threads"] = opt["threads"].to_i
-	
-	if opt["threads"] < 1
-		puts "Opcion invalida: --threads #{opt["threads"]}"
-		puts "No se puede establecer un número de threads inferior a 1"
-		exit(0)
-	end
 end
 
 unless File.ftype(opt["dir"]) == "directory"
