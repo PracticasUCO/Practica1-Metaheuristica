@@ -4,6 +4,7 @@
 require_relative '../BasicPHub/BasicPHub'
 require_relative '../CapacitedPHubNode/CapacitedPHubNode'
 require_relative 'c_phub'
+require 'set'
 
 module PHUB
 	# La clase PHUB esta encargada de encontrar una buena solución para el problema
@@ -13,17 +14,19 @@ module PHUB
 		# de datos a leer
 		def initialize(path)
 			super
-			@initial_population = 50
+			@initial_population = 75
 			@probability_crossing = 0.9
 			@probability_mutation = 0.15
-			@number_evaluations = @nodos.length * 10
-			@evaluaciones_sin_mejora = @nodos.length * 1
+			@number_evaluations_stationary = @nodos.length * 1250
+			@number_evaluations_generational = @nodos.length * 100
+			@evaluaciones_sin_mejora_estacionario = @nodos.length * 10
+			@evaluaciones_sin_mejora_generacional = @nodos.length * 3
 		end
 		
 		# Ordena los elementos de una lista de soluciones según su fitness
 		def sort_by_fitness!(lista_soluciones, fitness_soluciones)
 			raise TypeError, "lista_soluciones debe de ser un Array" unless lista_soluciones.kind_of? Array
-			raise TypeError, "fitness_soluciones debe de ser una tabla de hash" unless fitness_soluciones? Hash
+			raise TypeError, "fitness_soluciones debe de ser una tabla de hash" unless fitness_soluciones.kind_of? Hash
 			
 			lista_soluciones.sort_by! {|solucion| fitness_soluciones[solucion]}
 		end
@@ -78,10 +81,8 @@ module PHUB
 			
 			# Inicio del algoritmo
 			
-			while evaluaciones < @number_evaluations
+			while evaluaciones < (@number_evaluations_stationary)
 				individuoA, individuoB = ruleta(poblacion_actual, costes_poblacion, 2)
-				
-				puts "Mejor --> #{mejor_coste} Evaluaciones: #{(evaluaciones * 100 / @number_evaluations).to_f} %"
 				
 				# Si la probabilidad de cruce lo permite, cruzamos dos individuos al azar
 				if rand <= @probability_crossing
@@ -154,14 +155,9 @@ module PHUB
 						evaluaciones_sin_mejora += 1
 					end
 					
-					if evaluaciones_sin_mejora == @evaluaciones_sin_mejora
+					if evaluaciones_sin_mejora == @evaluaciones_sin_mejora_estacionario
 						evaluaciones_sin_mejora = 0
 						poblacion_actual, costes_poblacion = reiniciar_poblacion(poblacion_actual, mejor_individuo, mejor_coste)
-						puts "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-						puts "==============================================="
-						puts "poblacion reiniciada"
-						puts "==============================================="
-						puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 					end
 					
 				end
@@ -194,9 +190,136 @@ module PHUB
 			# Se genera la vision bonita de la solucion
 			pretty = pretty_solution(mejor_individuo)
 			
-			puts "Evolucion del coste: #{coste_inicial} --> #{mejor_coste}"
-			
 			#Se devuelve el resultado
+			return pretty, mejor_coste, mejor_individuo
+		end
+		
+		def algoritmo_evolutivo_generacional()
+			poblacion_actual = Array.new
+			costes_poblacion = Hash.new
+			
+			evaluaciones = 0
+			evaluaciones_sin_mejora = 0
+			# Generación de la población inicial
+			
+			*, mejor_coste, mejor_individuo = generar_solucion_aleatoria()
+			
+			(@initial_population - 1).times do
+				*, coste, individuo = generar_solucion_aleatoria()
+				
+				poblacion_actual << individuo
+				costes_poblacion[individuo] = coste
+				
+				if coste < mejor_coste
+					mejor_coste = coste
+					mejor_individuo = individuo
+				end
+				
+				poblacion_actual << individuo
+				costes_poblacion[individuo] = coste
+			end
+			
+			# Lanzamiento del algoritmo
+			while evaluaciones < @number_evaluations_generational	
+				# Seleccion de individuos al azar
+				seleccionados = ruleta(poblacion_actual, costes_poblacion, @initial_population - 1)
+				
+				hijos = Array.new
+				
+				# Se tratan de cruzar y mutar todos los individuos
+				seleccionados.each do |individuoA|
+					if rand <= @probability_crossing
+						
+						individuoB = seleccionados[rand(seleccionados.length)]
+						
+						hijoA, hijoB = cruce(individuoA, individuoB)
+						
+						hijos << hijoA << hijoB
+					end
+					
+					if rand <= @probability_mutation
+						
+						mutante = mutar(individuoA)
+						
+						hijos << mutante
+					end
+				end
+				
+				# Si no se generaron los suficientes hijos tratare
+				# de generarlos por la fuerza
+				while hijos.length < (@initial_population - 1)
+					individuoA = seleccionados[rand(seleccionados.length)]
+					individuoB = seleccionados[rand(seleccionados.length)]
+					
+					if rand <= 0.5
+						hijoA, hijoB = cruce(individuoA, individuoB)
+					else
+						hijoA = mutar(hijoA)
+						hijoB = mutar(hijoB)
+					end
+					
+					hijos << hijoA << hijoB
+				end
+				
+				# Se evalua la nueva generacion
+				costes_hijos = evaluar_conjunto_soluciones(hijos)
+				mejor_coste_hijo = costes_hijos.values.sort![0]
+				
+				if mejor_coste_hijo < mejor_coste
+					mejor_hijo = costes_hijos.invert[mejor_coste_hijo]
+					
+					mejor_individuo = mejor_hijo
+					mejor_coste = mejor_coste_hijo
+					evaluaciones_sin_mejora = 0
+				else
+					evaluaciones_sin_mejora += 1
+				end
+				
+				evaluaciones += 1
+				
+				# Si han ocurrido las suficientes iteraciones sin mejora
+				# se reinicia la poblacion
+				
+				if evaluaciones_sin_mejora == @evaluaciones_sin_mejora_generacional
+					evaluaciones_sin_mejora = 0		
+					poblacion_actual, costes_poblacion = reiniciar_poblacion(poblacion_actual, mejor_individuo, mejor_coste)
+				else
+					# Como puede haber más individuos de la cuenta, se comprueba
+					# si esto sucede y se eliminar los peores individuos en caso
+					# de que esto ocurra
+					if hijos.length > @initial_population
+						hijos << mejor_individuo
+						costes_hijos[mejor_individuo] = mejor_coste
+						
+						nuevos_hijos = torneo(hijos, costes_hijos, @initial_population - 1)
+						nuevos_costes = Hash.new
+						
+						if not nuevos_hijos.include? mejor_individuo
+							nuevos_hijos << mejor_individuo
+						else
+							nuevo = torneo(hijos, costes_hijos, 1)
+							nuevos_hijos << nuevo[0]
+						end
+						
+						nuevos_hijos.each do |n|
+							nuevos_costes[n] = costes_hijos[n]
+						end
+					
+						#hijos = hijos[0..@initial_population]
+						hijos = nuevos_hijos
+						costes_hijos = nuevos_costes
+					end
+				
+					# La poblacion de hijos sustituye a la poblacion de padres
+					# junto con el mejor individuo hasta la fecha
+					poblacion_actual = hijos
+					costes_poblacion = costes_hijos
+				end
+			end
+			
+			# Se devuelve al mejor individuo
+			pretty = pretty_solution(mejor_individuo)
+			
 			return pretty, mejor_coste, mejor_individuo
 		end
 		
