@@ -29,12 +29,8 @@ rescue Getopt::Long::Error => e
 	puts "Compruebe con --help la entrada antes de continuar"
 end
 
-random_seed = srand(123)
-srand(random_seed)
-
-unless opt["hide-seed"]
-	puts "\nSeed: #{random_seed}\n\n"
-end
+opt["seed"] = srand(123)
+srand(opt["seed"])
 
 if opt["help"]	
 	puts "Este programa busca una solución al problema del PHUB mediante el uso"
@@ -55,6 +51,32 @@ if opt["help"]
 	puts "\t --show: Cuando se especifica se muestra por pantalla la solución"
 	puts "\t generada y su coste."
 	puts "\t --hide-seed: No muestra la semilla generada"
+	exit(0)
+end
+
+unless opt["dir"]
+	puts "Es obligatorio especificar la ruta donde se encuentran los ficheros"
+	puts "a procesar. Use la opción --dir para ello."
+	puts "Si necesita más ayuda use la opción  --help"
+	exit(0)
+end
+
+unless opt["threads"]
+	opt["threads"] = 1
+else
+	opt["threads"] = opt["threads"].to_i
+	
+	if opt["threads"] < 1
+		puts "Opcion invalida: --threads #{opt["threads"]}"
+		puts "No se puede establecer un número de threads inferior a 1"
+		exit(0)
+	end
+end
+
+unless File.ftype(opt["dir"]) == "directory"
+	tipo = File.ftype(opt["dir"])
+	puts "Opcion erronea: --dir #{opt["dir"]} --> #{tipo}"
+	puts "Debe de especificar un directorio."
 	exit(0)
 end
 
