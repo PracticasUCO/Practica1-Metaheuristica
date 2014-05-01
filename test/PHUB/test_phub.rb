@@ -797,10 +797,4 @@ describe PHUBPrivate do
 			mutacion.length.must_equal longitud
 		end
 	end
-	
-	describe "Algoritmo evolutivo estacionario" do
-		it "Pruebas especificas" do
-			@t.algoritmo_evolutivo_estacionario()
-		end
-	end
 end
