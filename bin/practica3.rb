@@ -93,9 +93,11 @@ ficheros.each do |file|
 		phub = PHUB::PHUB.new(file)
 	rescue TypeError => e
 		puts "No se corresponde a una instancia del PHUB."
+		ficheros.delete(file)
 		next
 	rescue TypeError => e
 		puts "No se corresponde a una instancia del PHUB."
+		ficheros.delete(file)
 		next
 	end
 	
@@ -139,4 +141,25 @@ if opt["show"]
 		puts "Generacional: #{coste_g} en #{tiempo_g} segundos"
 		puts ""
 	end
+end
+
+if opt["save"]
+	File.open(opt["save"], File::CREAT|File::APPEND|File::RDWR) do |save|
+		ficheros.each do |file|
+			basename = File.basename file
+			tipo = "CPH"
+			coste = costes[file]
+			tiempo = tiempo[file]
+		
+			coste_e = coste[0]
+			coste_g = coste[1]
+		
+			tiempo_e = tiempo[0]
+			tiempo_g = tiempo[1]
+			
+			save.puts "#{basename};#{tipo};#{coste_g};#{tiempo_g};#{coste_e};#{tiempo_e}"
+		end
+	end
+	
+	puts "Ficherso guardados con exito en #{opt["save"]}"
 end
