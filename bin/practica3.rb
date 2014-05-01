@@ -57,3 +57,21 @@ if opt["help"]
 	puts "\t --hide-seed: No muestra la semilla generada"
 	exit(0)
 end
+
+if opt["save"] and File.exists? opt["save"]
+	basename = File.basename opt["save"]
+	puts "El fichero #{basename} ya existe"
+	
+	STDOUT.flush
+	
+	print "Desea sobreescribirlo (S/n)? "
+	confirmacion = STDIN.gets.chomp
+	
+	if confirmacion == "S" or confirmacion == "s"
+		puts "Se sobreescribira el fichero #{basename}"
+		File.delete(opt["save"])
+		File.open(opt["save"], File::CREAT|File::APPEND|File::RDWR) {}
+	else
+		puts "Reinicie el programa usando otro nombre de fichero."
+	end
+end
