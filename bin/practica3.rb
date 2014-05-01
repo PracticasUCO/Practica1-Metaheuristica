@@ -107,16 +107,18 @@ ficheros.each do |file|
 	pretty_e, coste_e, solucion_e = phub.algoritmo_evolutivo_estacionario()
 	end_e_time = Time.new
 	
-	puts "\t Estacionario: #{coste_e}"
+	puts "\t Estacionario: #{coste_e}. Tiempo: #{(end_e_time - start_e_time) / 60} minutos"
 	
 	start_g_time = Time.new
 	pretty_g, coste_g, solucion_g = phub.algoritmo_evolutivo_generacional()
 	end_g_time = Time.new
 	
-	puts "\t Generacional: #{coste_g}"
+	puts "\t Generacional: #{coste_g}. Tiempo: #{(end_g_time - start_g_time)} minutos"
 	
 	tiempo_e = end_e_time - start_e_time
 	tiempo_g = end_g_time - start_g_time
+	
+	puts "\t Tiempo consumido: #{(tiempo_g + tiempo_e) / 60} minutos"
 	
 	costes[file] = [coste_e, coste_g]
 	prettys[file] = [pretty_e, pretty_g]
@@ -140,8 +142,8 @@ if opt["show"]
 		puts "Lista de costes"
 		puts "=============================================="
 		puts "#{basename}"
-		puts "Estacionario: #{coste_e} en #{tiempo_e} segundos"
-		puts "Generacional: #{coste_g} en #{tiempo_g} segundos"
+		puts "Estacionario: #{coste_e} en #{tiempo_e} segundos => #{tiempo_e.to_i/60} minutos #{tiempo_e % 60} segundos"
+		puts "Generacional: #{coste_g} en #{tiempo_g} segundos => #{tiempo_g.to_i/60} minutos #{tiempo_g % 60} segundos"
 		puts ""
 	end
 end
