@@ -107,13 +107,21 @@ ficheros.each do |file|
 	pretty_e, coste_e, solucion_e = phub.algoritmo_evolutivo_estacionario()
 	end_e_time = Time.new
 	
-	puts "\t Estacionario: #{coste_e}. Tiempo: #{((end_e_time - start_e_time) / 60).to_i} minutos #{(end_e_time - start_e_time) % 60} segundos"
+	segundos_e = (end_e_time - start_e_time).to_i
+	minutos_e = segundos_e  /  60
+	segundos_e = segundos_e  %  60
+	
+	puts "\t Estacionario: #{coste_e}. Tiempo: #{minutos_e} minutos #{segundos_e} segundos"
 	
 	start_g_time = Time.new
 	pretty_g, coste_g, solucion_g = phub.algoritmo_evolutivo_generacional()
 	end_g_time = Time.new
 	
-	puts "\t Generacional: #{coste_g}. Tiempo: #{((end_g_time - start_g_time) / 60).to_i} minutos #{(end_g_time - start_g_time) % 60} segundos"
+	segundos_g = (end_g_time - start_g_time).to_i
+	minutos_g = segundos_g  /  60
+	segundos_g = segundos_g  %  60
+	
+	puts "\t Generacional: #{coste_g}. Tiempo: #{minutos_g} minutos #{segundos_g} segundos"
 	
 	tiempo_e = end_e_time - start_e_time
 	tiempo_g = end_g_time - start_g_time
@@ -139,6 +147,18 @@ if opt["show"]
 		tiempo_e = tiempo[0]
 		tiempo_g = tiempo[1]
 		
+		segundos_e = tiempo[0].to_i
+		minutos_e = segundos_e.to_i  /  60
+		segundos_e = segundos_e  %  60
+		horas_e = minutos_e  /  60
+		minutos_e = minutos_e  %  60
+		
+		segundos_g = tiempo[1].to_i
+		minutos_g = segundos_g.to_i  /  60
+		segundos_g = segundos_g  %  60
+		horas_g = minutos_g  /  60
+		minutos_g = minutos_g  %  60
+		
 		suma += tiempo_e
 		suma += tiempo_g
 		
@@ -147,18 +167,27 @@ if opt["show"]
 		puts "Lista de costes"
 		puts "=============================================="
 		puts "#{basename}"
-		puts "Estacionario: #{coste_e} en #{(tiempo_e.to_i/60).to_i} minutos #{tiempo_e % 60} segundos"
-		puts "Generacional: #{coste_g} en #{(tiempo_g.to_i/60).to_i} minutos #{tiempo_g % 60} segundos"
+		puts "Estacionario: #{coste_e} en #{horas_e} h #{minutos_e} m #{segundos_e} s"
+		puts "Generacional: #{coste_g} en #{horas_e} h #{minutos_g} m #{segundos_g} s"
 		puts ""
 	end
+	
+	total_segundos = suma.to_i
+	total_minutos = total_segundos / 60
+	total_segundos = total_segundos  %  60
+	total_horas = total_minutos / 60
+	total_minutos = total_minutos  %  60
+	
 	puts "=============================================="
-	puts "Tiempo total: #{(suma.to_i / 60).to_i} minutos #{suma.to_i % 60} segundos"
+	puts "Tiempo total: #{total_horas} #{total_minutos} m #{total_segundos} s"
 	puts ""
 end
 
 if opt["save"]
 	File.open(opt["save"], File::CREAT|File::APPEND|File::RDWR) do |save|
 		save.puts "Semilla; #{opt["seed"]}"
+		save.puts ""
+		save.puts "Instancia;Tipo;Coste AGg;Tiempo AGg;Coste AGe;Tiempo AGe"
 		
 		ficheros.each do |file|
 			basename = File.basename file
