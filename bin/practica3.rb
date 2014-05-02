@@ -101,32 +101,39 @@ ficheros.each do |file|
 		next
 	end
 	
-	puts "lectura correcta, ejecutando algoritmos..."
-	
 	start_e_time = Time.new
 	pretty_e, coste_e, solucion_e = phub.algoritmo_evolutivo_estacionario()
 	end_e_time = Time.new
 	
 	segundos_e = (end_e_time - start_e_time).to_i
-	minutos_e = segundos_e  /  60
+	minutos_e = (segundos_e  /  60).to_i
 	segundos_e = segundos_e  %  60
 	
-	puts "\t Estacionario: #{coste_e}. Tiempo: #{minutos_e} minutos #{segundos_e} segundos"
+	puts "\n\t Estacionario: #{coste_e}. Tiempo: #{minutos_e} m #{segundos_e} s"
 	
 	start_g_time = Time.new
 	pretty_g, coste_g, solucion_g = phub.algoritmo_evolutivo_generacional()
 	end_g_time = Time.new
 	
 	segundos_g = (end_g_time - start_g_time).to_i
-	minutos_g = segundos_g  /  60
+	minutos_g = (segundos_g  /  60).to_i
 	segundos_g = segundos_g  %  60
 	
-	puts "\t Generacional: #{coste_g}. Tiempo: #{minutos_g} minutos #{segundos_g} segundos"
+	puts "\t Generacional: #{coste_g}. Tiempo: #{minutos_g} m #{segundos_g} s"
 	
 	tiempo_e = end_e_time - start_e_time
 	tiempo_g = end_g_time - start_g_time
 	
-	puts "\t Tiempo consumido: #{(tiempo_g + tiempo_e) / 60} minutos"
+	total_s = segundos_e + segundos_g
+	total_m = minutos_e + minutos_g
+	total_h = 0
+	
+	total_m += (total_s / 60).to_i
+	total_s = total_s  %  60
+	total_h += (total_m / 60).to_i
+	total_m = total_m %  60
+	
+	puts "\t Tiempo consumido: #{total_h} h #{total_m} m #{total_s} s"
 	puts ""
 	costes[file] = [coste_e, coste_g]
 	prettys[file] = [pretty_e, pretty_g]
@@ -135,6 +142,12 @@ end
 
 if opt["show"]
 	suma = 0
+	
+	puts "Semilla utilizada: #{opt["seed"]}"
+	puts ""
+	puts "Lista de costes"
+	puts "=============================================="
+	
 	ficheros.each do |file|
 		basename = File.basename file
 		
@@ -148,24 +161,20 @@ if opt["show"]
 		tiempo_g = tiempo[1]
 		
 		segundos_e = tiempo[0].to_i
-		minutos_e = segundos_e.to_i  /  60
+		minutos_e = (segundos_e.to_i  /  60).to_i
 		segundos_e = segundos_e  %  60
-		horas_e = minutos_e  /  60
+		horas_e = (minutos_e  /  60).to_i
 		minutos_e = minutos_e  %  60
 		
 		segundos_g = tiempo[1].to_i
-		minutos_g = segundos_g.to_i  /  60
+		minutos_g = (segundos_g.to_i  /  60).to_i
 		segundos_g = segundos_g  %  60
-		horas_g = minutos_g  /  60
+		horas_g = (minutos_g  /  60).to_i
 		minutos_g = minutos_g  %  60
 		
 		suma += tiempo_e
 		suma += tiempo_g
 		
-		puts "Semilla utilizada: #{opt["seed"]}"
-		puts ""
-		puts "Lista de costes"
-		puts "=============================================="
 		puts "#{basename}"
 		puts "Estacionario: #{coste_e} en #{horas_e} h #{minutos_e} m #{segundos_e} s"
 		puts "Generacional: #{coste_g} en #{horas_e} h #{minutos_g} m #{segundos_g} s"
@@ -173,13 +182,13 @@ if opt["show"]
 	end
 	
 	total_segundos = suma.to_i
-	total_minutos = total_segundos / 60
+	total_minutos = (total_segundos / 60).to_i
 	total_segundos = total_segundos  %  60
-	total_horas = total_minutos / 60
+	total_horas = (total_minutos / 60).to_i
 	total_minutos = total_minutos  %  60
 	
 	puts "=============================================="
-	puts "Tiempo total: #{total_horas} #{total_minutos} m #{total_segundos} s"
+	puts "Tiempo total: #{total_horas} h #{total_minutos} m #{total_segundos} s"
 	puts ""
 end
 
