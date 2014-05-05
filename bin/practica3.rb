@@ -57,6 +57,7 @@ if opt["help"]
 	puts "\t --show: Cuando se especifica se muestra por pantalla la solución"
 	puts "\t generada y su coste.\n\n"
 	puts "\t --hide-seed: No muestra la semilla generada. Valor por defecto: false\n\n"
+	puts "\t --best-values: Carga el fichero con los mejores valores conocidos\n\n"
 	exit(0)
 end
 
