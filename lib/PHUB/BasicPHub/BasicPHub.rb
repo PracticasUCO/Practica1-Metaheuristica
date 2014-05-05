@@ -43,6 +43,7 @@ module PHUB
 			raise TypeError, "path_db debe de ser un string" unless path_db.kind_of? String
 			
 			@nodos.clear
+			@max_cost = -Float::INFINITY
 			
 			File.open(path_db, "r") do |file|
 				# De la primera linea se lee el numero de nodos concentradores y
@@ -65,6 +66,18 @@ module PHUB
 					nodo = CapacitedPHubNode.new(coordenadas: [coorX, coorY], demanda: demanda, capacidad_servicio: @capacidad_concentrador)
 					
 					@nodos << nodo
+				end
+			end
+			
+			@nodos.each do |nodo|
+				@nodos.each do |nodo_destino|
+					next if nodo == nodo_destino
+					
+					distancia = nodo.distancia(nodo_destino)
+					
+					if distancia > @max_cost
+						@max_cost = distancia
+					end
 				end
 			end
 		end
