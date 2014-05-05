@@ -10,13 +10,29 @@ def cargar_ficheros(directorio)
 	return ficheros
 end
 
+def cargar_mejores_valores(fichero)
+	mejores = Hash.new
+	
+	File.open(fichero, "r") do |file|
+		file.each do |linea|
+			nombre, mejor_valor = linea.chomp().split(/ /)
+			mejor_valor = mejor_valor.to_f
+			
+			mejores[nombre] = mejor_valor
+		end
+	end
+	
+	return mejores
+end
+
 begin
 	opt = Getopt::Long.getopts(
 	["--help", "-h", Getopt::BOOLEAN],
 	["--dir", "-d", Getopt::REQUIRED],
 	["--save", "-s", Getopt::REQUIRED],
 	["--show", nil, Getopt::BOOLEAN],
-	["--hide-seed", nil, Getopt::BOOLEAN])
+	["--hide-seed", nil, Getopt::BOOLEAN],
+	["--best-values", nil, Getopt::REQUIRED])
 rescue Getopt::Long::Error => e
 	puts "Uno o varios de los parametros opcionales es incorrecto."
 	puts "Compruebe con --help la entrada antes de continuar"
@@ -177,7 +193,7 @@ if opt["show"]
 		
 		puts "#{basename}"
 		puts "Estacionario: #{coste_e} en #{horas_e} h #{minutos_e} m #{segundos_e} s"
-		puts "Generacional: #{coste_g} en #{horas_e} h #{minutos_g} m #{segundos_g} s"
+		puts "Generacional: #{coste_g} en #{horas_g} h #{minutos_g} m #{segundos_g} s"
 		puts ""
 	end
 	
@@ -192,11 +208,17 @@ if opt["show"]
 	puts ""
 end
 
+if opt["best-values"]
+	mejores = cargar_mejores_valores(opt["best-values"])
+else
+	mejores = Hash.new
+end
+
 if opt["save"]
 	File.open(opt["save"], File::CREAT|File::APPEND|File::RDWR) do |save|
 		save.puts "Semilla; #{opt["seed"]}"
 		save.puts ""
-		save.puts "Instancia;Tipo;Coste AGg;Tiempo AGg;Coste AGe;Tiempo AGe"
+		save.puts "Instancia;Tipo;Coste AGg;Tiempo AGg;Coste AGe;Tiempo AGe;Mejor valor"
 		
 		ficheros.each do |file|
 			basename = File.basename file
@@ -210,9 +232,9 @@ if opt["save"]
 			tiempo_e = tiempo[0]
 			tiempo_g = tiempo[1]
 			
-			save.puts "#{basename};#{tipo};#{coste_g};#{tiempo_g};#{coste_e};#{tiempo_e}"
+			save.puts "#{basename};#{tipo};#{coste_g};#{tiempo_g};#{coste_e};#{tiempo_e};#{mejores[basename]}"
 		end
 	end
 	
-	puts "Ficherso guardados con exito en #{opt["save"]}"
+	puts "Ficheros guardados con exito en #{opt["save"]}"
 end
