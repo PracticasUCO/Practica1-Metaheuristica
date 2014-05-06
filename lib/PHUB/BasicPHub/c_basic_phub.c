@@ -49,7 +49,7 @@ VALUE rb_funcion_objetivo(VALUE self, VALUE solucion)
 	
 	/*if(desconectados > 0)
 	{
-		suma += valor_por_desconexiones * (desconectados + 1);
+		suma += (valor_por_desconexiones / 2) * (desconectados + 1);
 	}*/
 
 	return DBL2NUM(suma);
