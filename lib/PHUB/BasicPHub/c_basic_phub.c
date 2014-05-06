@@ -14,6 +14,7 @@ VALUE rb_funcion_objetivo(VALUE self, VALUE solucion)
 	long int i;
 	unsigned int desconectados = 0;
 	double valor_por_desconexiones = NUM2DBL(rb_iv_get(self, "@max_cost"));
+	double penalizacion = 0;
 
 	if(tipoParametro != T_ARRAY)
 	{
@@ -47,10 +48,11 @@ VALUE rb_funcion_objetivo(VALUE self, VALUE solucion)
 		}	
 	}
 	
-	/*if(desconectados > 0)
+	if(desconectados > 0)
 	{
-		suma += (valor_por_desconexiones / 2) * (desconectados + 1);
-	}*/
+		penalizacion = valor_por_desconexiones * desconectados;
+		suma += penalizacion / 2;
+	}
 
 	return DBL2NUM(suma);
 }
